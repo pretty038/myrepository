@@ -12,7 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.apcompany.user.pojo.TUser;
 import com.apcompany.user.service.TUserServiceI;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion.User;
 
 public class MyBatisTest {
 	
@@ -31,16 +30,16 @@ private TUserServiceI userService;
         userService = (TUserServiceI) ac.getBean("tUserService");
     }
     
-    @Test
-    public void testAddUser(){
-        //ApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"spring.xml","spring-mybatis.xml"});
-        //UserServiceI userService = (UserServiceI) ac.getBean("userService");
-        TUser user = new TUser();  
-        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
-        user.setUserName("白虎神皇xdp");
-        user.setUserBirthday(new Date());
-        user.setUserSalary(10000D);
-        userService.addUser(user);
-    }
+//    @Test
+//    public void testAddUser(){
+//        //ApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"spring.xml","spring-mybatis.xml"});
+//        //UserServiceI userService = (UserServiceI) ac.getBean("userService");
+//        TUser user = new TUser();  
+//        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
+//        user.setUserName("白虎神皇xdp");
+//        user.setUserBirthday(new Date());
+//        user.setUserSalary(10000D);
+//        userService.addUser(user);
+//    }
 
 }
