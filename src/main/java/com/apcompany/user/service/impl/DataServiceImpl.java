@@ -105,4 +105,24 @@ public class DataServiceImpl implements DataService {
 		return tQuestionsDao.searchAll(questionid);
 	}
 
+	@Override
+	public int updateQuestion(TQuestions tQuestions) {
+		// TODO Auto-generated method stub
+		return tQuestionsDao.update(tQuestions);
+	}
+
+	@Override
+	public int updateChiose(TChoises tChoises) {
+		// TODO Auto-generated method stub
+		return tChoisedao.update(tChoises);
+	}
+
+	@Override
+	public int updateAnswers(TAnswers tAnswers) {
+		// TODO Auto-generated method stub
+		return tAnswerdao.update(tAnswers);
+	}
+	
+	
+
 }
