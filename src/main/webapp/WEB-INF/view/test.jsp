@@ -32,36 +32,35 @@
 		<button id="edr" onclick="editorOK()">编辑公式完成</button>
 		<button onclick="test3()">test2</button>
 		<button onclick="refresh()">refresh</button>
+		<button onclick="formUp()">提交修改</button>
 		<div class="header">
 			<h1>吾优woyoo</h1>
 		</div>
 		<div class="main">
-			<form id="tabUp">
+			<form id="tabUp" enctype="multipart/form-data">
 			</form>
 			<div class="col" id="dv2">				
 				<div class="childW">
-					<div id="cinQues2">
 						<p>
-							<button onclick="AddOptionBt()">AddOption</button>
+							<button onclick="AddOptionBt($(this))">AddOption</button>
+							<button onclick="deleteDiv($(this))">DeleteOption</button>
 						</p>
 						<p class="neip">
-							<label class="inputRes">问题</label>
+							<label class="inputRes" title="tQuestions.question">问题</label>
 							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
 							<br />						
 						</p>
+						
 						<p class="neip">
-							<label class="inputRes">答案</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>	
-							<br />						
-						</p>
-						<p class="neip">
-							<label class="inputRes">选项</label>
+							<label class="inputRes" title="tChoises[0].choise">选项</label>
 							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
 							<br />							
 						</p>
-						
-			
-					</div>
+						<p class="neip">
+							<label class="inputRes" title="tAnswers.answer">答案</label>
+							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>	
+							<br />						
+						</p>			
 				</div>				
 			</div>			
 		</div>
