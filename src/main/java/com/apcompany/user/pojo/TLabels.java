@@ -2,7 +2,7 @@ package com.apcompany.user.pojo;
 
 import java.sql.Timestamp;
 
-public class Labels {
+public class TLabels {
 	
 	private long id;
 	private int status;
