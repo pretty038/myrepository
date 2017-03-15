@@ -13,13 +13,19 @@ $(document).ready(function() {
 	//					$(this).css("background-color", "#C8E0F0");
 	//				});
 	//focus事件展开键盘.
+	$("#editor table button").on("mouseover", function() {
+						$(this).css("background-color", "#C8E0F0");
+	});
+	$("#editor table button").on("mouseout", function() {
+		$(this).css("background-color", "buttonface");
+	});
 });
 
 function editorAppValue(t) {
 	//document.getElementById("inp").value += (t.value + " ");
-	var tmp = $("#editor").prev().prev().prev().val();
-	tmp += (t.value + " ");
-	$("#editor").prev().prev().prev().val(tmp);
+	var tmp = $("#editor").parent().children("input").val();
+	tmp += (t.value);
+	$("#editor").parent().children("input").val(tmp);
 }
 
 function editorOverBt() {
