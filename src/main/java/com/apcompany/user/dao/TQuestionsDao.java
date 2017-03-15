@@ -2,7 +2,6 @@ package com.apcompany.user.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
@@ -20,10 +19,10 @@ public interface TQuestionsDao {
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TQuestions questions);
 
-	@Update("update questions set answer=#{answer} where id=#{id}")
+	@Update("update questions set question=#{question} where id=#{id}")
 	public int update(TQuestions questions);
 
-	@Delete("update questions set status=1 where id=#{id}")
+	@Update("update questions set status=1 where id=#{id}")
 	public int delete(int id);
 	
 	@Select("select count(1) from questions ")

@@ -28,7 +28,7 @@
 	answers b,
 	choises c
 	where a.id=b.questionId and a.id=c.questionId 
-	and a.status=0
+	and a.status=0 and b.status=0 and c.status=0
 		<if test="questionid!=null and questionid>0" >
   			and a.id= #{questionid,jdbcType=INTEGER}
   		</if>

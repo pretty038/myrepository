@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
+import com.apcompany.user.pojo.TLabels;
+import com.apcompany.user.pojo.TLabelsQuestionRel;
 import com.apcompany.user.pojo.TQuestions;
 
 public interface DataService {
@@ -25,5 +27,15 @@ public interface DataService {
 	public int updateChiose(TChoises tChoises);
 
 	public int updateAnswers(TAnswers tAnswers);
+
+	public boolean addLabel(TLabels tLabels);
+
+	public int updateLabel(TLabels tLabels);
+
+	public int delLabel(int id);
+
+	public int updateQuestionLabel(TLabelsQuestionRel tLabelsQuestionRel);
+	
+	public int delQuestionLabel(int id);
 
 }

@@ -13,8 +13,7 @@ import com.apcompany.user.pojo.TChoises;
 public interface TChoisesDao {
 	@Select("select * from choises where id=#{id}")
 	public TChoises getChoise(int id);
-	
-	
+
 	@Select("select * from choises where questionid=#{id}")
 	public List<TChoises> getChoiseByQuestionId(int id);
 
@@ -24,14 +23,13 @@ public interface TChoisesDao {
 
 	@Update("update choises set questionid=#{questionid},choise=#{choise} where id=#{id}")
 	public int update(TChoises choises);
-	
+
 	@Update("update choises set choise=#{choise} where questionid=#{questionid}")
 	public int updateByQuestionId(TChoises choises);
 
 	@Delete("update choises set status=1 where id=#{id}")
 	public int delete(int id);
-	
-	
+
 	@Delete("update choises set status=1 where questionid=#{id}")
 	public int deleteByQuestionId(int id);
 }

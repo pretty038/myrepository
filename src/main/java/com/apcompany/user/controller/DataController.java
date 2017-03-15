@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
 import com.apcompany.user.pojo.SuperData;
+import com.apcompany.user.pojo.TAnswers;
+import com.apcompany.user.pojo.TChoises;
 import com.apcompany.user.pojo.TQuestions;
 import com.apcompany.user.service.DataService;
 
@@ -74,6 +76,27 @@ public class DataController {
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
+	}
+
+	@RequestMapping("/updateQuesion")
+	@ResponseBody
+	public Boolean updateQuesion(TQuestions tQuestions) {
+		int count = dataService.updateQuestion(tQuestions);
+		return count > 0;
+	}
+
+	@RequestMapping("/updateAnswers")
+	@ResponseBody
+	public Boolean updateAnswers(TAnswers tAnswers) {
+		int count = dataService.updateAnswers(tAnswers);
+		return count > 0;
+	}
+
+	@RequestMapping("/updateChoise")
+	@ResponseBody
+	public Boolean updateChoise(TChoises tChoises) {
+		int count = dataService.updateChiose(tChoises);
+		return count > 0;
 	}
 
 }
