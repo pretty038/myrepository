@@ -272,14 +272,17 @@ function editAndSaveBt(t){
 }
 function commitChange(t,u){
 	//先生成数据格式。
-	//u的值为  'a','b','c'分别代表问题，选项，答案。
-	var formdata = new FormData($("#tabUp"));	
+	//u的值为  'a','b','c'分别代表问题，选项，答案。	
+	var tmpFormData = $("<form></form>");
+	tmpFormData.attr("enctype","multipart/form-data");
+	tmpFormData.insertAfter($("#tabUp"));
+	var formdata = new FormData(tmpFormData);
 	//div 的title当id。
 	//p标签下面的label标签的title
 	//p标签下面的label的text当
-	var tmpname = $(this).parent().children("label").prop("title");
+	var tmpname = t.parent().children("label").prop("title");
 	formdata.append("id",tmpname);
-	var tmpvalue = $(this).parent().children("label").text();
+	var tmpvalue = t.parent().children("label").text();
 	//用一连串的规则去拼目标字符串。
 	var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
 	var string3 = string2.replace(/<\/span>/g,"");
@@ -297,13 +300,13 @@ function commitChange(t,u){
 	if(u === 'a')
 	{	 
 		formdata.append("question",string9);
-		urlString="../../apcompany/data/";
+		urlString="../../apcompany/data/updateQuesion";
 	} else if(u === 'b') {
 		formdata.append("choise",string9);
-		urlString="../../apcompany/data/";
+		urlString="../../apcompany/data/updateChoise";
 	} else if(u === 'c') {
 		formdata.append("answer",string9);
-		urlString="../../apcompany/data/";
+		urlString="../../apcompany/data/updateAnswers";
 	}
 	console.log(urlString);
 	//ajax返回数据
@@ -317,5 +320,6 @@ function commitChange(t,u){
             console.log("over..");
         }
 	});
+	$("#tabUp").next().remove();
 	
 }
