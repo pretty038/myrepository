@@ -8,11 +8,12 @@ $(document).ready(function(){
 });
 function formUp(){
 	var formdata = new FormData($("#tabUp"));
+	//虽然添加了label，没有什么问题
 	$(".childw:first p label").each(function(){
 		//console.log($(this).children("label").text());
 		//console.log($(this).children("input").prop("name"));
 		var tmpname = $(this).prop("title");
-		var tmpvalue = $(this).text();
+		var tmpvalue = $(this).html();
 		//用一连串的规则去拼目标字符串。
 		var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
 		var string3 = string2.replace(/<\/span>/g,"");
@@ -42,38 +43,7 @@ function formUp(){
 	
 }
 function editorOK(){
-	var oldtxt = document.getElementById("quesInp").value;
-	//console.log(oldtxt);
-	var le = "$\{";
-	var rg ="\}$";
-	var newtxt = le + oldtxt  + rg;
-	
-	document.getElementById("quesLabel").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("answ").value;
-	newtxt = "";
-	//console.log(oldtxt);
-	newtxt = "$\{" + oldtxt + "\}$";
-	//console.log(newtxt);
-	document.getElementById("answLabel").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op1").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option1").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op2").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option2").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op3").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option3").innerHTML = newtxt;
-	
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-	
+		
 }
 function refresh(){
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -98,7 +68,23 @@ function test2(){
     	   btAddOp.appendTo(pBt);
     	   btDelOp.appendTo(pBt);
     	   pBt.appendTo(chw);
-    	   //一段标签由 p包含一个label和一个button组成.
+//    	   //这段p应该用来展示p标签。参考问题吧。
+//    	   var pLabel = $("<p></p>");
+//    	   var lablabel =$("<label></label>");
+//    	   lablabel.attr("title","");//这里需要添加一个label的title属性，应该是id.
+//    	   var btLabel = $("<button>Edit</button>");
+//    	   btLabel.attr("onclick","editAndSaveBt($(this))");
+//    	   btLabel.addClass("editAndsave");
+//    	   var btCommitLabel = $("<button>Commit</button>");
+//    	   btCommitLabel.addClass=$("btCommit");
+//    	   btCommitLabel.attr("onclick","commitChange($(this),'a')");
+//    	   lablabel.html();
+//    	   lablabel.appendTo(pLabel);
+//    	   btLabel.appendTo(pLabel);
+//    	   btCommitLabel.appendTo(pLabel);
+//    	   $("<br />").appendTo(pLabel);
+//    	   pLabel.appendTo(chw);
+    	   //问题标签,一段标签由 p包含一个label和一个button组成.
     	   var pQs = $("<p></p>");
     	   var qs = $("<label></label>",{class:"quesT"});
     	   qs.attr("title",jsonObj[jn].id);
@@ -302,7 +288,8 @@ function commitChange(t,u){
 		formdata.append("question",string9);
 		urlString="../../apcompany/data/updateQuesion";
 	} else if(u === 'b') {
-		formdata.append("choise",string9);
+		string10 = string9.substr(3);
+		formdata.append("choise",string10);
 		urlString="../../apcompany/data/updateChoise";
 	} else if(u === 'c') {
 		formdata.append("answer",string9);
