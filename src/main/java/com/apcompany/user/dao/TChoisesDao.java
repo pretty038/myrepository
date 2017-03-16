@@ -21,7 +21,7 @@ public interface TChoisesDao {
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TChoises choises);
 
-	@Update("update choises set questionid=#{questionid},choise=#{choise} where id=#{id}")
+	@Update("update choises set choise=#{choise} where id=#{id}")
 	public int update(TChoises choises);
 
 	@Update("update choises set choise=#{choise} where questionid=#{questionid}")
