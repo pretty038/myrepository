@@ -20,15 +20,26 @@
 			<result column="cquestionId" property="questionid" />
 			<result column="choise" property="choise" />
 		</collection>
+		<collection property="labels" ofType="com.apcompany.user.pojo.TLabelsQuestionRel">
+			<id column="did" property="id" />
+			<result column="dquestionId" property="questionid" />
+			<result column="labelid" property="labelid" />
+		</collection>
 	</resultMap>
 	
 	<select id="searchAll"  resultMap="BaseResultMap"  >
-	select a.*,b.answer,c.choise,b.id aid,b.questionid aquestionid,c.questionid cquestionid,c.id cid from 
-	questions a,
-	answers b,
+	select a.*,b.answer,c.choise,b.id aid,b.questionid aquestionid,c.questionid cquestionid,c.id cid,d.id did,d.questionid dquestionid,d.labelid labelid from 
+	questions a
+	join 
+	answers b
+	on(a.id=b.questionId)
+	join
 	choises c
-	where a.id=b.questionId and a.id=c.questionId 
-	and a.status=0 and b.status=0 and c.status=0
+	on(a.id=c.questionId)
+	left join
+	labels_question_rel d 
+	on(a.id=d.questionid)
+	where  a.status=0 and b.status=0 and c.status=0  
 		<if test="questionid!=null and questionid>0" >
   			and a.id= #{questionid,jdbcType=INTEGER}
   		</if>

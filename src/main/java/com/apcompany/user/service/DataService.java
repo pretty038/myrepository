@@ -10,7 +10,7 @@ import com.apcompany.user.pojo.TQuestions;
 
 public interface DataService {
 
-	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers);
+	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers, List<TLabelsQuestionRel> tLabelsQuestionRel);
 
 	public boolean delData(int id);
 

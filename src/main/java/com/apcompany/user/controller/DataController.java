@@ -34,7 +34,7 @@ public class DataController {
 		System.out.println(superData);
 		if (superData != null) {
 			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
-					superData.gettAnswers());
+					superData.gettAnswers(),superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "true");
 			} else {

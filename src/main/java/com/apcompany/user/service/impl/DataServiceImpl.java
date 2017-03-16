@@ -34,7 +34,8 @@ public class DataServiceImpl implements DataService {
 	private TLabelQuestionRelDao tLabelQuestionRelDao;
 
 	@Override
-	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers) {
+	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers,
+			List<TLabelsQuestionRel> tLabelsQuestionRel) {
 		int out = 0;
 		out = tQuestionsDao.insert(tQuestions);
 		if (out != 1) {
@@ -52,6 +53,13 @@ public class DataServiceImpl implements DataService {
 		out = tAnswerdao.insert(tAnswers);
 		if (out != 1) {
 			return false;
+		}
+		for (TLabelsQuestionRel tQuestionRel : tLabelsQuestionRel) {
+			tQuestionRel.setQuestionid((int) tQuestions.getId());
+			out = tLabelQuestionRelDao.insert(tQuestionRel);
+			if (out != 1) {
+				return false;
+			}
 		}
 		return true;
 	}

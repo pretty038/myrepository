@@ -11,6 +11,7 @@ public class TQuestions {
 	private Timestamp ctime;
 	private Timestamp utime;
 	private List<TChoises> choices;
+	private List<TLabelsQuestionRel> labels;
 	private TAnswers tAnswers;
 	public long getId() {
 		return id;
@@ -55,10 +56,17 @@ public class TQuestions {
 	public void setChoices(List<TChoises> choices) {
 		this.choices = choices;
 	}
+	
+	public List<TLabelsQuestionRel> getLabels() {
+		return labels;
+	}
+	public void setLabels(List<TLabelsQuestionRel> labels) {
+		this.labels = labels;
+	}
 	@Override
 	public String toString() {
 		return "TQuestions [id=" + id + ", question=" + question + ", status=" + status + ", ctime=" + ctime
-				+ ", utime=" + utime + ", choices=" + choices + ", tAnswers=" + tAnswers + "]";
+				+ ", utime=" + utime + ", choices=" + choices + ", labels=" + labels + ", tAnswers=" + tAnswers + "]";
 	}
 
 }
