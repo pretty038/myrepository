@@ -48,7 +48,7 @@ public class DataController {
 		return "outcome";
 	}
 
-	@RequestMapping("/labelByName")
+	@RequestMapping("/insertLabel")
 	@ResponseBody
 	public String insertLabel(TLabels tLabels, Model model) {
 		boolean outcome = dataService.addLabel(tLabels);
