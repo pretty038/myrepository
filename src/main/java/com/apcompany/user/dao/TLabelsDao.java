@@ -32,4 +32,11 @@ public interface TLabelsDao {
 	@Select("select count(1) from labels where labelname like \"%\"#{names}\"%\"")
 	public int countByName(@Param(value = "names") String names);
 
+	@Select("select * from labels  limit #{pageStart},#{pageSize}")
+	public List<TLabels> selectAll(@Param(value = "pageStart") Integer pageStart,
+			@Param(value = "pageSize") Integer pageSize);
+	
+	@Select("select count(1) from labels ")
+	public int countAll();
+
 }

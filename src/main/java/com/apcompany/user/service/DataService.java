@@ -42,5 +42,10 @@ public interface DataService {
 	public List<TLabels> selectByName(Integer totalcount,Integer pageStart,Integer pageSize,String names);
 	
 	public int countSelectByName(String names);
+	
+	
+	public List<TLabels> selectAllLabels(Integer totalcount,Integer pageStart,Integer pageSize);
+	
+	public int countLabels();
 
 }
