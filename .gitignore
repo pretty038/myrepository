@@ -18,6 +18,7 @@ local.properties
 yes
 yes.pub
 
+
 # External tool builders
 .externalToolBuilders/
 
@@ -228,4 +229,5 @@ pip-log.txt
 	.settings/org.eclipse.wst.jsdt.ui.superType.container
 	.settings/org.eclipse.wst.jsdt.ui.superType.name
 	.settings/org.eclipse.wst.validation.prefs
+
 
