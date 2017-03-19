@@ -45,11 +45,12 @@
 							<button onclick="AddOptionBt($(this))">AddOption</button>
 							<button onclick="deleteDiv($(this))">DeleteOption</button>
 						</p>
-					<!--  	<p>
-							<label class="inputRes" title="label">标签</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
+						<p>
+							<input class="LabelInput" />
+							<button onclick="">AddLabel</button>
+							<button onclick="">
 							<br />
-						</p> -->
+						</p> 
 						<p class="neip">
 							<label class="inputRes" title="tQuestions.question">问题</label>
 							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>

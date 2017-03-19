@@ -33,8 +33,9 @@ public class DataController {
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
 		if (superData != null) {
-			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
-					superData.gettAnswers(),superData.gettLabelsQuestionRel());
+			boolean out = dataService.addData(superData.gettQuestions(),
+					superData.gettChoises(), superData.gettAnswers(),
+					superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "true");
 			} else {
@@ -42,7 +43,8 @@ public class DataController {
 			}
 
 		} else {
-			model.addAttribute("message", "super data is null!!!, please check the parameter !!!");
+			model.addAttribute("message",
+					"super data is null!!!, please check the parameter !!!");
 		}
 		return "outcome";
 	}
@@ -75,6 +77,13 @@ public class DataController {
 	public Boolean updateChoise(TChoises tChoises) {
 		int count = dataService.updateChiose(tChoises);
 		return count > 0;
+	}
+
+	@RequestMapping("/labelManager")
+	public String labelManager(Model model) {
+		// List<TQuestions> datalist = dataService.getDataList(0);
+		// model.addAttribute("datalist", datalist);
+		return "label-manager";
 	}
 
 }
