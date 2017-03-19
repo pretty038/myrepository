@@ -109,7 +109,7 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public TQuestions getData(int questionid) {
-		List<TQuestions> outlist = tQuestionsDao.searchAll(questionid);
+		List<TQuestions> outlist = tQuestionsDao.searchAll(questionid, 0, 20);
 		if (outlist != null && outlist.size() > 0) {
 			return outlist.get(0);
 		}
@@ -117,25 +117,29 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<TQuestions> getDataList(int questionid) {
-		return tQuestionsDao.searchAll(questionid);
+	public List<TQuestions> getDataList(int questionid,Integer totalcount,Integer curPage, Integer pageSize) {
+		curPage = curPage < 1 ? 1 : curPage;
+		int pageStart = (curPage - 1) * pageSize;
+		if (pageStart <= totalcount){
+			return tQuestionsDao.searchAll(questionid, pageStart, pageSize);
+		}else{
+			return null;
+		}
+		
 	}
 
 	@Override
 	public int updateQuestion(TQuestions tQuestions) {
-		// TODO Auto-generated method stub
 		return tQuestionsDao.update(tQuestions);
 	}
 
 	@Override
 	public int updateChiose(TChoises tChoises) {
-		// TODO Auto-generated method stub
 		return tChoisedao.update(tChoises);
 	}
 
 	@Override
 	public int updateAnswers(TAnswers tAnswers) {
-		// TODO Auto-generated method stub
 		return tAnswerdao.update(tAnswers);
 	}
 
@@ -147,26 +151,39 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public int updateLabel(TLabels tLabels) {
-		// TODO Auto-generated method stub
 		return tLabelsDao.update(tLabels);
 	}
 
 	@Override
 	public int delLabel(int id) {
-		// TODO Auto-generated method stub
 		return tLabelsDao.delete(id);
 	}
 
 	@Override
 	public int updateQuestionLabel(TLabelsQuestionRel tLabelsQuestionRel) {
-		// TODO Auto-generated method stub
 		return tLabelQuestionRelDao.update(tLabelsQuestionRel);
 	}
 
 	@Override
 	public int delQuestionLabel(int id) {
-		// TODO Auto-generated method stub
 		return tLabelQuestionRelDao.delete(id);
+	}
+
+	@Override
+	public List<TLabels> selectByName(Integer totalcount, Integer curPage, Integer pageSize, String names) {
+		curPage = curPage < 1 ? 1 : curPage;
+		int pageStart = (curPage - 1) * pageSize;
+		if (pageStart <= totalcount) {
+			return tLabelsDao.selectByName(pageStart, pageSize, names);
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
+	public int countSelectByName(String names) {
+		return tLabelsDao.countByName(names);
 	}
 
 }

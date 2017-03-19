@@ -1,7 +1,10 @@
 package com.apcompany.user.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -21,5 +24,12 @@ public interface TLabelsDao {
 
 	@Update("update labels set status=1 where id=#{id}")
 	public int delete(int id);
+
+	@Select("select * from labels where labelname like \"%\"#{names}\"%\" order by id limit #{pageStart},#{pageSize}")
+	public List<TLabels> selectByName(@Param(value = "pageStart") Integer pageStart,
+			@Param(value = "pageSize") Integer pageSize, @Param(value = "names") String names);
+
+	@Select("select count(1) from labels where labelname like \"%\"#{names}\"%\"")
+	public int countByName(@Param(value = "names") String names);
 
 }

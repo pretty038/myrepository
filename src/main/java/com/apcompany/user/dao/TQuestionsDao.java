@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Update;
 import com.apcompany.user.pojo.TQuestions;
 
 public interface TQuestionsDao {
-	
+
 	@Select("select * from questions where id=#{id}")
 	public TQuestions getQuestions(int id);
 
@@ -24,10 +24,11 @@ public interface TQuestionsDao {
 
 	@Update("update questions set status=1 where id=#{id}")
 	public int delete(int id);
-	
+
 	@Select("select count(1) from questions ")
 	public Integer getQuestionsNum();
-	
-	public List<TQuestions> searchAll(@Param("questionid") int questionid);
+
+	public List<TQuestions> searchAll(@Param("questionid") int questionid,
+			@Param(value = "pageStart") Integer pageStart, @Param(value = "pageSize") Integer pageSize);
 
 }

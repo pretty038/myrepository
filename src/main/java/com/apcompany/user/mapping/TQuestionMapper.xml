@@ -43,6 +43,7 @@
 		<if test="questionid!=null and questionid>0" >
   			and a.id= #{questionid,jdbcType=INTEGER}
   		</if>
+  	limit #{pageStart},#{pageSize}
 	</select>
 	
 </mapper>

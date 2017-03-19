@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.apcompany.user.pojo.SuperData;
 import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
+import com.apcompany.user.pojo.TLabels;
 import com.apcompany.user.pojo.TQuestions;
 import com.apcompany.user.service.DataService;
 
@@ -34,7 +35,7 @@ public class DataController {
 		System.out.println(superData);
 		if (superData != null) {
 			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
-					superData.gettAnswers(),superData.gettLabelsQuestionRel());
+					superData.gettAnswers(), superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "true");
 			} else {
@@ -47,10 +48,23 @@ public class DataController {
 		return "outcome";
 	}
 
+	@RequestMapping("/labelByName")
+	@ResponseBody
+	public String insertLabel(TLabels tLabels, Model model) {
+		boolean outcome = dataService.addLabel(tLabels);
+		if (outcome) {
+			model.addAttribute("message", "true");
+		} else {
+			model.addAttribute("message", "insert failed !!");
+		}
+		return "outcome";
+	}
+
 	@RequestMapping("/select")
 	@ResponseBody
-	public String selectAll(Model model) {
-		List<TQuestions> datalist = dataService.getDataList(0);
+	public String selectAll(Model model, Integer curPage, Integer pageSize) {
+		int totalcount = dataService.getDataCount();
+		List<TQuestions> datalist = dataService.getDataList(0, totalcount, curPage, pageSize);
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
@@ -75,6 +89,22 @@ public class DataController {
 	public Boolean updateChoise(TChoises tChoises) {
 		int count = dataService.updateChiose(tChoises);
 		return count > 0;
+	}
+
+	@RequestMapping("/delChoise")
+	@ResponseBody
+	public Boolean delChoise(int id) {
+		int count = dataService.delLabel(id);
+		return count > 0;
+	}
+
+	@RequestMapping("/labelByName")
+	@ResponseBody
+	public String labelByName(Integer curPage, Integer pageSize, String names) {
+		int totalcount = dataService.countSelectByName(names);
+		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
+		String jsonText = JSON.toJSONString(lables, true);
+		return jsonText;
 	}
 
 }

@@ -20,7 +20,7 @@ public interface DataService {
 
 	public TQuestions getData(int questionid);
 
-	public List<TQuestions> getDataList(int questionid);
+	public List<TQuestions> getDataList(int questionid,Integer totalcount,Integer curPage, Integer pageSize);
 
 	public int updateQuestion(TQuestions tQuestions);
 
@@ -37,5 +37,10 @@ public interface DataService {
 	public int updateQuestionLabel(TLabelsQuestionRel tLabelsQuestionRel);
 	
 	public int delQuestionLabel(int id);
+	
+	
+	public List<TLabels> selectByName(Integer totalcount,Integer pageStart,Integer pageSize,String names);
+	
+	public int countSelectByName(String names);
 
 }
