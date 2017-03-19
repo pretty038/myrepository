@@ -64,6 +64,8 @@ public class DataController {
 	@ResponseBody
 	public String selectAll(Model model, Integer curPage, Integer pageSize) {
 		int totalcount = dataService.getDataCount();
+		curPage = curPage == null ? 0 : curPage;
+		pageSize = pageSize == null ? 20 : pageSize;
 		List<TQuestions> datalist = dataService.getDataList(0, totalcount, curPage, pageSize);
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
@@ -101,6 +103,8 @@ public class DataController {
 	@RequestMapping("/labelByName")
 	@ResponseBody
 	public String labelByName(Integer curPage, Integer pageSize, String names) {
+		curPage = curPage == null ? 0 : curPage;
+		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countSelectByName(names);
 		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
 		String jsonText = JSON.toJSONString(lables, true);
