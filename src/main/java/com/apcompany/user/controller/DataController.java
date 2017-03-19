@@ -93,10 +93,17 @@ public class DataController {
 		return count > 0;
 	}
 
-	@RequestMapping("/delChoise")
+	@RequestMapping("/delLabel")
 	@ResponseBody
-	public Boolean delChoise(int id) {
+	public Boolean delLabel(int id) {
 		int count = dataService.delLabel(id);
+		return count > 0;
+	}
+	
+	@RequestMapping("/updateLabel")
+	@ResponseBody
+	public Boolean updateLabe(TLabels tLabels) {
+		int count = dataService.updateLabel(tLabels);
 		return count > 0;
 	}
 
@@ -107,6 +114,17 @@ public class DataController {
 		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countSelectByName(names);
 		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
+		String jsonText = JSON.toJSONString(lables, true);
+		return jsonText;
+	}
+	
+	@RequestMapping("/labelAll")
+	@ResponseBody
+	public String labelAll(Integer curPage, Integer pageSize) {
+		curPage = curPage == null ? 0 : curPage;
+		pageSize = pageSize == null ? 20 : pageSize;
+		int totalcount = dataService.countLabels();
+		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage, pageSize);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}

@@ -117,15 +117,15 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<TQuestions> getDataList(int questionid,Integer totalcount,Integer curPage, Integer pageSize) {
+	public List<TQuestions> getDataList(int questionid, Integer totalcount, Integer curPage, Integer pageSize) {
 		curPage = curPage < 1 ? 1 : curPage;
 		int pageStart = (curPage - 1) * pageSize;
-		if (pageStart <= totalcount){
+		if (pageStart <= totalcount) {
 			return tQuestionsDao.searchAll(questionid, pageStart, pageSize);
-		}else{
+		} else {
 			return null;
 		}
-		
+
 	}
 
 	@Override
@@ -184,6 +184,22 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public int countSelectByName(String names) {
 		return tLabelsDao.countByName(names);
+	}
+
+	@Override
+	public List<TLabels> selectAllLabels(Integer totalcount, Integer curPage, Integer pageSize) {
+		curPage = curPage < 1 ? 1 : curPage;
+		int pageStart = (curPage - 1) * pageSize;
+		if (pageStart <= totalcount) {
+			return tLabelsDao.selectAll(pageStart, pageSize);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public int countLabels() {
+		return tLabelsDao.countAll();
 	}
 
 }
