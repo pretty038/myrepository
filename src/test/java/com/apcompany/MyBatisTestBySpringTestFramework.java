@@ -40,13 +40,13 @@ public class MyBatisTestBySpringTestFramework {
     	System.out.println(tQuestions.getId());
     }
     
-     @Test
-     public void testSearch(){
-    	 List <TQuestions> list=questionsDao.searchAll(0);
-    	 for(TQuestions tQuestions:list){
-    		 System.out.println(tQuestions);
-    	 }
-     }
+//     @Test
+//     public void testSearch(){
+//    	 List <TQuestions> list=questionsDao.searchAll(0);
+//    	 for(TQuestions tQuestions:list){
+//    		 System.out.println(tQuestions);
+//    	 }
+//     }
     @Test
     public void insertTest1(){
     	TAnswers tAnswers=new TAnswers();

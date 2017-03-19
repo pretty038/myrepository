@@ -107,4 +107,9 @@ public class DataController {
 		return jsonText;
 	}
 
+	@RequestMapping("/labelManager")
+	public String labelManager(Model model) {
+		return "label-manager";
+	}
+
 }

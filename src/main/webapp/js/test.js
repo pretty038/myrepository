@@ -1,42 +1,35 @@
 $(document).ready(function(){
-	$("#dv2").on("mouseover",".quesT,.anT,.opT",function(){
+	$("#dv2").on("mouseover",".childw p",function(){
 		$(this).css("background-color","#C8E0F0");
 	});
-	$("#dv2").on("mouseout",".quesT,.anT,.opT",function(){
+	$("#dv2").on("mouseout",".childw p",function(){
 		$(this).css("background-color","#FFFFFF");
-	});
-	$("#dv2").on("click",".quesT,.anT,.opT",function(){
-		var tmp = $("<input />");
-		tmp.attr("class", "tmpInput");
-		var tmp2 = $("<button>Open Editor</button>");
-		tmp.attr("class", "tmpBt");
-		tmp.insertBefore($(this));
-		tmp2.insertBefore($(this));
-		$(this).css("background-color","#C8E0F0");
-		//id赋值
-		var str = $("#flg").text();
-		$(this).attr("id","tmpPage" + str);
-		
-		tmp2.css("background-color","#C8E0F0");
-		tmp.css("background-color","#C8E0F0");
-		tmp2.attr("onclick","tmpClick($(this))");
-		
 	});
 });
 function formUp(){
 	var formdata = new FormData($("#tabUp"));
-	$("#cinQues .neip").each(function(){
+	//虽然添加了label，没有什么问题
+	$(".childw:first p label").each(function(){
 		//console.log($(this).children("label").text());
 		//console.log($(this).children("input").prop("name"));
-		var tmpname = $(this).children("input").prop("name");
-		var tmpvalue = $(this).children("label").text();
-		console.log(tmpname,tmpvalue);
+		var tmpname = $(this).prop("title");
+		var tmpvalue = $(this).html();
+		//用一连串的规则去拼目标字符串。
+		var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
+		var string3 = string2.replace(/<\/span>/g,"");
+		var string4 = string3.replace(/<\/nobr>/g,"");		
+		var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
+		var string6 = string5.replace(/<\/script>/g,"}$");
+		var string7 = string6.replace(/<label.*?>/g,"");		
+		var string8 = string7.replace(/<\/label>/g,"");		
+		var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
+		console.log(tmpname,string9);
 		//formdata.append($(this).children("input").prop("name"),$(this).children("label").text());
-		formdata.append(tmpname,tmpvalue);
+		formdata.append(tmpname,string9);
 		
 	});
 	for(var valuetmp in formdata.values())
-		console.log(vluetmp);
+		console.log(valuetmp);
 	$.ajax({
         url:"../../apcompany/data/insert",
         type:"post",
@@ -50,42 +43,12 @@ function formUp(){
 	
 }
 function editorOK(){
-	var oldtxt = document.getElementById("quesInp").value;
-	//console.log(oldtxt);
-	var le = "$\{";
-	var rg ="\}$";
-	var newtxt = le + oldtxt  + rg;
-	//console.log(newtxt);
-	document.getElementById("quesLabel").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("answ").value;
-	newtxt = "";
-	//console.log(oldtxt);
-	newtxt = "$\{" + oldtxt + "\}$";
-	//console.log(newtxt);
-	document.getElementById("answLabel").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op1").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option1").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op2").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option2").innerHTML = newtxt;
-	
-	oldtxt = document.getElementById("op3").value;
-	newtxt = "";
-	newtxt = "$\{" + oldtxt + "\}$";
-	document.getElementById("option3").innerHTML = newtxt;
-	
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-	
+		
 }
 function refresh(){
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
+//test2()用来展示select得到的数据。
 function test2(){
 	$.get("/apcompany/data/select", function(result) {  
        //console.log(result); 
@@ -95,25 +58,91 @@ function test2(){
        for(var jn in jsonObj)
 		{
     	   var chw = $("<div></div>" ,{class:"childw"});
+    	   //chw.attr("title",jsonObj[jn].id);
+    	   //两个button
+    	   var pBt = $("<p></p>");
+    	   var btAddOp=$("<button>AddOption</button>");
+    	   var btDelOp=$("<button>DelOption</button>");
+    	   btAddOp.attr("onclick","AddOptionBt($(this))");
+    	   btDelOp.attr("onclick","deleteDiv($(this))");
+    	   btAddOp.appendTo(pBt);
+    	   btDelOp.appendTo(pBt);
+    	   pBt.appendTo(chw);
+//    	   //这段p应该用来展示p标签。参考问题吧。
+//    	   var pLabel = $("<p></p>");
+//    	   var lablabel =$("<label></label>");
+//    	   lablabel.attr("title","");//这里需要添加一个label的title属性，应该是id.
+//    	   var btLabel = $("<button>Edit</button>");
+//    	   btLabel.attr("onclick","editAndSaveBt($(this))");
+//    	   btLabel.addClass("editAndsave");
+//    	   var btCommitLabel = $("<button>Commit</button>");
+//    	   btCommitLabel.addClass=$("btCommit");
+//    	   btCommitLabel.attr("onclick","commitChange($(this),'a')");
+//    	   lablabel.html();
+//    	   lablabel.appendTo(pLabel);
+//    	   btLabel.appendTo(pLabel);
+//    	   btCommitLabel.appendTo(pLabel);
+//    	   $("<br />").appendTo(pLabel);
+//    	   pLabel.appendTo(chw);
+    	   //问题标签,一段标签由 p包含一个label和一个button组成.
+    	   var pQs = $("<p></p>");
     	   var qs = $("<label></label>",{class:"quesT"});
+    	   qs.attr("title",jsonObj[jn].id);
+    	   var btQs = $("<button>Edit</button>");
+    	   btQs.attr("onclick","editAndSaveBt($(this))");
+    	   btQs.addClass("editAndsave");
+    	   var btCommitQs = $("<button>Commit</button>");
+    	   btCommitQs.addClass=$("btCommit");
+    	   btCommitQs.attr("onclick","commitChange($(this),'a')");   	   
     	   qs.html(jsonObj[jn].question);
+    	   qs.appendTo(pQs);
+    	   btQs.appendTo(pQs);
+    	   btCommitQs.appendTo(pQs);
+    	   $("<br />").appendTo(pQs);   	   
+    	   pQs.appendTo(chw);
+    	 //下面是答案标签
+    	   var pAn = $("<p></p>");
     	   var an = $("<label></label>",{class:"anT"});
+    	   an.attr("title",jsonObj[jn].tAnswers.id);
+    	   var btAn = $("<button>Edit</button>");
+    	   btAn.attr("onclick","editAndSaveBt($(this))");
+    	   btAn.addClass("editAndsave");
+    	   var btCommitAn = $("<button>Commit</button>");
+    	   btCommitAn.addClass=$("btCommit");
+    	   btCommitAn.attr("onclick","commitChange($(this),'c')");    	   
     	   an.html( "The answer is: "+jsonObj[jn].tAnswers.answer);
-    	   qs.appendTo(chw);
+    	   an.appendTo(pAn);
+    	   btAn.appendTo(pAn);
+    	   btCommitAn.appendTo(pAn);
+    	   $("<br />").appendTo(pAn); 
+    	   //pAn.appendTo(chw);
+    	   
+    	   //下面是选项标签.
     	   var i = 0;
     	   var str = new String("ABCDEFGHIJK");
 			for(var jn2 in jsonObj[jn].choices)
 			{
+				var tmpP = $("<p></p>");
 				//console.log("option:" +jsonObj[jn].choices[jn2].choise);
 				var op1 = $("<label></label>",{class:"opT"});
-				
-					op1.text("("+ str.charAt(i)+ ") " + jsonObj[jn].choices[jn2].choise);
-					op1.appendTo(chw);
-				
+				op1.attr("title",jsonObj[jn].choices[jn2].id);
+				var opButton = $("<button>Edit</button>");
+				opButton.addClass("editAndsave");
+				opButton.attr("onclick","editAndSaveBt($(this))");
+				var btCommitTmp = $("<button>Commit</button>");
+		    	btCommitTmp.addClass=$("btCommit");
+		    	btCommitTmp.attr("onclick","commitChange($(this),'b')");		    	
+				op1.html("("+ str.charAt(i)+ ") " + jsonObj[jn].choices[jn2].choise);
+				op1.appendTo(tmpP);
+				opButton.appendTo(tmpP);
+				btCommitTmp.appendTo(tmpP);
+				$("<br />").appendTo(tmpP);
+				tmpP.appendTo(chw);				
 				i++;
 				
 			}
-			an.appendTo(chw);
+			
+			pAn.appendTo(chw);
 			chw.appendTo($("#dv2"));
 			
 		}
@@ -126,28 +155,36 @@ function test3(){
 	refresh();
 }
 var num=0;
-function AddOptionBt(){
+function AddOptionBt(t){
 	num++;
 	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
 	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
 	var op = $("<p></p>" ,{class:"neip"});
-	var insideD = $("<label></label>");
+	var insideD = $("<label>选项</label>");
 	var insideE = $("<button>Edit</button>")
-	var insideA = $("<input name=tChoises["+num+"].choise/>",{onblur:"exitInput($(this))"});
-	var insideB = $("<label></label>");
-	var insideC = $("<button>openEditor</button>");
-	insideC.addClass("editorStart");
+	//var insideA = $("<input name=tChoises["+num+"].choise/>",{onblur:"exitInput($(this))"});
+	//var insideB = $("<label></label>");
+	//var insideC = $("<button>openEditor</button>");
+	insideD.addClass("inputRes");
+	insideD.attr("title","tChoises[" + num +"].choise");
+	insideE.addClass("editAndsave");
+	insideE.attr("onclick","editAndSaveBt($(this))");
 	op.addClass("neip");
-	insideA.attr("onblur","exitInput($(this))");
+	insideD.appendTo(op);
+	insideE.appendTo(op);
+	$("<br/>").appendTo(op);
+	//insideA.attr("onblur","exitInput($(this))");
 	//attr才能实现这个，但是我在html上，在创建时候添加也行啊，而且class用的是Addclass，不明白为什么.
-	insideC.attr("onclick","editorOpen($(this))");
-	insideA.appendTo(op);
-	insideC.appendTo(op);
-	insideB.appendTo(op);
-	op.appendTo($("#cinQues"));
+	//insideC.attr("onclick","editorOpen($(this))");
+	//insideA.appendTo(op);
+	//insideC.appendTo(op);
+	//insideB.appendTo(op);
+	//op.appendTo($("#cinQues"));
+	op.insertBefore(t.parent().parent().children("p:last"));
 }
-function deleteDiv(){
-	$("#cinQues p:last").remove();
+function deleteDiv(t){
+	t.parent().parent().children("p:last").prev().remove();
+	//$("#cinQues p:last").remove();
 	num--;
 }
 function goInput(t){
@@ -218,4 +255,58 @@ function editAndSaveBt(t){
 		$(".editorOpenBt").remove();
 		//将input的值放入到lable中,清空本身。
 	}
+}
+function commitChange(t,u){
+	//先生成数据格式。
+	//u的值为  'a','b','c'分别代表问题，选项，答案。	
+	var tmpFormData = $("<form></form>");
+	tmpFormData.attr("enctype","multipart/form-data");
+	tmpFormData.insertAfter($("#tabUp"));
+	var formdata = new FormData(tmpFormData);
+	//div 的title当id。
+	//p标签下面的label标签的title
+	//p标签下面的label的text当
+	var tmpname = t.parent().children("label").prop("title");
+	formdata.append("id",tmpname);
+	var tmpvalue = t.parent().children("label").text();
+	//用一连串的规则去拼目标字符串。
+	var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
+	var string3 = string2.replace(/<\/span>/g,"");
+	var string4 = string3.replace(/<\/nobr>/g,"");		
+	var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
+	var string6 = string5.replace(/<\/script>/g,"}$");
+	var string7 = string6.replace(/<label.*?>/g,"");		
+	var string8 = string7.replace(/<\/label>/g,"");		
+	var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
+	
+	//$(this),父标签中的label的title情形，tQuestions.question tChoises[0].choise tAnswers.answer
+	//但是这样的话，我就得把id考虑进去。title就不能放那些东西了。
+	//根据第二个参数进行判断吧。
+	var urlString = "";
+	if(u === 'a')
+	{	 
+		formdata.append("question",string9);
+		urlString="../../apcompany/data/updateQuesion";
+	} else if(u === 'b') {
+		string10 = string9.substr(3);
+		formdata.append("choise",string10);
+		urlString="../../apcompany/data/updateChoise";
+	} else if(u === 'c') {
+		formdata.append("answer",string9);
+		urlString="../../apcompany/data/updateAnswers";
+	}
+	console.log(urlString);
+	//ajax返回数据
+	$.ajax({
+        url:urlString,
+        type:"post",
+        data:formdata,
+        processData:false,
+        contentType:false,
+        success:function(data){
+            console.log("over..");
+        }
+	});
+	$("#tabUp").next().remove();
+	
 }
