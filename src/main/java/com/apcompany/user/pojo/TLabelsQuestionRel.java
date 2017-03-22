@@ -4,18 +4,14 @@ import java.sql.Timestamp;
 
 public class TLabelsQuestionRel {
 	
-	private long id;
+	private int id;
 	private int status;
 	private int labelid;
 	private int questionid;
 	private Timestamp ctime;
 	private Timestamp utime;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+	private int labelsrelid;
+	
 	public int getStatus() {
 		return status;
 	}
@@ -45,6 +41,18 @@ public class TLabelsQuestionRel {
 	}
 	public void setUtime(Timestamp utime) {
 		this.utime = utime;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getLabelsrelid() {
+		return labelsrelid;
+	}
+	public void setLabelsrelid(int labelsrelid) {
+		this.labelsrelid = labelsrelid;
 	}
 	
 

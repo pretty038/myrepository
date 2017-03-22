@@ -6,6 +6,7 @@ import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
 import com.apcompany.user.pojo.TLabels;
 import com.apcompany.user.pojo.TLabelsQuestionRel;
+import com.apcompany.user.pojo.TLabelsRel;
 import com.apcompany.user.pojo.TQuestions;
 
 public interface DataService {
@@ -47,5 +48,13 @@ public interface DataService {
 	public List<TLabels> selectAllLabels(Integer totalcount,Integer pageStart,Integer pageSize);
 	
 	public int countLabels();
+	
+	public int insertOrUpateTLabelsRel(TLabelsRel tLabelsRel);
+	
+	public int delTLabelsRel(int id);
+	
+	public TLabelsRel selectById(int id);
+	
+	public List<TLabelsRel> selectByParentId(int parentId);
 
 }

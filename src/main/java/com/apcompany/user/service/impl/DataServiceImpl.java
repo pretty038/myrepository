@@ -9,11 +9,13 @@ import com.apcompany.user.dao.TAnswersDao;
 import com.apcompany.user.dao.TChoisesDao;
 import com.apcompany.user.dao.TLabelQuestionRelDao;
 import com.apcompany.user.dao.TLabelsDao;
+import com.apcompany.user.dao.TLabelsRelDao;
 import com.apcompany.user.dao.TQuestionsDao;
 import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
 import com.apcompany.user.pojo.TLabels;
 import com.apcompany.user.pojo.TLabelsQuestionRel;
+import com.apcompany.user.pojo.TLabelsRel;
 import com.apcompany.user.pojo.TQuestions;
 import com.apcompany.user.service.DataService;
 
@@ -32,6 +34,8 @@ public class DataServiceImpl implements DataService {
 	private TLabelsDao tLabelsDao;
 	@Autowired
 	private TLabelQuestionRelDao tLabelQuestionRelDao;
+	@Autowired
+	private TLabelsRelDao tLabelsRelDao;
 
 	@Override
 	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers,
@@ -200,6 +204,38 @@ public class DataServiceImpl implements DataService {
 	@Override
 	public int countLabels() {
 		return tLabelsDao.countAll();
+	}
+
+	@Override
+	public int insertOrUpateTLabelsRel(TLabelsRel tLabelsRel) {
+		int outcome = 0;
+		if (tLabelsRel == null) {
+			return outcome;
+		}
+		if (tLabelsRel.getId() > 0) {
+			outcome = tLabelsRelDao.update(tLabelsRel);
+		} else {
+			outcome = tLabelsRelDao.insert(tLabelsRel);
+		}
+		return outcome;
+	}
+
+	@Override
+	public int delTLabelsRel(int id) {
+		// TODO Auto-generated method stub
+		return tLabelsRelDao.delete(id);
+	}
+
+	@Override
+	public TLabelsRel selectById(int id) {
+		// TODO Auto-generated method stub
+		return tLabelsRelDao.select(id);
+	}
+
+	@Override
+	public List<TLabelsRel> selectByParentId(int parentId) {
+		// TODO Auto-generated method stub
+		return tLabelsRelDao.selectByParent(parentId);
 	}
 
 }

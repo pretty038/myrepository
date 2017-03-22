@@ -5,7 +5,7 @@ import java.util.List;
 
 
 public class TQuestions {
-	private long id;
+	private int id;
 	private String question;
 	private int status;
 	private Timestamp ctime;
@@ -13,12 +13,7 @@ public class TQuestions {
 	private List<TChoises> choices;
 	private List<TLabelsQuestionRel> labels;
 	private TAnswers tAnswers;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 	public String getQuestion() {
 		return question;
 	}
@@ -67,6 +62,12 @@ public class TQuestions {
 	public String toString() {
 		return "TQuestions [id=" + id + ", question=" + question + ", status=" + status + ", ctime=" + ctime
 				+ ", utime=" + utime + ", choices=" + choices + ", labels=" + labels + ", tAnswers=" + tAnswers + "]";
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

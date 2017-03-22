@@ -3,18 +3,12 @@ package com.apcompany.user.pojo;
 import java.sql.Timestamp;
 
 public class TAnswers {
-	private long id;
-	private long questionid;
+	private int id;
+	private int questionid;
 	private int status;
 	private String answer;
 	private Timestamp ctime;
 	private Timestamp utime;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
 	
 	public int getStatus() {
 		return status;
@@ -40,16 +34,23 @@ public class TAnswers {
 	public void setUtime(Timestamp utime) {
 		this.utime = utime;
 	}
-	public long getQuestionid() {
-		return questionid;
-	}
-	public void setQuestionid(long questionid) {
-		this.questionid = questionid;
-	}
+	
 	@Override
 	public String toString() {
 		return "TAnswers [id=" + id + ", questionid=" + questionid + ", status=" + status + ", answer=" + answer
 				+ ", ctime=" + ctime + ", utime=" + utime + "]";
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getQuestionid() {
+		return questionid;
+	}
+	public void setQuestionid(int questionid) {
+		this.questionid = questionid;
 	}
 
 }
