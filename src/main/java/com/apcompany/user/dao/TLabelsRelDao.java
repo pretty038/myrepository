@@ -13,36 +13,43 @@ import com.apcompany.user.pojo.TLabelsRel;
 
 public interface TLabelsRelDao {
 
-	final String TableName="labels_rel";
-	
-	@Select("select * from "+TableName+" where id=#{id}")
+	final String TableName = "labels_rel";
+
+	@Select("select * from " + TableName + " where id=#{id}")
 	public TLabelsRel select(int id);
-	
-	@Select("select * from "+TableName+" where parentsid=#{parentsid}")
+
+	@Select("select * from " + TableName + " where parentsid=#{parentsid}")
 	public List<TLabelsRel> selectByParent(int parentsid);
 
-	@Insert("insert into "+TableName+" (labelname,parentsid) values (#{labelname},#{parentsid})")
+	@Insert("insert into " + TableName
+			+ " (labelname,parentsid) values (#{labelname},#{parentsid})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TLabelsRel tLabelsRel);
 
-	@Update("update "+TableName+" set labelname=#{labelname},parentsid=#{parentsid} where id=#{id}")
+	@Update("update "
+			+ TableName
+			+ " set labelname=#{labelname},parentsid=#{parentsid} where id=#{id}")
 	public int update(TLabelsRel tLabelsRel);
 
-	@Update("update "+TableName+" set status=1 where id=#{id}")
+	@Update("update " + TableName + " set status=1 where id=#{id}")
 	public int delete(int id);
 
-	@Select("select * from "+TableName+" where labelname like \"%\"#{names}\"%\" order by id limit #{pageStart},#{pageSize}")
-	public List<TLabels> selectByName(@Param(value = "pageStart") Integer pageStart,
-			@Param(value = "pageSize") Integer pageSize, @Param(value = "names") String names);
+	@Select("select * from "
+			+ TableName
+			+ " where labelname like \"%\"#{names}\"%\" order by id limit #{pageStart},#{pageSize}")
+	public List<TLabels> selectByName(
+			@Param(value = "pageStart") Integer pageStart,
+			@Param(value = "pageSize") Integer pageSize,
+			@Param(value = "names") String names);
 
-	@Select("select count(1) from "+TableName+" where labelname like \"%\"#{names}\"%\"")
+	@Select("select count(1) from " + TableName
+			+ " where labelname like \"%\"#{names}\"%\"")
 	public int countByName(@Param(value = "names") String names);
 
-	@Select("select * from "+TableName+"  limit #{pageStart},#{pageSize}")
-	public List<TLabels> selectAll(@Param(value = "pageStart") Integer pageStart,
-			@Param(value = "pageSize") Integer pageSize);
-	
-	@Select("select count(1) from "+TableName+" ")
+	@Select("select * from " + TableName)
+	public List<TLabelsRel> selectAll();
+
+	@Select("select count(1) from " + TableName + " ")
 	public int countAll();
 
 }
