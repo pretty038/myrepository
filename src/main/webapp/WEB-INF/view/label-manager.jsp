@@ -11,14 +11,19 @@
 		<link href="../css/blog-single.css" rel="stylesheet">
 		<link href="../css/responsive.css" rel="stylesheet">		
 		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
-		<script type="text/javascript" src="../js/linklist.js"></script>
-		<script type="text/javascript" src="../js/label-manager.js"></script>		
+		<script type="text/javascript" src="../js/label-manager.js"></script>
+		<link href="../css/lable-manager.css" rel="stylesheet">		
 	</head>
 
 	<body>
 		<div>
 			<div><button onclick="showLabelTree()">ShowLabelTree</button></div>
-			<div></div>
+			<div class="divArea">
+				<div class="depth0" id="frame0">
+					<button class="add-option">AddOption</button>
+					<button class="hide-and-show-option">-</button>
+				</div>
+			</div>
 		</div>
 	</body>
 
