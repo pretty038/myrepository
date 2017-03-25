@@ -38,8 +38,8 @@ public class DataServiceImpl implements DataService {
 	private TLabelsRelDao tLabelsRelDao;
 
 	@Override
-	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers,
-			List<TLabelsQuestionRel> tLabelsQuestionRel) {
+	public boolean addData(TQuestions tQuestions, List<TChoises> tChoises,
+			TAnswers tAnswers, List<TLabelsQuestionRel> tLabelsQuestionRel) {
 		int out = 0;
 		out = tQuestionsDao.insert(tQuestions);
 		if (out != 1) {
@@ -59,7 +59,7 @@ public class DataServiceImpl implements DataService {
 			return false;
 		}
 		for (TLabelsQuestionRel tQuestionRel : tLabelsQuestionRel) {
-			tQuestionRel.setQuestionid((int) tQuestions.getId());
+			tQuestionRel.setQuestionid(tQuestions.getId());
 			out = tLabelQuestionRelDao.insert(tQuestionRel);
 			if (out != 1) {
 				return false;
@@ -88,7 +88,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers) {
+	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises,
+			TAnswers tAnswers) {
 		int out = 0;
 		out = tQuestionsDao.update(tQuestions);
 		if (out != 1) {
@@ -121,7 +122,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<TQuestions> getDataList(int questionid, Integer totalcount, Integer curPage, Integer pageSize) {
+	public List<TQuestions> getDataList(int questionid, Integer totalcount,
+			Integer curPage, Integer pageSize) {
 		curPage = curPage < 1 ? 1 : curPage;
 		int pageStart = (curPage - 1) * pageSize;
 		if (pageStart <= totalcount) {
@@ -174,7 +176,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<TLabels> selectByName(Integer totalcount, Integer curPage, Integer pageSize, String names) {
+	public List<TLabels> selectByName(Integer totalcount, Integer curPage,
+			Integer pageSize, String names) {
 		curPage = curPage < 1 ? 1 : curPage;
 		int pageStart = (curPage - 1) * pageSize;
 		if (pageStart <= totalcount) {
@@ -191,7 +194,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public List<TLabels> selectAllLabels(Integer totalcount, Integer curPage, Integer pageSize) {
+	public List<TLabels> selectAllLabels(Integer totalcount, Integer curPage,
+			Integer pageSize) {
 		curPage = curPage < 1 ? 1 : curPage;
 		int pageStart = (curPage - 1) * pageSize;
 		if (pageStart <= totalcount) {
@@ -236,6 +240,25 @@ public class DataServiceImpl implements DataService {
 	public List<TLabelsRel> selectByParentId(int parentId) {
 		// TODO Auto-generated method stub
 		return tLabelsRelDao.selectByParent(parentId);
+	}
+
+	@Override
+	public int countLabelsRel() {
+		return tLabelsRelDao.countAll();
+	}
+
+	@Override
+	public List<TLabelsRel> selectAllLabelsRel() {
+		// TODO Auto-generated method stub
+		// return TLabelsRelDao.selectAll(pageStart, pageSize);
+		return tLabelsRelDao.selectAll();
+
+	}
+
+	@Override
+	public int updateLabelRel(TLabelsRel tLabelsRel) {
+		return tLabelsRelDao.update(tLabelsRel);
+
 	}
 
 }
