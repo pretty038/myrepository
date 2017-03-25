@@ -159,9 +159,10 @@ public class DataController {
 	}
 
 	@RequestMapping("/labelUpdateOrInsert")
-	public Boolean labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
+	@ResponseBody
+	public String labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
 		int count = dataService.insertOrUpateTLabelsRel(tlabelsrel);
-		return count > 0;
+		return count > 0?"true":"false";
 	}
 
 	@RequestMapping("/labelManager")
