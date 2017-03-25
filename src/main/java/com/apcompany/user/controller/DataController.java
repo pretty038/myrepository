@@ -1,8 +1,6 @@
 package com.apcompany.user.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +36,8 @@ public class DataController {
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
 		if (superData != null) {
-			boolean out = dataService.addData(superData.gettQuestions(),
-					superData.gettChoises(), superData.gettAnswers(),
-					superData.gettLabelsQuestionRel());
+			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
+					superData.gettAnswers(), superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "true");
 			} else {
@@ -48,8 +45,7 @@ public class DataController {
 			}
 
 		} else {
-			model.addAttribute("message",
-					"super data is null!!!, please check the parameter !!!");
+			model.addAttribute("message", "super data is null!!!, please check the parameter !!!");
 		}
 		return "outcome";
 	}
@@ -72,8 +68,7 @@ public class DataController {
 		int totalcount = dataService.getDataCount();
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
-		List<TQuestions> datalist = dataService.getDataList(0, totalcount,
-				curPage, pageSize);
+		List<TQuestions> datalist = dataService.getDataList(0, totalcount, curPage, pageSize);
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
@@ -81,37 +76,37 @@ public class DataController {
 
 	@RequestMapping("/updateQuesion")
 	@ResponseBody
-	public Boolean updateQuesion(TQuestions tQuestions) {
+	public String updateQuesion(TQuestions tQuestions) {
 		int count = dataService.updateQuestion(tQuestions);
-		return count > 0;
+		return  count > 0?"true":"false";
 	}
 
 	@RequestMapping("/updateAnswers")
 	@ResponseBody
-	public Boolean updateAnswers(TAnswers tAnswers) {
+	public String updateAnswers(TAnswers tAnswers) {
 		int count = dataService.updateAnswers(tAnswers);
-		return count > 0;
+		return  count > 0?"true":"false";
 	}
 
 	@RequestMapping("/updateCimei'yihoise")
 	@ResponseBody
-	public Boolean updateChoise(TChoises tChoises) {
+	public String updateChoise(TChoises tChoises) {
 		int count = dataService.updateChiose(tChoises);
-		return count > 0;
+		return  count > 0?"true":"false";
 	}
 
 	@RequestMapping("/delLabel")
 	@ResponseBody
-	public Boolean delLabel(int id) {
+	public String delLabel(int id) {
 		int count = dataService.delLabel(id);
-		return count > 0;
+		return  count > 0?"true":"false";
 	}
 
 	@RequestMapping("/updateLabel")
 	@ResponseBody
-	public Boolean updateLabe(TLabels tLabels) {
+	public String updateLabe(TLabels tLabels) {
 		int count = dataService.updateLabel(tLabels);
-		return count > 0;
+		return  count > 0?"true":"false";
 	}
 
 	@RequestMapping(value = "/labelByName", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
@@ -120,8 +115,7 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countSelectByName(names);
-		List<TLabels> lables = dataService.selectByName(totalcount, curPage,
-				pageSize, names);
+		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}
@@ -132,8 +126,7 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countLabels();
-		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage,
-				pageSize);
+		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage, pageSize);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}
@@ -148,21 +141,16 @@ public class DataController {
 
 	@RequestMapping("/delLabelRel")
 	@ResponseBody
-	public Map<String, Object> delLabelRel(int id) {
-		Map<String, Object> resultMap = new HashMap<String, Object>();
+	public String delLabelRel(int id) {
 		int count = dataService.delTLabelsRel(id);
-		if (count > 0)
-			resultMap.put("result", "true");
-		else
-			resultMap.put("result", "fault");
-		return resultMap;
+		return count > 0 ? "true" : "false";
 	}
 
 	@RequestMapping("/labelUpdateOrInsert")
 	@ResponseBody
 	public String labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
 		int count = dataService.insertOrUpateTLabelsRel(tlabelsrel);
-		return count > 0?"true":"false";
+		return count > 0 ? "true" : "false";
 	}
 
 	@RequestMapping("/labelManager")
