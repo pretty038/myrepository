@@ -255,4 +255,10 @@ public class DataServiceImpl implements DataService {
 
 	}
 
+	@Override
+	public int updateLabelRel(TLabelsRel tLabelsRel) {
+		return tLabelsRelDao.update(tLabelsRel);
+
+	}
+
 }

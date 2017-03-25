@@ -1,6 +1,8 @@
 package com.apcompany.user.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -144,9 +146,35 @@ public class DataController {
 		return jsonText;
 	}
 
+	@RequestMapping("/delLabelRel")
+	@ResponseBody
+	public Map<String, Object> delLabelRel(int id) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		int count = dataService.delTLabelsRel(id);
+		if (count > 0)
+			resultMap.put("result", "true");
+		else
+			resultMap.put("result", "fault");
+		return resultMap;
+	}
+
+	@RequestMapping("/labelUpdateOrInsert")
+	public Boolean labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
+		int count = dataService.insertOrUpateTLabelsRel(tlabelsrel);
+		return count > 0;
+	}
+
 	@RequestMapping("/labelManager")
 	public String labelManager(Model model) {
 		return "label-manager";
+	}
+
+	@RequestMapping("/labelTest")
+	public String labelTest(Model model) {
+
+		model.addAttribute("message", "true");
+
+		return "labeltest";
 	}
 
 }

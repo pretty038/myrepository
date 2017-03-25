@@ -21,14 +21,14 @@ public interface TLabelsRelDao {
 	@Select("select * from " + TableName + " where parentsid=#{parentsid}")
 	public List<TLabelsRel> selectByParent(int parentsid);
 
-	@Insert("insert into " + TableName
-			+ " (labelname,parentsid) values (#{labelname},#{parentsid})")
+	@Insert("insert into "
+			+ TableName
+			+ " (labelname,parentsid,depth) values (#{labelname},#{parentsid},#{depth})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TLabelsRel tLabelsRel);
 
-	@Update("update "
-			+ TableName
-			+ " set labelname=#{labelname},parentsid=#{parentsid} where id=#{id}")
+	@Update("update " + TableName
+			+ " set labelname=#{labelname} where id=#{id}")
 	public int update(TLabelsRel tLabelsRel);
 
 	@Update("update " + TableName + " set status=1 where id=#{id}")
@@ -46,7 +46,7 @@ public interface TLabelsRelDao {
 			+ " where labelname like \"%\"#{names}\"%\"")
 	public int countByName(@Param(value = "names") String names);
 
-	@Select("select * from " + TableName)
+	@Select("select * from " + TableName + " where status=0")
 	public List<TLabelsRel> selectAll();
 
 	@Select("select count(1) from " + TableName + " ")

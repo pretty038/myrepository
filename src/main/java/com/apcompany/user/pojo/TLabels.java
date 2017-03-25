@@ -11,8 +11,6 @@ public class TLabels {
 	private Timestamp ctime;
 	private Timestamp utime;
 
-	
-
 	public int getStatus() {
 		return status;
 	}

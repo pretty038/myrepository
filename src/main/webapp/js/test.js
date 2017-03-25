@@ -28,8 +28,8 @@ function formUp(){
 		formdata.append(tmpname,string9);
 		
 	});
-	for(var valuetmp in formdata.values())
-		console.log(valuetmp);
+//	for(var valuetmp in formdata.values())
+//		console.log(valuetmp);
 	$.ajax({
         url:"../../apcompany/data/insert",
         type:"post",

@@ -1,8 +1,7 @@
 $(document).ready(function(){
 	$("#frame0").on("click", ".add-option", addOption);
-	$("#frame0").on("click", ".del-option", function(){
-		//$(this).parent().remove();
-	});
+	$("#frame0").on("click", ".commitChange", commitBt);
+	$("#frame0").on("click", ".del-option", delLables);
 	$("#frame0").on("click",".hide-and-show-option",function(){
 		if($(this).text() === "-")
 		{			
@@ -24,8 +23,11 @@ function addOption(t,id,labelname,parentid,depth) {
 	var tmpDelbutton = $("<button>DelOption</button>");
 	var tmpHidebutton = $("<button>-</button>");
 	tmpinput.appendTo(tmpdiv);
+	tmpAddbutton.addClass("add-option");
 	tmpAddbutton.appendTo(tmpdiv);
+	tmpCommitbutton.addClass("commitChange");
 	tmpCommitbutton.appendTo(tmpdiv);
+	tmpDelbutton.addClass("del-option");
 	tmpDelbutton.appendTo(tmpdiv);
 	tmpHidebutton.addClass("hide-and-show-option");
 	tmpHidebutton.appendTo(tmpdiv);
@@ -37,9 +39,70 @@ function addOption(t,id,labelname,parentid,depth) {
 		tmpinput.val(labelname);
 		tmpdiv.appendTo($("#frame"+parentid));
 		
-	} else if(t instanceof jQuery) {
-		
+	} else  {
+		//只是添加ui而已
+		tmpdiv.appendTo($(this).parent());
 	}
+}
+function commitBt(){
+	var tmpForm = $("<form></form>");
+	tmpForm.attr("enctype","multipart/form-data");
+	tmpForm.appendTo("body");
+	var formdata = new FormData($("form"));
+	//按下commit的时候，我要根据id属性是否存在，如果有id属性，则是要更新一下.
+	//这个在后台已经有对应了。如果传回的id是0，就是新添加，如果是id大于0，则是update，我只需要
+	//判断下id属性是否存在，存在，就传回否则就传0，回去。
+	if($(this).parent().attr("id"))
+	{
+		//存在id,用update。
+		var str4 = $(this).parent().attr("id");
+		formdata.append("id",str4.slice(5,str4.length));
+		formdata.append("labelname",$(this).parent().children("input").val());		
+	} else {
+		//不存在id，我要传输labelname，parentsid，depth，如果返回值为真，根据返回值设置id，
+		//parentsid,depth;
+		formdata.append("id","0");
+		formdata.append("labelname",$(this).parent().children("input").val());
+		var str3 = $(this).parent().parent().attr("id");
+		formdata.append("parentsid",str3.slice(5,str3.length));
+		var str = $(this).parent().parent().attr("class");
+		str = str.slice(5,str.length);
+		var str2 = Number.parseInt(str) + 1;
+		formdata.append("depth",str2);	
+	}
+	$.ajax({
+        url:"../../apcompany/data/labelUpdateOrInsert",
+        type:"post",
+        data:formdata,
+        processData:false,
+        contentType:false,
+        success:function(data){
+            console.log("over.." + data);
+        }
+	});
+	$("form").remove();
+}
+
+function delLables(){
+	var tmpForm = $("<form></form>");
+	tmpForm.attr("enctype","multipart/form-data");
+	tmpForm.appendTo("body");
+	var formdata = new FormData($("form"));
+	var str = $(this).parent().attr("id");
+	formdata.append("id",str.slice(5,str.length));
+	$.ajax({
+        url:"../../apcompany/data/delLabelRel",
+        type:"post",
+        data:formdata,
+        processData:false,
+        contentType:false,
+        success:function(data){
+            console.log("over.." + data.result);
+        }
+	});
+		
+	$("form").remove();
+	$(this).parent().remove();
 }
 function showAllLabels(){
 	//ajax取回所有的labels。
