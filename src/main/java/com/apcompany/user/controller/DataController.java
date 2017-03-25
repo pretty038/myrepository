@@ -87,7 +87,7 @@ public class DataController {
 		return count > 0;
 	}
 
-	@RequestMapping("/updateChoise")
+	@RequestMapping("/updateCimei'yihoise")
 	@ResponseBody
 	public Boolean updateChoise(TChoises tChoises) {
 		int count = dataService.updateChiose(tChoises);
