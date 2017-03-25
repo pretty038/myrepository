@@ -17,6 +17,7 @@ local.properties
 .loadpath
 yes
 yes.pub
+src/main/resources/dbconfig.properties
 
 
 # External tool builders
@@ -229,5 +230,6 @@ pip-log.txt
 	.settings/org.eclipse.wst.jsdt.ui.superType.container
 	.settings/org.eclipse.wst.jsdt.ui.superType.name
 	.settings/org.eclipse.wst.validation.prefs
+	
 
 
