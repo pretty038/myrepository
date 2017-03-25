@@ -150,7 +150,7 @@ public class DataController {
 	@ResponseBody
 	public String labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
 		int count = dataService.insertOrUpateTLabelsRel(tlabelsrel);
-		return count > 0 ? "true" : "false";
+		return String.valueOf(count);
 	}
 
 	@RequestMapping("/labelManager")
