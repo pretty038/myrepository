@@ -1,3 +1,59 @@
+var arraySelect = new Array();
+function showSelect(objArray){
+	//我要根据objJson的数据	
+	//我需要根据depth来创建new Array;
+	var tmpdepth = 1;
+	var newlevel = 0;
+	arraySelect[0] = new Array();
+	var k = 0;
+	for(var i = 0;i < objArray.length;i++){
+		if(objArray[i][3] != tmpdepth){
+			//如果不等，说明层次发生了变化，需要新建一个Array，然后才能赋值。
+			//k = 0;array[depth-1] = new Array
+			tmpdepth++;
+			arraySelect[tmpdepth-1] = new Array();
+			k = 0;
+			
+		}
+		//四个元素分别是id，labelname，parentsid，children的路径，自身的绝对路径.
+		arraySelect[tmpdepth - 1][k] = new Array(objArray[i][0],objArray[i][1],objArray[i][2],"",(tmpdepth - 1) + ":" +k);
+		//console.log(arraySelect[tmpdepth - 1][k][1]);
+		//如果相等说明还在这个层次。
+		if(tmpdepth != 1){
+			//第一层比较特别，不需要去查找上层的父节点，并把自己的绝对地址加进去。
+			for(var j=0;j < arraySelect[tmpdepth-2].length;j++){
+				if(arraySelect[tmpdepth - 1][k][2] === arraySelect[tmpdepth-2][j][0]){
+					//如果该节点是新添加节点的父节点，就把绝对地址加进去。
+					arraySelect[tmpdepth-2][j][3] += ("+"+(tmpdepth-1)+":"+k);
+				}
+			}
+		}
+		//赋值完成后，k要++
+		k++;
+	}
+	//下面就要根据arraySelect来生成select。不同的select要用div隔开，不然会互相干扰change事件。
+	for(var n = 0; n < arraySelect.length;n++){
+		var tmpDiv = $("<div></div>");
+		tmpDiv.addClass("select" + n);
+		var tmpselect = $("<select></select>");
+		tmpselect.appendTo(tmpDiv);
+		tmpDiv.appendTo($("#optionDiv"));
+		//下面要把option加进去。
+		//option的选项只要设置第一级即可，其他的保留select就够了。		
+	}
+	for(var p = 0;p < arraySelect[0].length;p++){
+		
+		tmpoption = $("<option></option>");
+		//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
+		tmpoption.attr("id","option" + arraySelect[0][p][0]);
+		tmpoption.attr("value",arraySelect[0][p][1]);
+		tmpoption.text(arraySelect[0][p][1]);
+		//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
+		tmpoption.addClass(arraySelect[0][p][4] + arraySelect[0][p][3]);
+		tmpoption.appendTo($(".select0 select"));
+	}
+	//下面再定义select的change函数，补齐后面的select。
+}
 $(document).ready(function(){
 	$("#frame0").on("click", ".add-option", addOption);
 	$("#frame0").on("click", ".commitChange", commitBt);
@@ -156,6 +212,7 @@ function showLabelTree(){
 		for(var j=0;j < array.length;j++){
 			addOption("DIV", array[j][0], array[j][1], array[j][2], array[j][3]);
 		}
+		showSelect(array);
 	});
 }
 
