@@ -6,7 +6,7 @@ public class TLabelsQuestionRel {
 	
 	private int id;
 	private int status;
-	private int labelid;
+	private String labelid;
 	private int questionid;
 	private Timestamp ctime;
 	private Timestamp utime;
@@ -18,10 +18,10 @@ public class TLabelsQuestionRel {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public int getLabelid() {
+	public String getLabelid() {
 		return labelid;
 	}
-	public void setLabelid(int labelid) {
+	public void setLabelid(String labelid) {
 		this.labelid = labelid;
 	}
 	public int getQuestionid() {
