@@ -42,6 +42,7 @@ function addOption(t,id,labelname,parentid,depth) {
 	} else  {
 		//只是添加ui而已
 		tmpdiv.appendTo($(this).parent());
+		
 	}
 }
 function commitBt(){
@@ -52,12 +53,14 @@ function commitBt(){
 	//按下commit的时候，我要根据id属性是否存在，如果有id属性，则是要更新一下.
 	//这个在后台已经有对应了。如果传回的id是0，就是新添加，如果是id大于0，则是update，我只需要
 	//判断下id属性是否存在，存在，就传回否则就传0，回去。
+	var flag = "tmp";
 	if($(this).parent().attr("id"))
 	{
 		//存在id,用update。
 		var str4 = $(this).parent().attr("id");
 		formdata.append("id",str4.slice(5,str4.length));
-		formdata.append("labelname",$(this).parent().children("input").val());		
+		formdata.append("labelname",$(this).parent().children("input").val());
+		flag = "update";
 	} else {
 		//不存在id，我要传输labelname，parentsid，depth，如果返回值为真，根据返回值设置id，
 		//parentsid,depth;
@@ -68,8 +71,12 @@ function commitBt(){
 		var str = $(this).parent().parent().attr("class");
 		str = str.slice(5,str.length);
 		var str2 = Number.parseInt(str) + 1;
-		formdata.append("depth",str2);	
+		formdata.append("depth",str2);
+		//根据depth设置新div的class。
+		$(this).parent().addClass("depth" + str2);
+		flag = "insert";
 	}
+	var objDiv = $(this).parent();
 	$.ajax({
         url:"../../apcompany/data/labelUpdateOrInsert",
         type:"post",
@@ -78,6 +85,11 @@ function commitBt(){
         contentType:false,
         success:function(data){
             console.log("over.." + data);
+            if(flag === "insert")
+            {
+            	//我需要根据传回的数值，设置id。
+            	objDiv.attr("id","frame" + data);
+            }
         }
 	});
 	$("form").remove();
