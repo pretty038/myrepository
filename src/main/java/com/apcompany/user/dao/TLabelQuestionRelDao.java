@@ -19,7 +19,7 @@ public interface TLabelQuestionRelDao {
 	@Select("select * from labels_question_rel where labels_rel_id = #{labels_rel_id}")
 	public List<TLabelsQuestionRel> selectByRel(int labels_rel_id);
 
-	@Insert("insert into labels_question_rel (labelid,questionid) values (#{labelid},#{questionid})")
+	@Insert("insert into labels_question_rel (labelid,labelsrelid,questionid) values (#{labelid},#{labelsrelid},#{questionid})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TLabelsQuestionRel tLabelsQuestionRel);
 

@@ -68,6 +68,36 @@ $(document).ready(function(){
 			$(this).parent().children("div").show();
 		}
 	});
+	$("#optionDiv").on("change","select",function(e){
+		//console.log($(this)[0].tagName);
+		//应该先把后面的select的option的都去掉。
+		$(e.target).parent().nextAll().find("option").remove();
+		//change的情况下，我要改变下一个
+		//先获取改变后的option的class值。
+//		var tmpstr = $(this).children("option:selected").prop("class");
+//		var str2 = tmpstr.split("+");
+//		console.log(str2);
+//		for(var i =1;i < str2.length;i++){
+//			var tmpstr3 = str2[i];
+//			var tmpstr2 = tmpstr3.split(":");
+//			console.log(arraySelect[tmpstr2[0]][tmpstr2[1]][1]);
+//		}
+		//下一步就是根据取到的值将下一个select的option重新添加。
+		var tmpstr = $(e.target).children("option:selected").prop("class");
+		var tmpstr2 = tmpstr.split("+");
+		for(var i = 1;i < tmpstr2.length;i++){
+			//解析出option的在arraySelect中的绝对路径。
+			tmpstr3 = tmpstr2[i].split(":");			
+			tmpoption = $("<option></option>");
+			//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
+			tmpoption.attr("id","option" + arraySelect[tmpstr3[0]][tmpstr3[1]][0]);
+			tmpoption.attr("value",arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
+			tmpoption.text(arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
+			//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
+			tmpoption.addClass(arraySelect[tmpstr3[0]][tmpstr3[1]][4] + arraySelect[tmpstr3[0]][tmpstr3[1]][3]);
+			tmpoption.appendTo($(e.target).parent().next().children("select"));
+		}
+	});
 });
 function addOption(t,id,labelname,parentid,depth) {
 	//对于展示函数，我调用这个传入的是父id，对于button，我传入的是$(this),可以根据t[0].tagName来判定。
@@ -173,17 +203,6 @@ function delLables(){
 	$(this).parent().remove();
 }
 function showAllLabels(){
-	//ajax取回所有的labels。
-//	$.ajax({
-//        url:"../../apcompany/data/insert",
-//        type:"post",
-//        data:formdata,
-//        processData:false,
-//        contentType:false,
-//        success:function(data){
-//           
-//        }
-//	});
 }
 function showLabelTree(){
 	$.get("/apcompany/data/labelRelAll",function(result){
