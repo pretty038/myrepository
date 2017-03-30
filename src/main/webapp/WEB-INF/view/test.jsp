@@ -61,9 +61,11 @@
 								<select></select>
 							</div>
 							<div class="label-selectYear">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<input type="text" id="d241" value="2008-01" onfocus="WdatePicker({dateFmt:'yyyy-MM',startDate:'1980-05-01'})" class="Wdate"/>
 							</div>
 							<div class="label-isRealPro">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<p><input type="checkbox" value="" checked="checked" />是真题</p>
 							</div>
 							<div class="label-proNum">
@@ -79,15 +81,19 @@
 								<p>题型<select></select></p>
 							</div>
 							<div class="label-calculator">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<p>能用计算器<input type="checkbox" value="" checked="checked" /></p>
 							</div>
 							<div class="label-diagram">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<p>含数表<input type="checkbox" value="" checked="checked" /></p>
 							</div>
 							<div class="label-image">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<p>含图片<input type="checkbox" value="" checked="checked" /></p>
 							</div>
 							<div class="label-prove">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
 								<p>证明题<input type="checkbox" value="" checked="checked" /></p>
 							</div>
 							<div class="label-section">

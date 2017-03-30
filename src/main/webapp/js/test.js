@@ -1,30 +1,54 @@
 //这个东西要怎么搞呢？我进入界面，可以选择是要进入添加标题界面还是展示界面。或者可以分开，这就是一个单纯的输入界面。
 var arraySelect = new Array();
-function initNonrelativeLabel(){
+
+function initNonrelativeLabel(){	
+	$(".label-selectSubject,.label-selectPublisher").find("select").each(function() {
+		var tmpopt22 = $("<option>__</option>");
+		tmpopt22.attr("value","__");
+		tmpopt22.appendTo($(this));
+	});
 	$.get("/apcompany/data/labelAll", function(result) {
 		var jsonObj = JSON.parse(result);
+		$(".label-proNum,.label-section,.label-proDiff,.label-proKind,.label-proType").each(function(){
+			var tmpopt = $("<option>-<option>");
+			tmpopt.appendTo($(this).children("select"));
+
+		});
 		for(var jn in jsonObj){
 			if(jsonObj[jn].type === 1){
-				console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
+				//console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
 				var tmpsubject = $("<option></option>");
 				tmpsubject.text(jsonObj[jn].labelname);
 				tmpsubject.prop("value",jsonObj[jn].id);
 				tmpsubject.appendTo($(".label-selectSubject").children("select"));
 			}else if(jsonObj[jn].type === 2){
-				console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
+				//console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
 				var tmppublisher = $("<option></option>");
 				tmppublisher.text(jsonObj[jn].labelname);
 				tmppublisher.prop("value",jsonObj[jn].id);
 				tmppublisher.appendTo($(".label-selectPublisher").children("select"));
 			}
-			console.log($(".label-selectSubject select").get(0).tagName);
 		}
 	});
-	$(".label-proNum,.label-proDiff,.label-proKind,.label-proType,.label-section").each(function(){
+	$(".label-proNum,.label-section").each(function(){
+		var tmpopt22 = $("<option>__</option>");
+		tmpopt22.attr("value","__");
+		tmpopt22.appendTo($(this).find("select"));
 		for(var i = 0;i < 20;i++){
 			var tmpoption = $("<option></option>");
 			tmpoption.attr("value",i+1);
 			tmpoption.text(i+1);
+			tmpoption.appendTo($(this).find("select"));
+		}
+	});
+	$(".label-proDiff,.label-proKind,.label-proType").each(function(){
+		var tmpopt22 = $("<option>_</option>");
+		tmpopt22.attr("value","_");
+		tmpopt22.appendTo($(this).find("select"));
+		for(var i = 0;i < 10;i++){
+			var tmpoption = $("<option></option>");
+			tmpoption.attr("value",i+1);
+			tmpoption.text(i);
 			tmpoption.appendTo($(this).find("select"));
 		}
 	});
@@ -162,64 +186,102 @@ function formUp(){
 	});
 	//我要拼接label的标签。如果是相关标签，我要用哪个字段呢？tLabelsQuestionRel[0].
 	var strnonrelLabel = "";
+	var tmpstrnon = "";
 	//科目
-	var tmpstrnon = $(".label-selectSubject option:selected").prop("value");
-	if(tmpstrnon.length == 1)
-		tmpstrnon = "0" + tmpstrnon;
+		tmpstrnon = $(".label-selectSubject option:selected").prop("value");
+		if(tmpstrnon.length == 1)
+			tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//出版社
 	tmpstrnon = $(".label-selectPublisher option:selected").prop("value");
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//年份
-	tmpstrnon = $(".label-selectYear input").val();
-	tmpstrnon = tmpstrnon.replace(/-/,"");
+	if($(".label-selectYear p").children("input").prop("checked") === true){
+		tmpstrnon = $(".label-selectYear").children("input").val();
+		tmpstrnon = tmpstrnon.replace(/-/,"");
+	} else {
+		tmpstrnon = "______";
+	}	
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//是否真题
-	if($(".label-isRealPro input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
+	if($(".label-isRealPro p").children("input").prop("checked") === true){
+		if($(".label-isRealPro input").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	console.log(strnonrelLabel);
+	
 	//题号
 	var tmpstrnon = $(".label-proNum option:selected").text();
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//难度
 	var tmpstrnon = $(".label-proDiff option:selected").text();
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//题类
 	var tmpstrnon = $(".label-proKind option:selected").text();
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//题型
 	var tmpstrnon = $(".label-proType option:selected").text();
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	//计算器
-	if($(".label-calculator input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
+	if($(".label-calculator p").children("input").prop("checked") === true){
+		if($(".label-calculator input").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	console.log(strnonrelLabel);
+	
 	//数表
-	if($(".label-diagram input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
+	if($(".label-diagram p").children("input").prop("checked") === true){
+		if($(".label-diagram input").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else {
+		strnonrelLabel += "_";
+	}
+	console.log(strnonrelLabel);
+	
 	//图片
-	if($(".label-image input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
+	if($(".label-image p").children("input").prop("checked") === true){
+		if($(".label-image input").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	console.log(strnonrelLabel);
+	
 	//证明题
-	if($(".label-prove input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
+	if($(".label-prove p").children("input").prop("checked") === true){
+		if($(".label-prove input").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else
+		strnonrelLabel += "_";
+	//console.log(strnonrelLabel);
 	//部分
 	tmpstrnon = $(".label-section option:selected").prop("value");
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
 	formdata.append("tLabelsQuestionRel[0].labelid",strnonrelLabel);
 	//上面就是如何弄拼接这个字符传。
 	//下面的相关性标签，要读取三个的全部id，然后都发送。这样看来，arrayselect还要保存每个id的父辈全部的id，这

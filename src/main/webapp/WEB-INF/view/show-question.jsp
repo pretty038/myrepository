@@ -10,7 +10,7 @@
 		<link href="../css/style.css" rel="stylesheet">
 		<link href="../css/blog-single.css" rel="stylesheet">
 		<link href="../css/responsive.css" rel="stylesheet">
-		<link href="../css/test.css" rel="stylesheet">
+		<link href="../css/showquestion.css" rel="stylesheet">
 		<link href="../css/public.css" rel="stylesheet">
 		<link href="../css/editor.css" rel="stylesheet">
 		<script type="text/x-mathjax-config">
@@ -46,6 +46,84 @@
 		<p style="display: none;" id="flg">0</p>
 		<p style="display: none;" id="editorFlg">0</p>
 		<p style="display: none;" id="editorUIFlg">0</p>
+		<div id="editDiv" style="display: none;background-color: #FFFFFF">
+			<div class="editChildw">
+						<hr />
+						<p>
+							<button onclick="AddOptionBt($(this))">AddOption</button>
+							<button onclick="">DeleteOption</button>
+						</p>
+						
+						<div class="nonrelativeLabel">
+							<!-- 应该弹出
+							// 00科目 + 00出版 + 000000年份 + 0是否真题 + 00题号 + 0难度 + 0题类 + 0题型 + 0计算器 + 0数表 +0图片
+							// + 0证明题 + 0部分; -->
+							<div class="label-selectSubject">
+								<select></select>
+							</div>
+							<div class="label-selectPublisher">
+								<select></select>
+							</div>
+							<div class="label-selectYear">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<input type="text" id="d241" value="2008-01" onfocus="WdatePicker({dateFmt:'yyyy-MM',startDate:'1980-05-01'})" class="Wdate"/>
+							</div>
+							<div class="label-isRealPro">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<p><input type="checkbox" value="" checked="checked" />是真题</p>
+							</div>
+							<div class="label-proNum">
+								<p>题号<select></select></p>
+							</div>
+							<div class="label-proDiff">
+								<p>难度<select></select></p>
+							</div>
+							<div class="label-proKind">
+								<p>题类<select></select></p>
+							</div>
+							<div class="label-proType">
+								<p>题型<select></select></p>
+							</div>
+							<div class="label-calculator">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<p>能用计算器<input type="checkbox" value="" checked="checked" /></p>
+							</div>
+							<div class="label-diagram">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<p>含数表<input type="checkbox" value="" checked="checked" /></p>
+							</div>
+							<div class="label-image">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<p>含图片<input type="checkbox" value="" checked="checked" /></p>
+							</div>
+							<div class="label-prove">
+								<p>使用此选项<input type="checkbox" value="" checked="checked" /></p>
+								<p>证明题<input type="checkbox" value="" checked="checked" /></p>
+							</div>
+							<div class="label-section">
+								<p>题部分<select></select></p>
+							</div>					
+							<br />
+						</div>
+						<div class="relativeLabel" id="relativeDiv">
+							
+						</div>
+						<div>
+							<button onclick="commitLableChange()">commitLabelChange</button>
+						</div>							
+						<br />
+					<!--  	<p class="neip">
+							问题：<input />					
+						</p>
+						
+						<p class="neip">
+							选项：<input />						
+						</p>
+						<p class="neip">
+							答案：<input />					
+						</p> -->			
+				</div>
+		</div>
 		<div id="editor" style="display: none;">
 			<button id="cln" onclick="editorClose()">关闭编辑器</button>
 			<div class="mathEditor">
@@ -239,6 +317,7 @@
 				</table>				
 			</div>
 		</div>
+		
 	</body>
 
 </html>

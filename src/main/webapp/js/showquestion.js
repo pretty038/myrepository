@@ -1,6 +1,8 @@
 //这个东西要怎么搞呢？我进入界面，可以选择是要进入添加标题界面还是展示界面。或者可以分开，这就是一个单纯的输入界面。
 var arraySelect = new Array();
 var arrayNonSelect = new Array();
+var aleng1 = 0;
+var aleng2 = 0;
 function initNonrelativeLabel(){
 	$.get("/apcompany/data/labelAll", function(result) {
 		var jsonObj = JSON.parse(result);
@@ -14,7 +16,11 @@ function initNonrelativeLabel(){
 				arrayNonSelect[1][arrayNonSelect[1].length] = new Array(jsonObj[jn].id,jsonObj[jn].labelname);
 			}
 		}
-	});	
+		aleng1 = arrayNonSelect[0].length;
+		aleng2 = arrayNonSelect[1].length;
+		//console.log("ee+aleng1:" + aleng1 +";aleng1:"+aleng1);
+		initLabel();
+	});		
 }
 function initRelativeLabel(){
 	$.get("/apcompany/data/labelRelAll",function(result){
@@ -71,7 +77,131 @@ function initRelativeLabel(){
 		}
 		//下面就要根据arraySelect来生成select。不同的select要用div隔开，不然会互相干扰change事件。
 		//下面再定义select的change函数，补齐后面的select。
+		for(var n = 0; n < arraySelect.length;n++){
+			var tmpDiv = $("<div></div>");
+			tmpDiv.addClass("select" + n);
+			var tmpselect = $("<select></select>");
+			tmpselect.appendTo(tmpDiv);
+			tmpDiv.appendTo($("#relativeDiv"));
+			//下面要把option加进去。
+			//option的选项只要设置第一级即可，其他的保留select就够了。		
+		}
+		for(var p = 0;p < arraySelect[0].length;p++){
+			
+			tmpoption = $("<option></option>");
+			//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
+			tmpoption.attr("id","option" + arraySelect[0][p][0]);
+			tmpoption.attr("value",arraySelect[0][p][1]);
+			tmpoption.text(arraySelect[0][p][1]);
+			//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
+			tmpoption.addClass(arraySelect[0][p][4] + arraySelect[0][p][3]);
+			tmpoption.appendTo($(".select0 select"));
+		}
 	});
+}
+function initLabel() {
+	$(".label-selectSubject,.label-selectPublisher").find("select").each(function() {
+		var tmpopt22 = $("<option>__</option>");
+		tmpopt22.attr("value","__");
+		tmpopt22.appendTo($(this));
+	});
+	//console.log("aleng1:" + aleng1 +";aleng1:"+aleng1);
+	for(var i =0;i < aleng1;i++){
+		var tmpopt22 = $("<option></option>");
+		tmpopt22.attr("value",arrayNonSelect[0][i][0]);
+		tmpopt22.text(arrayNonSelect[0][i][1]);
+		//console.log(arrayNonSelect[0][i][1]);
+		tmpopt22.appendTo($(".label-selectSubject select"));
+	}
+	for(var i =0;i < aleng2;i++){
+		var tmpopt22 = $("<option></option>");
+		tmpopt22.attr("value",arrayNonSelect[1][i][0]);
+		tmpopt22.text(arrayNonSelect[1][i][1]);
+		//console.log(arrayNonSelect[1][i][1]);
+		tmpopt22.appendTo($(".label-selectPublisher select"));
+	}
+	$(".label-proNum,.label-section").each(function(){
+		var tmpopt22 = $("<option>__</option>");
+		tmpopt22.attr("value","__");
+		tmpopt22.appendTo($(this).find("select"));
+		for(var i = 0;i < 20;i++){
+			var tmpoption = $("<option></option>");
+			tmpoption.attr("value",i+1);
+			tmpoption.text(i+1);
+			tmpoption.appendTo($(this).find("select"));
+		}
+	});
+	$(".label-proDiff,.label-proKind,.label-proType").each(function(){
+		var tmpopt22 = $("<option>_</option>");
+		tmpopt22.attr("value","_");
+		tmpopt22.appendTo($(this).find("select"));
+		for(var i = 0;i < 10;i++){
+			var tmpoption = $("<option></option>");
+			tmpoption.attr("value",i);
+			tmpoption.text(i);
+			tmpoption.appendTo($(this).find("select"));
+		}
+	});
+}
+function editOpen(e){
+	//console.log($(e.target));是button
+	//这样目标下面的neip类都要删除，然后在这里重新添加。
+	var objPa = $(e.target).parent();
+	console.log("class:"+$(e.target).parent().prop("class"));
+	$("#editDiv").appendTo(objPa);
+	$("#editDiv").show();
+	//labelDiv类下面共14个标签，前13个用:分隔符，分割出来label进行判定和还原
+	var arrayLabel = new Array(0,1,4,5,6,7,12);
+	var i = 0;
+	$("#editDiv").parent().children(".labelDiv").children("label:eq(0),label:eq(1)").each(function(){
+		var tmpstr = $(this).text().split(":");
+		
+		if(tmpstr[1].charAt(0) === "0")
+			tmpstr[1] = tmpstr[1].charAt(1);
+		//console.log("1:" +".nonrelativeLabel div:eq("+arrayLabel[i] + ")" + ";2:" + "option[text='" +tmpstr[1]+"']");
+		$(".nonrelativeLabel").children("div:eq("+ arrayLabel[i] +")").children("select").find("option[value='"+$(this).attr("value") +"']").attr("selected",true);
+		//console.log($(".nonrelativeLabel").children("div:eq("+ arrayLabel[i] +")").prop("class"));
+		i++;
+	});
+	$("#editDiv").parent().children(".labelDiv").children("label:eq(4),label:eq(5),label:eq(6),label:eq(7),label:eq(12)").each(function(){
+		var tmpstr = $(this).text().split(":");		
+		if(tmpstr[1].charAt(0) === "0")
+			tmpstr[1] = tmpstr[1].charAt(1);
+		//console.log($(this).text());
+		$(".nonrelativeLabel").children("div:eq("+ arrayLabel[i] +")").find("option[value='1']").attr("selected",true);
+		i++;
+	});
+	var tmpstr2 = $("#editDiv").parent().children(".labelDiv").children("label:eq(2)").text().split(":");
+	if(tmpstr2[1] === "______"){
+		$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked",false);
+		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").attr("disabled","true");
+	}else {
+		$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked",true);
+		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").removeAttr("disabled");
+		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").val(tmpstr2[1].slice(0,4) + "-" + tmpstr2[1].slice(4,6));
+	}
+	var arrayJudge = new Array(3,8,9,10,11);
+	i=0;
+	$("#editDiv").parent().children(".labelDiv").children("label:eq(3),label:eq(8),label:eq(9),label:eq(10),label:eq(11)").each(function(){
+		var tmpstr = $(this).text();		
+		if(tmpstr === "_"){
+			$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:first").attr("checked",false);
+			$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:last").attr("disabled","true");
+		}else {
+			$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:first").attr("checked",true);
+			$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:last").removeAttr("disabled","true");
+			if(tmpstr.indexOf("不"))
+				$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:last").attr("checked",true);
+			else 
+				$(".nonrelativeLabel").children("div:eq("+ arrayJudge[i] +")").find("input:last").attr("checked",false);
+		}		
+		i++;
+	});
+	
+	
+	
+	//quesT,opT,anT三个类，每个类都要添加一个div框，里面有一个input，一个commitChange
+	//如果是新加的option，里面的button应该是commitAdd，
 }
 $(document).ready(function(){
 	//下面我要添加非相关标签的select和相关标签的select。
@@ -79,6 +209,30 @@ $(document).ready(function(){
 	initRelativeLabel();
 	test2();
 	//接下来我要设计一下编辑界面，如果要编辑某个选项，怎么弄？
+	$("#dv2").on("click",$(".editBt"),editOpen);
+	$(".editChildw").click(function(){
+		return false;
+	});
+	$("#relativeDiv").on("change","select",function(e){
+		//console.log($(this)[0].tagName);
+		//应该先把后面的select的option的都去掉。
+		$(e.target).parent().nextAll().find("option").remove();
+		//下一步就是根据取到的值将下一个select的option重新添加。
+		var tmpstr = $(e.target).children("option:selected").prop("class");
+		var tmpstr2 = tmpstr.split("+");
+		for(var i = 1;i < tmpstr2.length;i++){
+			//解析出option的在arraySelect中的绝对路径。
+			tmpstr3 = tmpstr2[i].split(":");			
+			tmpoption = $("<option></option>");
+			//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
+			tmpoption.attr("id","option" + arraySelect[tmpstr3[0]][tmpstr3[1]][0]);
+			tmpoption.attr("value",arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
+			tmpoption.text(arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
+			//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
+			tmpoption.addClass(arraySelect[tmpstr3[0]][tmpstr3[1]][4] + arraySelect[tmpstr3[0]][tmpstr3[1]][3]);
+			tmpoption.appendTo($(e.target).parent().next().children("select"));
+		}
+	});
 });
 
 function refresh(){
@@ -94,42 +248,53 @@ function test2(){
        for(var jn in jsonObj)
 		{
     	   var chw = $("<div></div>" ,{class:"childw"});
+    	   var tmpbt = $("<button>Edit</button>"); 
+    	   tmpbt.addClass("editBt");
+    	   tmpbt.appendTo(chw);
     	   //我要添加标签了，一个是非相关标签，一个非相关标签。
     	   var labelDiv = $("<div></div>",{class:"labelDiv"})
     	   //利用ajax取回字符串，然后将
-    	   var strNonRelLabel = "0104200801101111111101";
+    	   var strNonRelLabel = jsonObj[jn].labels[0].labelid;
     	   var tmpSt=new Array(0,2,4,10,11,13,14,15,16,17,18,19,20);
     	   var tmpstrLabel = new Array("科目","出版商","年份","是真题","题号","难度","题类","题型","用计算器","含数表","含图片","是证明题","题部分");
-    	   var tmpEnd = new Array(2,4,9,11,13,14,15,16,17,18,19,20,22);
+    	   var tmpEnd = new Array(2,4,10,11,13,14,15,16,17,18,19,20,22);
     	   for(var i = 0;i < 13;i++){
     		   var tmpSE = strNonRelLabel.slice(tmpSt[i],tmpEnd[i]);
     		   switch(i){
     		   case 0:
     			   //需要添加前两个标签。
-    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
-    				   //不设置该标签。
-    			   } else {
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "__"){
+    				   var tmpSubjectLabel = $("<label></label>");
+					   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +"__");
+					   tmpSubjectLabel.attr("value","__");
+					   tmpSubjectLabel.appendTo(labelDiv);
+    			   }else{
     				   //arrayNonSelect[i].length写法不能识别，抑郁。
     				   for(var j = 0;j < arrayNonSelect[0].length;j++){
     					   if(arrayNonSelect[0][j][0] === Number(strNonRelLabel.slice(tmpSt[i],tmpEnd[i])))
     					   {
     						   var tmpSubjectLabel = $("<label></label>");
     						   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +arrayNonSelect[i][j][1]);
+    						   tmpSubjectLabel.attr("value",arrayNonSelect[i][j][0]);
     						   tmpSubjectLabel.appendTo(labelDiv);
     					   }
     				   }
     			   }
     			   break;
     		   case 1:
-    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
-    				   //不设置该标签。
-    			   } else {
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "__"){
+    				   var tmpSubjectLabel = $("<label></label>");
+					   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +"__");
+					   tmpSubjectLabel.attr("value","__");
+					   tmpSubjectLabel.appendTo(labelDiv);
+    			   }else{
     				   //arrayNonSelect[i].length写法不能识别，抑郁。
     				   for(var j = 0;j < arrayNonSelect[1].length;j++){
     					   if(arrayNonSelect[1][j][0] === Number(strNonRelLabel.slice(tmpSt[i],tmpEnd[i])))
     					   {
     						   var tmpSubjectLabel = $("<label></label>");
     						   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +arrayNonSelect[i][j][1]);
+    						   tmpSubjectLabel.attr("value",arrayNonSelect[i][j][0]);
     						   tmpSubjectLabel.appendTo(labelDiv);
     					   }
     				   }
@@ -137,9 +302,7 @@ function test2(){
     			   break;
     		   case 2:case 5:case 6:case 7:case 4:case 12:
     			   //添加日期
-    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
-    				   //不设置该标签。
-    			   } else {    				   
+    			   {    				   
     						   var tmpNonRelLabel = $("<label></label>");
     						   tmpNonRelLabel.text( tmpstrLabel[i] + ":" +strNonRelLabel.slice(tmpSt[i],tmpEnd[i]));
     						   tmpNonRelLabel.appendTo(labelDiv);    					  
@@ -149,15 +312,15 @@ function test2(){
     		   case 3:case 8:case 9:case 10:case 11:
     			   //添加，都是些default之类的，这里要用三个，-，代表该属性不存在，用占位符表示
     			   //回头需要给insert文件添加占位符。
-    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
-    				   //不设置该标签。
-    			   } else {    				   
+    			    {    				   
     						   var tmpNonRelLabel = $("<label></label>");
     						   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "1"){
     							   tmpNonRelLabel.text( tmpstrLabel[i]);
     							   
-    						   } else {
+    						   } else if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "0"){
     							   tmpNonRelLabel.text("不" + tmpstrLabel[i]);
+    						   } else if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "_"){
+    							   tmpNonRelLabel.text(tmpstrLabel[i] +" 该属性不使用");
     						   }
     						   tmpNonRelLabel.appendTo(labelDiv);       					  
     				   
@@ -166,7 +329,7 @@ function test2(){
     		   }
     	   }
     	   //利用ajax取回相关标签。
-    	   var strRelLabel = "15";
+    	   var strRelLabel = jsonObj[jn].labels[0].labelsrelid;
     	   var tmpSelect = new Array();
     	   var flagstr = strRelLabel;
     	   //在这里，我只要将原来的标签的路径给贴出来就行了，我不弄自动对齐了，因为这个功能不一定有用，而且复杂。
@@ -174,8 +337,7 @@ function test2(){
     			for(var j = 0;j < arraySelect[i].length;j++){
     				//console.log(arraySelect[i][j][0] + ":" + flagstr);
     				if(arraySelect[i][j][0] === Number(flagstr)){
-    					tmpSelect.push(i+":" + j);
-    					console.log(arraySelect[i][j][2]);
+    					tmpSelect.push(i+":" + j);    					
     					if(arraySelect[i][j][2] != 0){
     						flagstr = arraySelect[i][j][2];
     						i=0;
@@ -183,17 +345,14 @@ function test2(){
     					}
     				}    					   
     			}
-    	   }
-    	   console.log(tmpSelect);
+    	   }    	   
     	   var tmpLabelRel = $("<label></label>");
-    	   for(var i=tmpSelect.length-1;i < tmpSelect.length;i--){
+    	   for(var i=(tmpSelect.length-1);i >= 0;i--){    		   
     		   var tmpstrrel = tmpSelect[i].split(":");
     		   var tmpBtext = $("<b></b>");
     		   var tmp1 = Number(tmpstrrel[0]);
     		   var tmp2 = Number(tmpstrrel[1]);
-    		   console.log(tmpSelect[i]);
-    		   console.log("tmpstr22:" + tmp1);
-    		   console.log(tmpstrrel[0] + ":" + tmpstrrel[1]);
+    		       		  
     		   if(i!=0)
     			   tmpBtext.text(arraySelect[tmp1][tmp2][1] + "--->");
     		   else
@@ -249,70 +408,7 @@ function test3(){
 	refresh();
 }
 var num=0;
-function AddOptionBt(t){
-	num++;
-	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
-	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
-	var op = $("<p></p>" ,{class:"neip"});
-	var insideD = $("<label>选项</label>");
-	var insideE = $("<button>Edit</button>")
-	//var insideA = $("<input name=tChoises["+num+"].choise/>",{onblur:"exitInput($(this))"});
-	//var insideB = $("<label></label>");
-	//var insideC = $("<button>openEditor</button>");
-	insideD.addClass("inputRes");
-	insideD.attr("title","tChoises[" + num +"].choise");
-	insideE.addClass("editAndsave");
-	insideE.attr("onclick","editAndSaveBt($(this))");
-	op.addClass("neip");
-	insideD.appendTo(op);
-	insideE.appendTo(op);
-	$("<br/>").appendTo(op);
-	//insideA.attr("onblur","exitInput($(this))");
-	//attr才能实现这个，但是我在html上，在创建时候添加也行啊，而且class用的是Addclass，不明白为什么.
-	//insideC.attr("onclick","editorOpen($(this))");
-	//insideA.appendTo(op);
-	//insideC.appendTo(op);
-	//insideB.appendTo(op);
-	//op.appendTo($("#cinQues"));
-	op.insertBefore(t.parent().parent().children("p:last"));
-}
-function deleteDiv(t){
-	t.parent().parent().children("p:last").prev().remove();
-	//$("#cinQues p:last").remove();
-	num--;
-}
-function goInput(t){
-	console.log("go input");
-}
-function exitInput(t){
-	//console.log("exit input");
-	//t.next().next().html("$\{ " + t.next().next().children("span").text() + t.val() +" \}$");
-	//refresh();
-	//MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-}
-//if the answer is
 
-function tmpClick(t){
-//	console.log("in");
-//	//console.log($("#tmpPage").text());
-//	var str = $("#flg").text();
-//	$("#tmpPage" + str).text( "$\{" + $(".tmpInput").val() + "\}$" );
-//	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-//	$("#tmpPage" + str).css("background-color","#FFFFFF");
-//	var num = Number(str);
-//	num++;
-//	$("#flg").text(num);
-//	//$("#tmpPage").removeAttr("id");
-//	$(".tmpInput").remove();
-//	$(".tmpBt").remove();
-	console.log("go editor");
-	$("#editor").appendTo(t.parent());
-	$("#editor").show();
-}
-function clickNeipP(t){
-	//弹出一个input和两个button,一个button关联打开editor,未必会需要打开editor。
-	//---另一个button关联提交修改。再加一个，三个button。第三个button，进入编辑模式。
-}
 function editAndSaveBt(t){
 	//需要做什么呢。插入一个input按钮和一个打开editor的button.
 	if($("#editorFlg").text() === "0")
@@ -389,7 +485,6 @@ function commitChange(t,u){
 		formdata.append("answer",string9);
 		urlString="../../apcompany/data/updateAnswers";
 	}
-	console.log(urlString);
 	//ajax返回数据
 	$.ajax({
         url:urlString,
@@ -401,6 +496,141 @@ function commitChange(t,u){
             console.log("over..");
         }
 	});
-	$("#tabUp").next().remove();
+	$("#tabUp").next().remove();	
+}
+function AddOptionBt(t) {
+	//其实就是添加一个input
+	var tmpP = $("<p>选项：</p>",{class:"neip"});
+	var tmpIn = $("<input />");
+	tmpIn.appendTo(tmpP);
+	var tmpBt = $("<button>Commit</button>");
+	tmpBt.appendTo(tmpP);
+	tmpP.insertBefore(t.parent().parent().children(".neip:last"));
+}
+function commitLableChange(){
+	//参考form
+	var tmpform = $("<form></form>");
+	tmpform.attr("enctype","multipart/form-data");
+	tmpform.appendTo("body");
+	var formdata = new FormData(tmpform);
+	//我要拼接label的标签。如果是相关标签，我要用哪个字段呢？tLabelsQuestionRel[0].
+	var strnonrelLabel = "";
+	var tmpstrnon = "";
+	//科目
+		tmpstrnon = $(".label-selectSubject option:selected").prop("value");
+		if(tmpstrnon.length == 1)
+			tmpstrnon = "0" + tmpstrnon;
+	strnonrelLabel += tmpstrnon;
 	
+	//出版社
+	tmpstrnon = $(".label-selectPublisher option:selected").prop("value");
+	if(tmpstrnon.length == 1)
+		tmpstrnon = "0" + tmpstrnon;
+	strnonrelLabel += tmpstrnon;
+	
+	//年份
+	if($(".label-selectYear p").children("input").prop("checked") === true){
+		tmpstrnon = $(".label-selectYear").children("input").val();
+		tmpstrnon = tmpstrnon.replace(/-/,"");
+	} else {
+		tmpstrnon = "______";
+	}	
+	strnonrelLabel += tmpstrnon;
+	
+	//是否真题
+	if($(".label-isRealPro").find("input:first").prop("checked") === true){
+		if($(".label-isRealPro").find("input:last").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	
+	
+	//题号
+	var tmpstrnon = $(".label-proNum option:selected").text();
+	if(tmpstrnon.length == 1)
+		tmpstrnon = "0" + tmpstrnon;
+	strnonrelLabel += tmpstrnon;
+	
+	//难度
+	var tmpstrnon = $(".label-proDiff option:selected").text();
+	strnonrelLabel += tmpstrnon;
+	
+	//题类
+	var tmpstrnon = $(".label-proKind option:selected").text();
+	strnonrelLabel += tmpstrnon;
+	
+	//题型
+	var tmpstrnon = $(".label-proType option:selected").text();
+	strnonrelLabel += tmpstrnon;
+	
+	//计算器
+	if($(".label-calculator").find("input:first").prop("checked") === true){
+		if($(".label-calculator").find("input:last").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	
+	
+	//数表
+	if($(".label-diagram").find("input:first").prop("checked") === true){
+		if($(".label-diagram").find("input:last").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else {
+		strnonrelLabel += "_";
+	}
+	
+	
+	//图片
+	if($(".label-image").find("input:first").prop("checked") === true){
+		if($(".label-image").find("input:last").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else 
+		strnonrelLabel += "_";
+	
+	
+	//证明题
+	if($(".label-prove").find("input:first").prop("checked") === true){
+		if($(".label-prove").find("input:last").prop("checked") === true)
+			strnonrelLabel += "1";
+		else 
+			strnonrelLabel += "0";
+	} else
+		strnonrelLabel += "_";
+	tmpstrnon = $(".label-section option:selected").prop("value");
+	if(tmpstrnon.length == 1)
+		tmpstrnon = "0" + tmpstrnon;
+	strnonrelLabel += tmpstrnon;
+	console.log(strnonrelLabel);
+	formdata.append("tLabelsQuestionRel[0].labelid",strnonrelLabel);
+	
+	var strrelLabel = "";
+	$("#relativeDiv").find("select").each(function(){
+		var tmpLabelId = $(this).children("option:selected").prop("id");
+		if(tmpLabelId != null){
+			strreLabel = tmpLabelId.slice(6,tmpLabelId.length);
+		}			
+	});
+	formdata.append("tLabelsQuestionRel[0].labelsrelid",strreLabel);
+	var tmpquesId = $("#editDiv").parent().children(".quesT").prop("title");
+	formdata.append("id",tmpquesId);
+	$.ajax({
+        url:"../../apcompany/data/insert",
+        type:"post",
+        data:formdata,
+        processData:false,
+        contentType:false,
+        success:function(data){
+            console.log("over..");
+        }
+	});
+	
+	$("form").remove();
 }
