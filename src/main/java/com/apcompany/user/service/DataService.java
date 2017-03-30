@@ -26,7 +26,7 @@ public interface DataService {
 
 	public int updateQuestion(TQuestions tQuestions);
 
-	public int updateChiose(TChoises tChoises);
+	public int insertOrUpdateChoise(TChoises tChoises);
 
 	public int updateAnswers(TAnswers tAnswers);
 

@@ -40,30 +40,27 @@ public class DataController {
 	@RequestMapping("/insert")
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
-		if (superData != null&&superData.gettQuestions().getId()==0) {
-			boolean out = dataService.addData(superData.gettQuestions(),
-					superData.gettChoises(), superData.gettAnswers(),
-					superData.gettLabelsQuestionRel());
+		if (superData != null && superData.gettQuestions().getId() == 0) {
+			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
+					superData.gettAnswers(), superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "insert true");
 			} else {
 				model.addAttribute("message", "insert failed !!");
 			}
 
-		}else if(superData != null&&superData.gettQuestions().getId()>0){
-			boolean out = dataService.updateData(superData.gettQuestions(),
-					superData.gettChoises(), superData.gettAnswers(),
-					superData.gettLabelsQuestionRel());
+		} else if (superData != null && superData.gettQuestions().getId() > 0) {
+			boolean out = dataService.updateData(superData.gettQuestions(), superData.gettChoises(),
+					superData.gettAnswers(), superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "update true");
 			} else {
 				model.addAttribute("message", "update failed !!");
 			}
 		}
-		
+
 		else {
-			model.addAttribute("message",
-					"super data is null!!!, please check the parameter !!!");
+			model.addAttribute("message", "super data is null!!!, please check the parameter !!!");
 		}
 		return "outcome";
 	}
@@ -86,8 +83,7 @@ public class DataController {
 		int totalcount = dataService.getDataCount();
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
-		List<TQuestions> datalist = dataService.getDataList(0, totalcount,
-				curPage, pageSize);
+		List<TQuestions> datalist = dataService.getDataList(0, totalcount, curPage, pageSize);
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
@@ -107,10 +103,11 @@ public class DataController {
 		return count > 0 ? "true" : "false";
 	}
 
-	@RequestMapping("/updateCimei'yihoise")
+	@RequestMapping("/insertOrUpdateChoise")
 	@ResponseBody
-	public String updateChoise(TChoises tChoises) {
-		int count = dataService.updateChiose(tChoises);
+	public String insertOrUpdateChoise(TChoises tChoises) {
+
+		int count = dataService.insertOrUpdateChoise(tChoises);
 		return count > 0 ? "true" : "false";
 	}
 
@@ -134,8 +131,7 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countSelectByName(names);
-		List<TLabels> lables = dataService.selectByName(totalcount, curPage,
-				pageSize, names);
+		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}
@@ -146,8 +142,7 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 200 : pageSize;
 		int totalcount = dataService.countLabels();
-		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage,
-				pageSize);
+		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage, pageSize);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}

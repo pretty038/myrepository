@@ -150,8 +150,13 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public int updateChiose(TChoises tChoises) {
-		return tChoisedao.update(tChoises);
+	public int insertOrUpdateChoise(TChoises tChoises) {
+		if (tChoises.getId() == 0) {
+			return tChoisedao.insert(tChoises);
+		} else {
+			return tChoisedao.update(tChoises);
+		}
+
 	}
 
 	@Override
