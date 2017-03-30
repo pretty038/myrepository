@@ -118,10 +118,15 @@ public class DataController {
 		return count > 0 ? "true" : "false";
 	}
 
-	@RequestMapping("/updateLabel")
+	@RequestMapping("/insertOrUpdateLabel")
 	@ResponseBody
-	public String updateLabe(TLabels tLabels) {
-		int count = dataService.updateLabel(tLabels);
+	public String insertOrUpdateLabel(TLabels tLabels) {
+		int count=0;
+		if(tLabels!=null&&tLabels.getId()>0){
+			count=dataService.updateLabel(tLabels);
+		}else if(tLabels!=null&&tLabels.getId()==0){
+			count=dataService.addLabel(tLabels)?1:0;
+		}
 		return count > 0 ? "true" : "false";
 	}
 
@@ -162,9 +167,9 @@ public class DataController {
 		return count > 0 ? "true" : "false";
 	}
 
-	@RequestMapping("/labelUpdateOrInsert")
+	@RequestMapping("/labelRelUpdateOrInsert")
 	@ResponseBody
-	public String labelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
+	public String labelRelUpdateOrInsert(TLabelsRel tlabelsrel, Model model) {
 		int count = dataService.insertOrUpateTLabelsRel(tlabelsrel);
 		return String.valueOf(count);
 	}
