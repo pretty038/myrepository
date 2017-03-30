@@ -1,34 +1,20 @@
 //这个东西要怎么搞呢？我进入界面，可以选择是要进入添加标题界面还是展示界面。或者可以分开，这就是一个单纯的输入界面。
 var arraySelect = new Array();
+var arrayNonSelect = new Array();
 function initNonrelativeLabel(){
 	$.get("/apcompany/data/labelAll", function(result) {
 		var jsonObj = JSON.parse(result);
+		arrayNonSelect[0] = new Array();
+		arrayNonSelect[1] = new Array();
 		for(var jn in jsonObj){
 			if(jsonObj[jn].type === 1){
-				console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
-				var tmpsubject = $("<option></option>");
-				tmpsubject.text(jsonObj[jn].labelname);
-				tmpsubject.prop("value",jsonObj[jn].id);
-				tmpsubject.appendTo($(".label-selectSubject").children("select"));
+				//arrayNonSelect[0].push(jsonObj[jn].id,jsonObj[jn].labelname);
+				arrayNonSelect[0][arrayNonSelect[0].length] = new Array(jsonObj[jn].id,jsonObj[jn].labelname);
 			}else if(jsonObj[jn].type === 2){
-				console.log(jsonObj[jn].labelname + ":" + jsonObj[jn].type);
-				var tmppublisher = $("<option></option>");
-				tmppublisher.text(jsonObj[jn].labelname);
-				tmppublisher.prop("value",jsonObj[jn].id);
-				tmppublisher.appendTo($(".label-selectPublisher").children("select"));
+				arrayNonSelect[1][arrayNonSelect[1].length] = new Array(jsonObj[jn].id,jsonObj[jn].labelname);
 			}
-			console.log($(".label-selectSubject select").get(0).tagName);
 		}
-	});
-	$(".label-proNum,.label-proDiff,.label-proKind,.label-proType,.label-section").each(function(){
-		for(var i = 0;i < 20;i++){
-			var tmpoption = $("<option></option>");
-			tmpoption.attr("value",i+1);
-			tmpoption.text(i+1);
-			tmpoption.appendTo($(this).find("select"));
-		}
-	});
-	
+	});	
 }
 function initRelativeLabel(){
 	$.get("/apcompany/data/labelRelAll",function(result){
@@ -68,7 +54,7 @@ function initRelativeLabel(){
 				
 			}
 			//四个元素分别是id，labelname，parentsid，children的路径，自身的绝对路径.
-			arraySelect[tmpdepth - 1][k] = new Array(array[i][0],array[i][1],array[i][2],"",(tmpdepth - 1) + ":" +k);
+			arraySelect[tmpdepth - 1][k] = new Array(array[i][0],array[i][1],array[i][2],"",(tmpdepth - 1) + ":" +k);		
 			//console.log(arraySelect[tmpdepth - 1][k][1]);
 			//如果相等说明还在这个层次。
 			if(tmpdepth != 1){
@@ -84,170 +70,17 @@ function initRelativeLabel(){
 			k++;
 		}
 		//下面就要根据arraySelect来生成select。不同的select要用div隔开，不然会互相干扰change事件。
-		for(var n = 0; n < arraySelect.length;n++){
-			var tmpDiv = $("<div></div>");
-			tmpDiv.addClass("select" + n);
-			var tmpselect = $("<select></select>");
-			tmpselect.appendTo(tmpDiv);
-			tmpDiv.appendTo($("#relativeDiv"));
-			//下面要把option加进去。
-			//option的选项只要设置第一级即可，其他的保留select就够了。		
-		}
-		for(var p = 0;p < arraySelect[0].length;p++){
-			
-			tmpoption = $("<option></option>");
-			//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
-			tmpoption.attr("id","option" + arraySelect[0][p][0]);
-			tmpoption.attr("value",arraySelect[0][p][1]);
-			tmpoption.text(arraySelect[0][p][1]);
-			//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
-			tmpoption.addClass(arraySelect[0][p][4] + arraySelect[0][p][3]);
-			tmpoption.appendTo($(".select0 select"));
-		}
 		//下面再定义select的change函数，补齐后面的select。
 	});
 }
 $(document).ready(function(){
-	$("#dv2").on("mouseover",".childw p",function(){
-		$(this).css("background-color","#C8E0F0");
-	});
-	$("#dv2").on("mouseout",".childw p",function(){
-		$(this).css("background-color","#FFFFFF");
-	});
 	//下面我要添加非相关标签的select和相关标签的select。
 	initNonrelativeLabel();
 	initRelativeLabel();
-	$("#relativeDiv").on("change","select",function(e){
-		//console.log($(this)[0].tagName);
-		//应该先把后面的select的option的都去掉。
-		$(e.target).parent().nextAll().find("option").remove();
-		//下一步就是根据取到的值将下一个select的option重新添加。
-		var tmpstr = $(e.target).children("option:selected").prop("class");
-		var tmpstr2 = tmpstr.split("+");
-		for(var i = 1;i < tmpstr2.length;i++){
-			//解析出option的在arraySelect中的绝对路径。
-			tmpstr3 = tmpstr2[i].split(":");			
-			tmpoption = $("<option></option>");
-			//id和labelname，parentsid没必要，classname 可以用自身路径加上children路径。
-			tmpoption.attr("id","option" + arraySelect[tmpstr3[0]][tmpstr3[1]][0]);
-			tmpoption.attr("value",arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
-			tmpoption.text(arraySelect[tmpstr3[0]][tmpstr3[1]][1]);
-			//这样可以用+号分割，第一个是自己的绝对路径，而后面是子菜单的路径。
-			tmpoption.addClass(arraySelect[tmpstr3[0]][tmpstr3[1]][4] + arraySelect[tmpstr3[0]][tmpstr3[1]][3]);
-			tmpoption.appendTo($(e.target).parent().next().children("select"));
-		}
-	});
+	test2();
+	//接下来我要设计一下编辑界面，如果要编辑某个选项，怎么弄？
 });
-function formUp(){
-	var formdata = new FormData($("#tabUp"));
-	//虽然添加了label，没有什么问题
-	$(".childw:first p label").each(function(){
-		//console.log($(this).children("label").text());
-		//console.log($(this).children("input").prop("name"));
-		var tmpname = $(this).prop("title");
-		var tmpvalue = $(this).html();
-		//用一连串的规则去拼目标字符串。
-		var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
-		var string3 = string2.replace(/<\/span>/g,"");
-		var string4 = string3.replace(/<\/nobr>/g,"");		
-		var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
-		var string6 = string5.replace(/<\/script>/g,"}$");
-		var string7 = string6.replace(/<label.*?>/g,"");		
-		var string8 = string7.replace(/<\/label>/g,"");		
-		var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
-		console.log(tmpname,string9);
-		//formdata.append($(this).children("input").prop("name"),$(this).children("label").text());
-		formdata.append(tmpname,string9);
-		
-	});
-	//我要拼接label的标签。如果是相关标签，我要用哪个字段呢？tLabelsQuestionRel[0].
-	var strnonrelLabel = "";
-	//科目
-	var tmpstrnon = $(".label-selectSubject option:selected").prop("value");
-	if(tmpstrnon.length == 1)
-		tmpstrnon = "0" + tmpstrnon;
-	strnonrelLabel += tmpstrnon;
-	//出版社
-	tmpstrnon = $(".label-selectPublisher option:selected").prop("value");
-	if(tmpstrnon.length == 1)
-		tmpstrnon = "0" + tmpstrnon;
-	strnonrelLabel += tmpstrnon;
-	//年份
-	tmpstrnon = $(".label-selectYear input").val();
-	tmpstrnon = tmpstrnon.replace(/-/,"");
-	strnonrelLabel += tmpstrnon;
-	//是否真题
-	if($(".label-isRealPro input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
-	//题号
-	var tmpstrnon = $(".label-proNum option:selected").text();
-	if(tmpstrnon.length == 1)
-		tmpstrnon = "0" + tmpstrnon;
-	strnonrelLabel += tmpstrnon;
-	//难度
-	var tmpstrnon = $(".label-proDiff option:selected").text();
-	strnonrelLabel += tmpstrnon;
-	//题类
-	var tmpstrnon = $(".label-proKind option:selected").text();
-	strnonrelLabel += tmpstrnon;
-	//题型
-	var tmpstrnon = $(".label-proType option:selected").text();
-	strnonrelLabel += tmpstrnon;
-	//计算器
-	if($(".label-calculator input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
-	//数表
-	if($(".label-diagram input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
-	//图片
-	if($(".label-image input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
-	//证明题
-	if($(".label-prove input").prop("checked") === true)
-		strnonrelLabel += "1";
-	else 
-		strnonrelLabel += "0";
-	//部分
-	tmpstrnon = $(".label-section option:selected").prop("value");
-	if(tmpstrnon.length == 1)
-		tmpstrnon = "0" + tmpstrnon;
-	strnonrelLabel += tmpstrnon;
-	formdata.append("tLabelsQuestionRel[0].labelid",strnonrelLabel);
-	//上面就是如何弄拼接这个字符传。
-	//下面的相关性标签，要读取三个的全部id，然后都发送。这样看来，arrayselect还要保存每个id的父辈全部的id，这
-	//是一个问题，如果不保存，我就要多次遍历了。还是保存下来比较好。我可以考虑生成array的时候改动。这样我上传的时候
-	//只要上传最后一个id值就行了。
-	var strrelLabel = "";
-	$("#relativeDiv").find("select").each(function(){
-		var tmpLabelId = $(this).children("option:selected").prop("id");
-		if(tmpLabelId != null){
-			strreLabel = tmpLabelId.slice(6,tmpLabelId.length);
-		}			
-	});
-	formdata.append("tLabelsQuestionRel[0].labelsrelid",strreLabel);
-	$.ajax({
-        url:"../../apcompany/data/insert",
-        type:"post",
-        data:formdata,
-        processData:false,
-        contentType:false,
-        success:function(data){
-            console.log("over..");
-        }
-	});
-	
-}
-function editorOK(){
-		
-}
+
 function refresh(){
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
@@ -261,48 +94,131 @@ function test2(){
        for(var jn in jsonObj)
 		{
     	   var chw = $("<div></div>" ,{class:"childw"});
-    	   //chw.attr("title",jsonObj[jn].id);
-    	   //两个button
-    	   var pBt = $("<p></p>");
-    	   var btAddOp=$("<button>AddOption</button>");
-    	   var btDelOp=$("<button>DelOption</button>");
-    	   btAddOp.attr("onclick","AddOptionBt($(this))");
-    	   btDelOp.attr("onclick","deleteDiv($(this))");
-    	   btAddOp.appendTo(pBt);
-    	   btDelOp.appendTo(pBt);
-    	   pBt.appendTo(chw);
+    	   //我要添加标签了，一个是非相关标签，一个非相关标签。
+    	   var labelDiv = $("<div></div>",{class:"labelDiv"})
+    	   //利用ajax取回字符串，然后将
+    	   var strNonRelLabel = "0104200801101111111101";
+    	   var tmpSt=new Array(0,2,4,10,11,13,14,15,16,17,18,19,20);
+    	   var tmpstrLabel = new Array("科目","出版商","年份","是真题","题号","难度","题类","题型","用计算器","含数表","含图片","是证明题","题部分");
+    	   var tmpEnd = new Array(2,4,9,11,13,14,15,16,17,18,19,20,22);
+    	   for(var i = 0;i < 13;i++){
+    		   var tmpSE = strNonRelLabel.slice(tmpSt[i],tmpEnd[i]);
+    		   switch(i){
+    		   case 0:
+    			   //需要添加前两个标签。
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
+    				   //不设置该标签。
+    			   } else {
+    				   //arrayNonSelect[i].length写法不能识别，抑郁。
+    				   for(var j = 0;j < arrayNonSelect[0].length;j++){
+    					   if(arrayNonSelect[0][j][0] === Number(strNonRelLabel.slice(tmpSt[i],tmpEnd[i])))
+    					   {
+    						   var tmpSubjectLabel = $("<label></label>");
+    						   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +arrayNonSelect[i][j][1]);
+    						   tmpSubjectLabel.appendTo(labelDiv);
+    					   }
+    				   }
+    			   }
+    			   break;
+    		   case 1:
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
+    				   //不设置该标签。
+    			   } else {
+    				   //arrayNonSelect[i].length写法不能识别，抑郁。
+    				   for(var j = 0;j < arrayNonSelect[1].length;j++){
+    					   if(arrayNonSelect[1][j][0] === Number(strNonRelLabel.slice(tmpSt[i],tmpEnd[i])))
+    					   {
+    						   var tmpSubjectLabel = $("<label></label>");
+    						   tmpSubjectLabel.text(tmpstrLabel[i] + ":" +arrayNonSelect[i][j][1]);
+    						   tmpSubjectLabel.appendTo(labelDiv);
+    					   }
+    				   }
+    			   }
+    			   break;
+    		   case 2:case 5:case 6:case 7:case 4:case 12:
+    			   //添加日期
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
+    				   //不设置该标签。
+    			   } else {    				   
+    						   var tmpNonRelLabel = $("<label></label>");
+    						   tmpNonRelLabel.text( tmpstrLabel[i] + ":" +strNonRelLabel.slice(tmpSt[i],tmpEnd[i]));
+    						   tmpNonRelLabel.appendTo(labelDiv);    					  
+    				   
+    			   }
+    		       break;   	  		   
+    		   case 3:case 8:case 9:case 10:case 11:
+    			   //添加，都是些default之类的，这里要用三个，-，代表该属性不存在，用占位符表示
+    			   //回头需要给insert文件添加占位符。
+    			   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "--"){
+    				   //不设置该标签。
+    			   } else {    				   
+    						   var tmpNonRelLabel = $("<label></label>");
+    						   if(strNonRelLabel.slice(tmpSt[i],tmpEnd[i]) === "1"){
+    							   tmpNonRelLabel.text( tmpstrLabel[i]);
+    							   
+    						   } else {
+    							   tmpNonRelLabel.text("不" + tmpstrLabel[i]);
+    						   }
+    						   tmpNonRelLabel.appendTo(labelDiv);       					  
+    				   
+    			   }
+    			   break;
+    		   }
+    	   }
+    	   //利用ajax取回相关标签。
+    	   var strRelLabel = "15";
+    	   var tmpSelect = new Array();
+    	   var flagstr = strRelLabel;
+    	   //在这里，我只要将原来的标签的路径给贴出来就行了，我不弄自动对齐了，因为这个功能不一定有用，而且复杂。
+    	   for(var i = 0;i < arraySelect.length;i++){
+    			for(var j = 0;j < arraySelect[i].length;j++){
+    				//console.log(arraySelect[i][j][0] + ":" + flagstr);
+    				if(arraySelect[i][j][0] === Number(flagstr)){
+    					tmpSelect.push(i+":" + j);
+    					console.log(arraySelect[i][j][2]);
+    					if(arraySelect[i][j][2] != 0){
+    						flagstr = arraySelect[i][j][2];
+    						i=0;
+    						j=0;    						
+    					}
+    				}    					   
+    			}
+    	   }
+    	   console.log(tmpSelect);
+    	   var tmpLabelRel = $("<label></label>");
+    	   for(var i=tmpSelect.length-1;i < tmpSelect.length;i--){
+    		   var tmpstrrel = tmpSelect[i].split(":");
+    		   var tmpBtext = $("<b></b>");
+    		   var tmp1 = Number(tmpstrrel[0]);
+    		   var tmp2 = Number(tmpstrrel[1]);
+    		   console.log(tmpSelect[i]);
+    		   console.log("tmpstr22:" + tmp1);
+    		   console.log(tmpstrrel[0] + ":" + tmpstrrel[1]);
+    		   if(i!=0)
+    			   tmpBtext.text(arraySelect[tmp1][tmp2][1] + "--->");
+    		   else
+    			   tmpBtext.text(arraySelect[tmp1][tmp2][1]);
+    		   tmpBtext.appendTo(tmpLabelRel);
+    	   }
+    	   tmpLabelRel.appendTo(labelDiv);
+    	   labelDiv.appendTo(chw);
     	   //问题标签,一段标签由 p包含一个label和一个button组成.
     	   var pQs = $("<p></p>");
     	   var qs = $("<label></label>",{class:"quesT"});
     	   qs.attr("title",jsonObj[jn].id);
-    	   var btQs = $("<button>Edit</button>");
-    	   btQs.attr("onclick","editAndSaveBt($(this))");
-    	   btQs.addClass("editAndsave");
-    	   var btCommitQs = $("<button>Commit</button>");
-    	   btCommitQs.addClass=$("btCommit");
-    	   btCommitQs.attr("onclick","commitChange($(this),'a')");   	   
+ 	   
     	   qs.html(jsonObj[jn].question);
     	   qs.appendTo(pQs);
-    	   btQs.appendTo(pQs);
-    	   btCommitQs.appendTo(pQs);
+
     	   $("<br />").appendTo(pQs);   	   
     	   pQs.appendTo(chw);
     	 //下面是答案标签
     	   var pAn = $("<p></p>");
     	   var an = $("<label></label>",{class:"anT"});
-    	   an.attr("title",jsonObj[jn].tAnswers.id);
-    	   var btAn = $("<button>Edit</button>");
-    	   btAn.attr("onclick","editAndSaveBt($(this))");
-    	   btAn.addClass("editAndsave");
-    	   var btCommitAn = $("<button>Commit</button>");
-    	   btCommitAn.addClass=$("btCommit");
-    	   btCommitAn.attr("onclick","commitChange($(this),'c')");    	   
+    	   an.attr("title",jsonObj[jn].tAnswers.id);  	   
     	   an.html( "The answer is: "+jsonObj[jn].tAnswers.answer);
     	   an.appendTo(pAn);
-    	   btAn.appendTo(pAn);
-    	   btCommitAn.appendTo(pAn);
     	   $("<br />").appendTo(pAn); 
-    	   //pAn.appendTo(chw);
     	   
     	   //下面是选项标签.
     	   var i = 0;
@@ -312,21 +228,12 @@ function test2(){
 				var tmpP = $("<p></p>");
 				//console.log("option:" +jsonObj[jn].choices[jn2].choise);
 				var op1 = $("<label></label>",{class:"opT"});
-				op1.attr("title",jsonObj[jn].choices[jn2].id);
-				var opButton = $("<button>Edit</button>");
-				opButton.addClass("editAndsave");
-				opButton.attr("onclick","editAndSaveBt($(this))");
-				var btCommitTmp = $("<button>Commit</button>");
-		    	btCommitTmp.addClass=$("btCommit");
-		    	btCommitTmp.attr("onclick","commitChange($(this),'b')");		    	
+				op1.attr("title",jsonObj[jn].choices[jn2].id);		    	
 				op1.html("("+ str.charAt(i)+ ") " + jsonObj[jn].choices[jn2].choise);
 				op1.appendTo(tmpP);
-				opButton.appendTo(tmpP);
-				btCommitTmp.appendTo(tmpP);
 				$("<br />").appendTo(tmpP);
 				tmpP.appendTo(chw);				
-				i++;
-				
+				i++;				
 			}
 			
 			pAn.appendTo(chw);

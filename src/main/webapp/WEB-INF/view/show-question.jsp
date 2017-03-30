@@ -20,7 +20,7 @@
 		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" async src="../js/editor.js"></script>
-		<script type="text/javascript" async src="../js/test.js"></script>
+		<script type="text/javascript" async src="../js/showquestion.js"></script>
 		<style type="text/css">
 			#cmj {
 				width: 400px;
@@ -34,88 +34,13 @@
 		<div class="header">
 			<h1>吾优woyoo</h1>
 		</div>
-		<div>
-			<button id="edr" onclick="editorOK()">编辑公式完成</button>
-			<button onclick="test3()">test2</button>
-			<button onclick="refresh()">refresh</button>
-			<button onclick="formUp()">提交修改</button>
+		<div>		
+			<button onclick="refresh()">refresh</button>			
 		</div>
 		<div class="main">
 			<form id="tabUp" enctype="multipart/form-data">
 			</form>
-			<div class="col" id="dv2">				
-				<div class="childW">
-						<p>
-							<button onclick="AddOptionBt($(this))">AddOption</button>
-							<button onclick="deleteDiv($(this))">DeleteOption</button>
-						</p>
-						
-						<div class="nonrelativeLabel">
-							<!-- 应该弹出
-							// 00科目 + 00出版 + 000000年份 + 0是否真题 + 00题号 + 0难度 + 0题类 + 0题型 + 0计算器 + 0数表 +0图片
-							// + 0证明题 + 0部分; -->
-							<div class="label-selectSubject">
-								<select></select>
-							</div>
-							<div class="label-selectPublisher">
-								<select></select>
-							</div>
-							<div class="label-selectYear">
-								<input type="text" id="d241" value="2008-01" onfocus="WdatePicker({dateFmt:'yyyy-MM',startDate:'1980-05-01'})" class="Wdate"/>
-							</div>
-							<div class="label-isRealPro">
-								<p><input type="checkbox" value="" checked="checked" />是真题</p>
-							</div>
-							<div class="label-proNum">
-								<p>题号<select></select></p>
-							</div>
-							<div class="label-proDiff">
-								<p>难度<select></select></p>
-							</div>
-							<div class="label-proKind">
-								<p>题类<select></select></p>
-							</div>
-							<div class="label-proType">
-								<p>题型<select></select></p>
-							</div>
-							<div class="label-calculator">
-								<p>能用计算器<input type="checkbox" value="" checked="checked" /></p>
-							</div>
-							<div class="label-diagram">
-								<p>含数表<input type="checkbox" value="" checked="checked" /></p>
-							</div>
-							<div class="label-image">
-								<p>含图片<input type="checkbox" value="" checked="checked" /></p>
-							</div>
-							<div class="label-prove">
-								<p>证明题<input type="checkbox" value="" checked="checked" /></p>
-							</div>
-							<div class="label-section">
-								<p>题部分<select></select></p>
-							</div>					
-							<br />
-						</div>
-						<div class="relativeLabel" id="relativeDiv">
-							
-						</div>							
-						<br />
-						<p class="neip">
-							<label class="inputRes" title="tQuestions.question">问题</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
-							<br />						
-						</p>
-						
-						<p class="neip">
-							<label class="inputRes" title="tChoises[0].choise">选项</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
-							<br />							
-						</p>
-						<p class="neip">
-							<label class="inputRes" title="tAnswers.answer">答案</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>	
-							<br />						
-						</p>			
-				</div>				
+			<div class="col" id="dv2">												
 			</div>			
 		</div>
 		<p style="display: none;" id="flg">0</p>

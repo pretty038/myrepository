@@ -5,7 +5,8 @@ import com.apcompany.user.enums.QuestionClass;
 import com.apcompany.user.enums.QuestionType;
 
 public class TNonRelCondition {
-
+	// 00科目 + 00出版 + 000000年份 + 0是否真题 + 00题号 + 0难度 + 0题类 + 0题型 + 0计算器 + 0数表 +0图片
+	// + 0证明题 + 0部分;
 	// 1科目
 	private String subject;
 	// 2.出版
@@ -32,6 +33,16 @@ public class TNonRelCondition {
 	private boolean isPic;
 	// 12 证明题
 	private boolean isProof;
+	// 13 部分
+	private int section;
+
+	public int getSection() {
+		return section;
+	}
+
+	public void setSection(int section) {
+		this.section = section;
+	}
 
 	public String getSubject() {
 		return subject;
