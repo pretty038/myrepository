@@ -88,19 +88,31 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers) {
+	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers,
+			List<TLabelsQuestionRel> tLabelsQuestionRel) {
 		int out = 0;
 		out = tQuestionsDao.update(tQuestions);
 		if (out != 1) {
 			return false;
 		}
 		for (TChoises choise : tChoises) {
+
 			out = tChoisedao.update(choise);
+			if (out != 1) {
+				return false;
+			}
 		}
 
 		out = tAnswerdao.update(tAnswers);
 		if (out != 1) {
 			return false;
+		}
+		for (TLabelsQuestionRel tQuestionRel : tLabelsQuestionRel) {
+			tQuestionRel.setQuestionid(tQuestions.getId());
+			out = tLabelQuestionRelDao.update(tQuestionRel);
+			if (out != 1) {
+				return false;
+			}
 		}
 		return true;
 	}

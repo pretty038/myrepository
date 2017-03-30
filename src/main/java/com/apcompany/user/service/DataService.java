@@ -16,7 +16,7 @@ public interface DataService {
 
 	public boolean delData(int id);
 
-	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers);
+	public boolean updateData(TQuestions tQuestions, List<TChoises> tChoises, TAnswers tAnswers,List<TLabelsQuestionRel> tLabelsQuestionRel);
 
 	public int getDataCount();
 

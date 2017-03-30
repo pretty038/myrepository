@@ -24,11 +24,12 @@
 			<id column="did" property="id" />
 			<result column="dquestionId" property="questionid" />
 			<result column="labelid" property="labelid" />
+			<result column="labelsrelid" property="labelsrelid" />
 		</collection>
 	</resultMap>
 	
 	<select id="searchAll"  resultMap="BaseResultMap"  >
-	select a.*,b.answer,c.choise,b.id aid,b.questionid aquestionid,c.questionid cquestionid,c.id cid,d.id did,d.questionid dquestionid,d.labelid labelid from 
+	select a.*,b.answer,c.choise,b.id aid,b.questionid aquestionid,c.questionid cquestionid,c.id cid,d.id did,d.questionid dquestionid,d.labelid labelid,d.labelsrelid labelsrelid from 
 	questions a
 	join 
 	answers b

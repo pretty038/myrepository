@@ -40,17 +40,28 @@ public class DataController {
 	@RequestMapping("/insert")
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
-		if (superData != null) {
+		if (superData != null&&superData.gettQuestions().getId()==0) {
 			boolean out = dataService.addData(superData.gettQuestions(),
 					superData.gettChoises(), superData.gettAnswers(),
 					superData.gettLabelsQuestionRel());
 			if (out) {
-				model.addAttribute("message", "true");
+				model.addAttribute("message", "insert true");
 			} else {
 				model.addAttribute("message", "insert failed !!");
 			}
 
-		} else {
+		}else if(superData != null&&superData.gettQuestions().getId()>0){
+			boolean out = dataService.updateData(superData.gettQuestions(),
+					superData.gettChoises(), superData.gettAnswers(),
+					superData.gettLabelsQuestionRel());
+			if (out) {
+				model.addAttribute("message", "update true");
+			} else {
+				model.addAttribute("message", "update failed !!");
+			}
+		}
+		
+		else {
 			model.addAttribute("message",
 					"super data is null!!!, please check the parameter !!!");
 		}

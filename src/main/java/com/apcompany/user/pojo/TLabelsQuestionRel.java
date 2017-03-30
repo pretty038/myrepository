@@ -54,6 +54,11 @@ public class TLabelsQuestionRel {
 	public void setLabelsrelid(int labelsrelid) {
 		this.labelsrelid = labelsrelid;
 	}
+	@Override
+	public String toString() {
+		return "TLabelsQuestionRel [id=" + id + ", status=" + status + ", labelid=" + labelid + ", questionid="
+				+ questionid + ", ctime=" + ctime + ", utime=" + utime + ", labelsrelid=" + labelsrelid + "]";
+	}
 	
 
 }
