@@ -18,6 +18,7 @@ local.properties
 yes
 yes.pub
 src/main/resources/dbconfig.properties
+src/main/webapp/js/MathJax-master/
 
 
 # External tool builders

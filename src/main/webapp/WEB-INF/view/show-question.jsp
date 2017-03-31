@@ -111,17 +111,7 @@
 						<div>
 							<button onclick="commitLableChange()">commitLabelChange</button>
 						</div>							
-						<br />
-					<!--  	<p class="neip">
-							问题：<input />					
-						</p>
-						
-						<p class="neip">
-							选项：<input />						
-						</p>
-						<p class="neip">
-							答案：<input />					
-						</p> -->			
+						<br />		
 				</div>
 		</div>
 		<div id="editor" style="display: none;">
