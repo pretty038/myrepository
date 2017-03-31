@@ -23,7 +23,7 @@ public interface TLabelQuestionRelDao {
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TLabelsQuestionRel tLabelsQuestionRel);
 
-	@Update("update labels_question_rel set labelide=#{labelid} where questionid=#{questionid}")
+	@Update("update labels_question_rel set labelide=#{labelid},labelsrelid=#{labelsrelid} where questionid=#{questionid}")
 	public int update(TLabelsQuestionRel tLabelsQuestionRel);
 
 	@Update("update labels_question_rel set status=1 where id=#{id}")

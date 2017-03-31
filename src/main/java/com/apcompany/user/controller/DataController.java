@@ -14,6 +14,7 @@ import com.apcompany.user.pojo.SuperData;
 import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
 import com.apcompany.user.pojo.TLabels;
+import com.apcompany.user.pojo.TLabelsQuestionRel;
 import com.apcompany.user.pojo.TLabelsRel;
 import com.apcompany.user.pojo.TQuestions;
 import com.apcompany.user.service.DataService;
@@ -185,6 +186,15 @@ public class DataController {
 		model.addAttribute("message", "true");
 
 		return "labeltest";
+	}
+	
+	
+	
+	@RequestMapping("/updateQuestionLabel")
+	@ResponseBody
+	public String updateQuestionLabel(TLabelsQuestionRel tLabelsQuestionRel) {
+		int count = dataService.updateQuestionLabel(tLabelsQuestionRel);
+		return count > 0 ? "true" : "false";
 	}
 
 }
