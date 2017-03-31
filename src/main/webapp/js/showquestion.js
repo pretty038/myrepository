@@ -3,6 +3,7 @@ var arraySelect = new Array();
 var arrayNonSelect = new Array();
 var aleng1 = 0;
 var aleng2 = 0;
+var editFlag = 0;
 function stringPar(str){
 	//用一连串的规则去拼目标字符串。
 	var string2 = str.replace(/<span.*?>.*?<\/span>/g,"");		
@@ -161,103 +162,115 @@ function initLabel() {
 }
 
 function editOpen(e) {
-	//console.log($(e.target));是button
-	//这样目标下面的neip类都要删除，然后在这里重新添加。
-	var objPa = e.parent();
-	console.log("class:" + e.parent().prop("class"));
-	$("#editDiv").appendTo(objPa);
-	$("#editDiv").show();
-	//labelDiv类下面共14个标签，前13个用:分隔符，分割出来label进行判定和还原
-	var arrayLabel = new Array(0, 1, 4, 5, 6, 7, 12);
-	var i = 0;
-	$("#editDiv").parent().children(".labelDiv").children("label:eq(0),label:eq(1)").each(function() {
-		var tmpstr = $(this).text().split(":");
+	if(editFlag === 0 && e.text() === "Edit"){
+		//console.log($(e.target));是button
+		//这样目标下面的neip类都要删除，然后在这里重新添加。
+		var objPa = e.parent();
+		console.log("class:" + e.parent().prop("class"));
+		$("#editDiv").appendTo(objPa);
+		$("#editDiv").show();
+		//labelDiv类下面共14个标签，前13个用:分隔符，分割出来label进行判定和还原
+		var arrayLabel = new Array(0, 1, 4, 5, 6, 7, 12);
+		var i = 0;
+		$("#editDiv").parent().children(".labelDiv").children("label:eq(0),label:eq(1)").each(function() {
+			var tmpstr = $(this).text().split(":");
 
-		if (tmpstr[1].charAt(0) === "0")
-			tmpstr[1] = tmpstr[1].charAt(1);
-		//console.log("1:" +".nonrelativeLabel div:eq("+arrayLabel[i] + ")" + ";2:" + "option[text='" +tmpstr[1]+"']");
-		$(".nonrelativeLabel").children("div:eq(" + arrayLabel[i] + ")").children("select").find("option[value='" + $(this).attr("value") + "']").attr("selected", true);
-		//console.log($(".nonrelativeLabel").children("div:eq("+ arrayLabel[i] +")").prop("class"));
-		i++;
-	});
-	$("#editDiv").parent().children(".labelDiv").children("label:eq(4),label:eq(5),label:eq(6),label:eq(7),label:eq(12)").each(function() {
-		var tmpstr = $(this).text().split(":");
-		if (tmpstr[1].charAt(0) === "0")
-			tmpstr[1] = tmpstr[1].charAt(1);
-		//console.log($(this).text());
-		$(".nonrelativeLabel").children("div:eq(" + arrayLabel[i] + ")").find("option[value='1']").attr("selected", true);
-		i++;
-	});
-	var tmpstr2 = $("#editDiv").parent().children(".labelDiv").children("label:eq(2)").text().split(":");
-	if (tmpstr2[1] === "______") {
-		$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked", false);
-		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").attr("disabled", "true");
-	} else {
-		$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked", true);
-		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").removeAttr("disabled");
-		$(".nonrelativeLabel").children("div:eq(2)").find("input:last").val(tmpstr2[1].slice(0, 4) + "-" + tmpstr2[1].slice(4, 6));
-	}
-	var arrayJudge = new Array(3, 8, 9, 10, 11);
-	i = 0;
-	$("#editDiv").parent().children(".labelDiv").children("label:eq(3),label:eq(8),label:eq(9),label:eq(10),label:eq(11)").each(function() {
-		var tmpstr = $(this).text();
-		if (tmpstr === "_") {
-			$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:first").attr("checked", false);
-			$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("disabled", "true");
+			if (tmpstr[1].charAt(0) === "0")
+				tmpstr[1] = tmpstr[1].charAt(1);
+			//console.log("1:" +".nonrelativeLabel div:eq("+arrayLabel[i] + ")" + ";2:" + "option[text='" +tmpstr[1]+"']");
+			$(".nonrelativeLabel").children("div:eq(" + arrayLabel[i] + ")").children("select").find("option[value='" + $(this).attr("value") + "']").attr("selected", true);
+			//console.log($(".nonrelativeLabel").children("div:eq("+ arrayLabel[i] +")").prop("class"));
+			i++;
+		});
+		$("#editDiv").parent().children(".labelDiv").children("label:eq(4),label:eq(5),label:eq(6),label:eq(7),label:eq(12)").each(function() {
+			var tmpstr = $(this).text().split(":");
+			if (tmpstr[1].charAt(0) === "0")
+				tmpstr[1] = tmpstr[1].charAt(1);
+			//console.log($(this).text());
+			$(".nonrelativeLabel").children("div:eq(" + arrayLabel[i] + ")").find("option[value='1']").attr("selected", true);
+			i++;
+		});
+		var tmpstr2 = $("#editDiv").parent().children(".labelDiv").children("label:eq(2)").text().split(":");
+		if (tmpstr2[1] === "______") {
+			$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked", false);
+			$(".nonrelativeLabel").children("div:eq(2)").find("input:last").attr("disabled", "true");
 		} else {
-			$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:first").attr("checked", true);
-			$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").removeAttr("disabled", "true");
-			if (tmpstr.indexOf("不"))
-				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("checked", true);
-			else
-				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("checked", false);
+			$(".nonrelativeLabel").children("div:eq(2)").find("input:first").attr("checked", true);
+			$(".nonrelativeLabel").children("div:eq(2)").find("input:last").removeAttr("disabled");
+			$(".nonrelativeLabel").children("div:eq(2)").find("input:last").val(tmpstr2[1].slice(0, 4) + "-" + tmpstr2[1].slice(4, 6));
 		}
-		i++;
-	});
+		var arrayJudge = new Array(3, 8, 9, 10, 11);
+		i = 0;
+		$("#editDiv").parent().children(".labelDiv").children("label:eq(3),label:eq(8),label:eq(9),label:eq(10),label:eq(11)").each(function() {
+			var tmpstr = $(this).text();
+			if (tmpstr === "_") {
+				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:first").attr("checked", false);
+				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("disabled", "true");
+			} else {
+				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:first").attr("checked", true);
+				$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").removeAttr("disabled", "true");
+				if (tmpstr.indexOf("不"))
+					$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("checked", true);
+				else
+					$(".nonrelativeLabel").children("div:eq(" + arrayJudge[i] + ")").find("input:last").attr("checked", false);
+			}
+			i++;
+		});
 
 
 
-	//quesT,opT,anT三个类，每个类都要添加一个div框，里面有一个input，一个commitChange
-	//如果是新加的option，里面的button应该是commitAdd，
-	//$(e.target).parent().children('.quesT').
-	var tmpQues = $("<p></p>",{class:"neip"});
-	var tmpQIn = $("<input />");
-	tmpQIn.val(stringPar(e.parent().find('.quesT').html()));
-	tmpQIn.attr("value",e.parent().children('.quesT').attr('value'));
-	var tmpBtQ = $("<button>CommitChange</button>");
-	tmpBtQ.attr('onclick', "commitChange($(this),'a')");
-	tmpQIn.appendTo(tmpQues);
-	tmpBtQ.appendTo(tmpQues);
-	tmpQues.appendTo($(".editChildw"));
+		//quesT,opT,anT三个类，每个类都要添加一个div框，里面有一个input，一个commitChange
+		//如果是新加的option，里面的button应该是commitAdd，
+		//$(e.target).parent().children('.quesT').
+		var tmpQues = $("<p></p>",{class:"neip"});
+		var tmpQIn = $("<input />");
+		tmpQIn.val(stringPar(e.parent().find('.quesT').html()));
+		tmpQIn.attr("value",e.parent().children('.quesT').attr('value'));
+		var tmpBtQ = $("<button>CommitChange</button>");
+		tmpBtQ.attr('onclick', "commitChange($(this),'a')");
+		tmpQIn.appendTo(tmpQues);
+		tmpBtQ.appendTo(tmpQues);
+		tmpQues.appendTo($(".editChildw"));
 
-	//对于选项还要添加一个 deleteoption
-	e.parent().find('.opT').each(function() {
-		var tmpOpt = $("<p></p>",{class:"neip"});
-		var tmpInp = $("<input />");
-		var tmpstr = $(this).html();
-		tmpInp.val(stringPar(tmpstr.slice(4,tmpstr.length)));
-		tmpInp.attr("value",$(this).attr("value"));
-		var tmpBtCommitChange = $("<button>CommitChange</button>");
-		tmpBtCommitChange.attr('onclick',"commitChange($(this),'b')");
-		var tmpBtDel = $("<button>delOption</button>");
-		tmpBtDel.attr('onclick', "deloption(($(this))");//这个函数一会再加。
-		tmpInp.appendTo(tmpOpt);
-		tmpBtCommitChange.appendTo(tmpOpt);
-		tmpBtDel.appendTo(tmpOpt);
-		tmpOpt.appendTo($(".editChildw"));
+		//对于选项还要添加一个 deleteoption
+		e.parent().find('.opT').each(function() {
+			var tmpOpt = $("<p></p>",{class:"neip"});
+			var tmpInp = $("<input />");
+			var tmpstr = $(this).html();
+			tmpInp.val(stringPar(tmpstr.slice(4,tmpstr.length)));
+			tmpInp.attr("value",$(this).attr("value"));
+			var tmpBtCommitChange = $("<button>CommitChange</button>");
+			tmpBtCommitChange.attr('onclick',"commitChange($(this),'b')");
+			var tmpBtDel = $("<button>delOption</button>");
+			tmpBtDel.attr('onclick', "deloption(($(this))");//这个函数一会再加。
+			tmpInp.appendTo(tmpOpt);
+			tmpBtCommitChange.appendTo(tmpOpt);
+			tmpBtDel.appendTo(tmpOpt);
+			tmpOpt.appendTo($(".editChildw"));
 
-	});
-	//答案选项
-	var tmpAn = $("<p></p>",{class:"neip"});
-	var tmpAInp = $("<input />");
-	var strAn = e.parent().find('.anT').html();
-	tmpAInp.val(stringPar(strAn.slice(15,strAn.length)));
-	tmpAInp.attr('value', e.parent().children('.anT').attr("value"));
-	var tmpbtCom = $("<button>CommitChange</button>");
-	tmpbtCom.attr('onclick', "commitChange($(this),'c')");
-	tmpAInp.appendTo(tmpAn);
-	tmpbtCom.appendTo(tmpAn);
-	tmpAn.appendTo($(".editChildw"));
+		});
+		//答案选项
+		var tmpAn = $("<p></p>",{class:"neip"});
+		var tmpAInp = $("<input />");
+		var strAn = e.parent().find('.anT').html();
+		tmpAInp.val(stringPar(strAn.slice(15,strAn.length)));
+		tmpAInp.attr('value', e.parent().children('.anT').attr("value"));
+		var tmpbtCom = $("<button>CommitChange</button>");
+		tmpbtCom.attr('onclick', "commitChange($(this),'c')");
+		tmpAInp.appendTo(tmpAn);
+		tmpbtCom.appendTo(tmpAn);
+		tmpAn.appendTo($(".editChildw"));
+		editFlag = 1;
+		$(this).text("Save");
+	} else if(editFlag === 1){
+		//save的话，我选择重新刷新整个页面吧，还要加一个局部刷新的函数。
+		if($(this).text() === "Save"){
+			$("#dv2").children().remove();
+			test2();
+		}
+		
+	}
+	
 }
 $(document).ready(function() {
 	//下面我要添加非相关标签的select和相关标签的select。
@@ -698,10 +711,10 @@ function commitLableChange() {
 	});
 	formdata.append("tLabelsQuestionRel[0].labelsrelid", strreLabel);
 	var tmpquesId = $("#editDiv").parent().children(".quesT").prop("title");
-	formdata.append("id", tmpquesId);
+	formdata.append("questionid", tmpquesId);
 	$.ajax({
 		//调用更新接口。
-		url: "../../apcompany/data/insert",
+		url: "../../apcompany/data/updateQuestionLabel",
 		type: "post",
 		data: formdata,
 		processData: false,
