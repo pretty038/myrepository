@@ -404,3 +404,8 @@ function commitChange(t,u){
 	$("#tabUp").next().remove();
 	
 }
+function delOption(t){
+	//获取id 
+	//ajax上传
+	//删除标签.
+}
