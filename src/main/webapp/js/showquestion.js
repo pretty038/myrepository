@@ -602,6 +602,7 @@ function commitChange(t, u) {
 	$("#tabUp").next().remove();
 	
 }
+<<<<<<< HEAD
 
 function AddOptionBt(t) {
 	//其实就是添加一个input
@@ -778,3 +779,10 @@ function deloption(t){
 function delUiOption(t) {
 	$(".editChildw .neip:last").prev().remove();
 }
+=======
+function delOption(t){
+	//获取id 
+	//ajax上传
+	//删除标签.
+}
+>>>>>>> e72d7865d9b018c6287e5b179a8b5bc5a8aae859
