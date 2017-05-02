@@ -1,5 +1,7 @@
 //这个东西要怎么搞呢？我进入界面，可以选择是要进入添加标题界面还是展示界面。或者可以分开，这就是一个单纯的输入界面。
 var arraySelect = new Array();
+CKEDITOR.config.height = 150;
+CKEDITOR.config.width = '700px';
 
 function initNonrelativeLabel(){	
 	$(".label-selectSubject,.label-selectPublisher").find("select").each(function() {
@@ -161,29 +163,50 @@ $(document).ready(function(){
 			tmpoption.appendTo($(e.target).parent().next().children("select"));
 		}
 	});
+	$(".label-selectYear,.label-isRealPro,.label-calculator,.label-diagram,.label-image,.label-prove").each(function(){
+		$(this).find("input:first").on("click",function(e){
+			if($(e.target).prop("checked") === true){
+				$(e.target).parent().parent().find("input:last").removeAttr("disabled");
+			} else {
+				$(e.target).parent().parent().find("input:last").attr("disabled","true");
+			}
+			
+		});
+	});
+	if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+		CKEDITOR.tools.enableHtml5Elements( document );
 });
 function formUp(){
 	var formdata = new FormData($("#tabUp"));
 	//虽然添加了label，没有什么问题
-	$(".childw:first p label").each(function(){
-		//console.log($(this).children("label").text());
-		//console.log($(this).children("input").prop("name"));
-		var tmpname = $(this).prop("title");
-		var tmpvalue = $(this).html();
-		//用一连串的规则去拼目标字符串。
-		var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
-		var string3 = string2.replace(/<\/span>/g,"");
-		var string4 = string3.replace(/<\/nobr>/g,"");		
-		var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
-		var string6 = string5.replace(/<\/script>/g,"}$");
-		var string7 = string6.replace(/<label.*?>/g,"");		
-		var string8 = string7.replace(/<\/label>/g,"");		
-		var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
-		console.log(tmpname,string9);
-		//formdata.append($(this).children("input").prop("name"),$(this).children("label").text());
-		formdata.append(tmpname,string9);
-		
-	});
+//	$(".childw:first p label").each(function(){
+//		//console.log($(this).children("label").text());
+//		//console.log($(this).children("input").prop("name"));
+//		var tmpname = $(this).prop("title");
+//		formdata.append(tmpname,string9);
+//		
+//	});
+	//添加问题
+	formdata.append($("#ques").prop("title"),CKEDITOR.instances.ques.getData());	
+	//添加答案
+	formdata.append($("#answer").prop("title"),CKEDITOR.instances.ques.getData());
+	//添加选项
+	for(var i = 0;i <= num;i++){
+		if(i === 0)
+			formdata.append($("#option0").prop("title"),CKEDITOR.instances.option0.getData());
+		else if(i === 1)
+			formdata.append($("#option1").prop("title"),CKEDITOR.instances.option1.getData());
+		else if(i === 2)
+			formdata.append($("#option2").prop("title"),CKEDITOR.instances.option2.getData());
+		else if(i === 3)
+			formdata.append($("#option3").prop("title"),CKEDITOR.instances.option3.getData());
+		else if(i === 4)
+			formdata.append($("#option4").prop("title"),CKEDITOR.instances.option4.getData());
+		else if(i === 5)
+			formdata.append($("#option5").prop("title"),CKEDITOR.instances.option5.getData());
+		else if(i === 6)
+			formdata.append($("#option6").prop("title"),CKEDITOR.instances.option6.getData());
+	}
 	//我要拼接label的标签。如果是相关标签，我要用哪个字段呢？tLabelsQuestionRel[0].
 	var strnonrelLabel = "";
 	var tmpstrnon = "";
@@ -192,13 +215,13 @@ function formUp(){
 		if(tmpstrnon.length == 1)
 			tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//出版社
 	tmpstrnon = $(".label-selectPublisher option:selected").prop("value");
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//年份
 	if($(".label-selectYear p").children("input").prop("checked") === true){
 		tmpstrnon = $(".label-selectYear").children("input").val();
@@ -207,7 +230,7 @@ function formUp(){
 		tmpstrnon = "______";
 	}	
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//是否真题
 	if($(".label-isRealPro p").children("input").prop("checked") === true){
 		if($(".label-isRealPro input").prop("checked") === true)
@@ -216,26 +239,26 @@ function formUp(){
 			strnonrelLabel += "0";
 	} else 
 		strnonrelLabel += "_";
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	
 	//题号
 	var tmpstrnon = $(".label-proNum option:selected").text();
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//难度
 	var tmpstrnon = $(".label-proDiff option:selected").text();
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//题类
 	var tmpstrnon = $(".label-proKind option:selected").text();
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//题型
 	var tmpstrnon = $(".label-proType option:selected").text();
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	//计算器
 	if($(".label-calculator p").children("input").prop("checked") === true){
 		if($(".label-calculator input").prop("checked") === true)
@@ -244,7 +267,7 @@ function formUp(){
 			strnonrelLabel += "0";
 	} else 
 		strnonrelLabel += "_";
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	
 	//数表
 	if($(".label-diagram p").children("input").prop("checked") === true){
@@ -255,7 +278,7 @@ function formUp(){
 	} else {
 		strnonrelLabel += "_";
 	}
-	console.log(strnonrelLabel);
+	//console.log(strnonrelLabel);
 	
 	//图片
 	if($(".label-image p").children("input").prop("checked") === true){
@@ -265,7 +288,7 @@ function formUp(){
 			strnonrelLabel += "0";
 	} else 
 		strnonrelLabel += "_";
-	console.log(strnonrelLabel);
+	
 	
 	//证明题
 	if($(".label-prove p").children("input").prop("checked") === true){
@@ -281,7 +304,6 @@ function formUp(){
 	if(tmpstrnon.length == 1)
 		tmpstrnon = "0" + tmpstrnon;
 	strnonrelLabel += tmpstrnon;
-	console.log(strnonrelLabel);
 	formdata.append("tLabelsQuestionRel[0].labelid",strnonrelLabel);
 	//上面就是如何弄拼接这个字符传。
 	//下面的相关性标签，要读取三个的全部id，然后都发送。这样看来，arrayselect还要保存每个id的父辈全部的id，这
@@ -303,6 +325,8 @@ function formUp(){
         contentType:false,
         success:function(data){
             console.log("over..");
+            $.growl.notice({title: "插入问题", message: "插入成功!" });
+            window.location.reload();
         }
 	});
 	
@@ -406,34 +430,18 @@ function test3(){
 var num=0;
 function AddOptionBt(t){
 	num++;
-	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
-	//var op = $("<p>选项:<input name=tChoises["+num+"].choise /></p>" ,{class:"neip"});
-	var op = $("<p></p>" ,{class:"neip"});
-	var insideD = $("<label>选项</label>");
-	var insideE = $("<button>Edit</button>")
-	//var insideA = $("<input name=tChoises["+num+"].choise/>",{onblur:"exitInput($(this))"});
-	//var insideB = $("<label></label>");
-	//var insideC = $("<button>openEditor</button>");
-	insideD.addClass("inputRes");
-	insideD.attr("title","tChoises[" + num +"].choise");
-	insideE.addClass("editAndsave");
-	insideE.attr("onclick","editAndSaveBt($(this))");
-	op.addClass("neip");
-	insideD.appendTo(op);
-	insideE.appendTo(op);
-	$("<br/>").appendTo(op);
-	//insideA.attr("onblur","exitInput($(this))");
-	//attr才能实现这个，但是我在html上，在创建时候添加也行啊，而且class用的是Addclass，不明白为什么.
-	//insideC.attr("onclick","editorOpen($(this))");
-	//insideA.appendTo(op);
-	//insideC.appendTo(op);
-	//insideB.appendTo(op);
-	//op.appendTo($("#cinQues"));
-	op.insertBefore(t.parent().parent().children("p:last"));
+	var title= "tChoises[" + num + "].choise";
+	var id="option"+num;
+	var tmpdiv = $("<div></div>");
+	tmpdiv.attr("id",id);
+	tmpdiv.attr("title",title);
+	tmpdiv.appendTo($("#frameChoice"));
+	initSample(id);
 }
 function deleteDiv(t){
-	t.parent().parent().children("p:last").prev().remove();
+	//t.parent().parent().children("p:last").prev().remove();
 	//$("#cinQues p:last").remove();
+	$("#frameChoice").children("div:last").remove();
 	num--;
 }
 function goInput(t){
@@ -475,29 +483,12 @@ function editAndSaveBt(t){
 		//进入修改模式.
 		t.html("Save");
 		$("#editorFlg").text("1");
-		var tmpInput = $("<input />");
-		var tmpEditorBt = $("<button>openEditor</button>");
-		
-		tmpInput.addClass("editAndSaveInput");
-		tmpEditorBt.addClass("editorOpenBt");
-		tmpEditorBt.attr("onclick","tmpClick($(this))");
-		tmpInput.appendTo(t.parent());
-		tmpEditorBt.appendTo(t.parent());
-		//进入修改模式，将lable中的text()引入到input中.
-		var oldInputTxt = t.parent().children("label").html();
-		//用一连串的规则去拼目标字符串。
-		var string2 = oldInputTxt.replace(/<span.*?>.*?<\/span>/g,"");		
-		var string3 = string2.replace(/<\/span>/g,"");
-		var string4 = string3.replace(/<\/nobr>/g,"");		
-		var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
-		var string6 = string5.replace(/<\/script>/g,"}$");
-		var string7 = string6.replace(/<label.*?>/g,"");		
-		var string8 = string7.replace(/<\/label>/g,"");		
-		var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
-		t.parent().children("input").val(string9);
+		//将editorck,将ckeditor转移到上面。
+		//我的想法是，写一个函数来初始化，
+		//初始化多个ckeditor这样我就不需要多个
 	} else {
-		t.html("Edit");
-		var txtInput = t.parent().children("input").val();
+		t.text("Edit");
+		var txtInput = t.parent().children("textarea").val();
 		t.parent().children("label").text(txtInput);
 		$("#editorFlg").text("0");
 		$(".editAndSaveInput").remove();
@@ -559,3 +550,77 @@ function commitChange(t,u){
 	$("#tabUp").next().remove();
 	
 }
+
+
+	
+
+	// The trick to keep the editor in the sample quite small
+	// unless user specified own height.
+
+var initSample = ( function() {
+	var wysiwygareaAvailable = isWysiwygareaAvailable(),
+		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+	return function(id) {
+		var editorElement = CKEDITOR.document.getById( id );
+
+		// :(((
+		if ( isBBCodeBuiltIn ) {
+			editorElement.setHtml(
+				'Hello world!\n\n' +
+				'I\'m an instance of [url=http://ckeditor.com]CKEditor[/url].'
+			);
+		}
+
+		// Depending on the wysiwygare plugin availability initialize classic or inline editor.
+		if ( wysiwygareaAvailable ) {
+			CKEDITOR.replace( id,{
+				extraPlugins: 'mathjax,base64image',
+				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',			
+				height: 60
+			} );
+			
+		} else {
+			editorElement.setAttribute( 'contenteditable', 'true' );
+			CKEDITOR.inline( id ,{
+				extraPlugins: 'mathjax,base64image',
+				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',
+				height: 60
+			});			
+
+			// TODO we can consider displaying some info box that
+			// without wysiwygarea the classic editor may not work.
+		}
+	};
+
+	function isWysiwygareaAvailable() {
+		// If in development mode, then the wysiwygarea must be available.
+		// Split REV into two strings so builder does not replace it :D.
+		if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+			return true;
+		}
+
+		return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+	}
+} )();
+var stepNum = 0;
+function AddStepBt(t){
+	stepNum++;
+	//var title= "tChoises[" + num + "].choise";
+	var id="step"+stepNum;
+	var tmpdiv = $("<div></div>");
+	tmpdiv.attr("id",id);
+	//tmpdiv.attr("title",title);
+	tmpdiv.appendTo($("#frameStep"));
+	initSample(id);
+}
+
+function deleteStep(t){
+	$("#frameStep").children("div:last").remove();
+	stepNum--;
+}
+	
+
+
+
+

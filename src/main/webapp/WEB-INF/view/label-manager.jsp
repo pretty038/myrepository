@@ -12,6 +12,8 @@
 		<link href="../css/responsive.css" rel="stylesheet">		
 		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../js/label-manager.js"></script>
+		<script src="https://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
+		<link href="https://static.runoob.com/assets/jquery/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
 		<link href="../css/lable-manager.css" rel="stylesheet">		
 	</head>
 
@@ -25,6 +27,7 @@
 				</div>
 			</div>
 		</div>
+		<hr>
 		<div id="optionDiv">
 		</div>
 	</body>

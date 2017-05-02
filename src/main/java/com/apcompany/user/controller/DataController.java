@@ -2,6 +2,8 @@ package com.apcompany.user.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,8 +44,9 @@ public class DataController {
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
 		if (superData != null && superData.gettQuestions().getId() == 0) {
-			boolean out = dataService.addData(superData.gettQuestions(), superData.gettChoises(),
-					superData.gettAnswers(), superData.gettLabelsQuestionRel());
+			boolean out = dataService.addData(superData.gettQuestions(),
+					superData.gettChoises(), superData.gettAnswers(),
+					superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "insert true");
 			} else {
@@ -51,8 +54,9 @@ public class DataController {
 			}
 
 		} else if (superData != null && superData.gettQuestions().getId() > 0) {
-			boolean out = dataService.updateData(superData.gettQuestions(), superData.gettChoises(),
-					superData.gettAnswers(), superData.gettLabelsQuestionRel());
+			boolean out = dataService.updateData(superData.gettQuestions(),
+					superData.gettChoises(), superData.gettAnswers(),
+					superData.gettLabelsQuestionRel());
 			if (out) {
 				model.addAttribute("message", "update true");
 			} else {
@@ -61,7 +65,8 @@ public class DataController {
 		}
 
 		else {
-			model.addAttribute("message", "super data is null!!!, please check the parameter !!!");
+			model.addAttribute("message",
+					"super data is null!!!, please check the parameter !!!");
 		}
 		return "outcome";
 	}
@@ -83,8 +88,9 @@ public class DataController {
 	public String selectAll(Model model, Integer curPage, Integer pageSize) {
 		int totalcount = dataService.getDataCount();
 		curPage = curPage == null ? 0 : curPage;
-		pageSize = pageSize == null ? 20 : pageSize;
-		List<TQuestions> datalist = dataService.getDataList(0, totalcount, curPage, pageSize);
+		pageSize = pageSize == null ? 200 : pageSize;
+		List<TQuestions> datalist = dataService.getDataList(0, totalcount,
+				curPage, pageSize);
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
@@ -112,6 +118,14 @@ public class DataController {
 		return count > 0 ? "true" : "false";
 	}
 
+	@RequestMapping("/delChoise")
+	@ResponseBody
+	public String delChoise(int id) {
+
+		int count = dataService.delChoise(id);
+		return count > 0 ? "true" : "false";
+	}
+
 	@RequestMapping("/delLabel")
 	@ResponseBody
 	public String delLabel(int id) {
@@ -122,11 +136,11 @@ public class DataController {
 	@RequestMapping("/insertOrUpdateLabel")
 	@ResponseBody
 	public String insertOrUpdateLabel(TLabels tLabels) {
-		int count=0;
-		if(tLabels!=null&&tLabels.getId()>0){
-			count=dataService.updateLabel(tLabels);
-		}else if(tLabels!=null&&tLabels.getId()==0){
-			count=dataService.addLabel(tLabels)?1:0;
+		int count = 0;
+		if (tLabels != null && tLabels.getId() > 0) {
+			count = dataService.updateLabel(tLabels);
+		} else if (tLabels != null && tLabels.getId() == 0) {
+			count = dataService.addLabel(tLabels) ? 1 : 0;
 		}
 		return count > 0 ? "true" : "false";
 	}
@@ -137,7 +151,8 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 20 : pageSize;
 		int totalcount = dataService.countSelectByName(names);
-		List<TLabels> lables = dataService.selectByName(totalcount, curPage, pageSize, names);
+		List<TLabels> lables = dataService.selectByName(totalcount, curPage,
+				pageSize, names);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}
@@ -148,7 +163,8 @@ public class DataController {
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 200 : pageSize;
 		int totalcount = dataService.countLabels();
-		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage, pageSize);
+		List<TLabels> lables = dataService.selectAllLabels(totalcount, curPage,
+				pageSize);
 		String jsonText = JSON.toJSONString(lables, true);
 		return jsonText;
 	}
@@ -187,14 +203,18 @@ public class DataController {
 
 		return "labeltest";
 	}
-	
-	
-	
-	@RequestMapping("/updateQuestionLabel")
+
+	@RequestMapping("/updateQL")
 	@ResponseBody
 	public String updateQuestionLabel(TLabelsQuestionRel tLabelsQuestionRel) {
 		int count = dataService.updateQuestionLabel(tLabelsQuestionRel);
 		return count > 0 ? "true" : "false";
+	}
+
+	@RequestMapping("/index1")
+	public String index(HttpServletRequest request) {
+
+		return "index";
 	}
 
 }

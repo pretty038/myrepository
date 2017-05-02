@@ -166,7 +166,6 @@ function editOpen(e) {
 		//console.log($(e.target));是button
 		//这样目标下面的neip类都要删除，然后在这里重新添加。
 		var objPa = e.parent();
-		console.log("class:" + e.parent().prop("class"));
 		$("#editDiv").appendTo(objPa);
 		$("#editDiv").show();
 		//labelDiv类下面共14个标签，前13个用:分隔符，分割出来label进行判定和还原
@@ -223,9 +222,9 @@ function editOpen(e) {
 		//如果是新加的option，里面的button应该是commitAdd，
 		//$(e.target).parent().children('.quesT').
 		var tmpQues = $("<p></p>",{class:"neip"});
-		var tmpQIn = $("<input />");
+		var tmpQIn = $("<textarea style='width:500px;height:100px;'></textarea>");
 		tmpQIn.val(stringPar(e.parent().find('.quesT').html()));
-		tmpQIn.attr("value",e.parent().children('.quesT').attr('value'));
+		tmpQIn.prop("name",e.parent().find('.quesT').prop('title'));
 		var tmpBtQ = $("<button>CommitChange</button>");
 		tmpBtQ.attr('onclick', "commitChange($(this),'a')");
 		tmpQIn.appendTo(tmpQues);
@@ -235,14 +234,15 @@ function editOpen(e) {
 		//对于选项还要添加一个 deleteoption
 		e.parent().find('.opT').each(function() {
 			var tmpOpt = $("<p></p>",{class:"neip"});
-			var tmpInp = $("<input />");
+			var tmpInp = $("<textarea style='width:500px;height:100px;'></textarea>");
+			
 			var tmpstr = $(this).html();
 			tmpInp.val(stringPar(tmpstr.slice(4,tmpstr.length)));
-			tmpInp.attr("value",$(this).attr("value"));
+			tmpInp.prop("name",$(this).attr("title"));
 			var tmpBtCommitChange = $("<button>CommitChange</button>");
 			tmpBtCommitChange.attr('onclick',"commitChange($(this),'b')");
 			var tmpBtDel = $("<button>delOption</button>");
-			tmpBtDel.attr('onclick', "deloption(($(this))");//这个函数一会再加。
+			tmpBtDel.attr("onclick", "deloption($(this))");//这个函数一会再加。
 			tmpInp.appendTo(tmpOpt);
 			tmpBtCommitChange.appendTo(tmpOpt);
 			tmpBtDel.appendTo(tmpOpt);
@@ -251,22 +251,24 @@ function editOpen(e) {
 		});
 		//答案选项
 		var tmpAn = $("<p></p>",{class:"neip"});
-		var tmpAInp = $("<input />");
+		var tmpAInp = $("<textarea style='width:500px;height:100px;'></textarea>");
 		var strAn = e.parent().find('.anT').html();
 		tmpAInp.val(stringPar(strAn.slice(15,strAn.length)));
-		tmpAInp.attr('value', e.parent().children('.anT').attr("value"));
+		tmpAInp.prop('name', e.parent().find('.anT').attr("title"));
 		var tmpbtCom = $("<button>CommitChange</button>");
 		tmpbtCom.attr('onclick', "commitChange($(this),'c')");
 		tmpAInp.appendTo(tmpAn);
 		tmpbtCom.appendTo(tmpAn);
 		tmpAn.appendTo($(".editChildw"));
 		editFlag = 1;
-		$(this).text("Save");
+		e.text("Save");
 	} else if(editFlag === 1){
 		//save的话，我选择重新刷新整个页面吧，还要加一个局部刷新的函数。
-		if($(this).text() === "Save"){
-			$("#dv2").children().remove();
-			test2();
+		if(e.text() === "Save"){
+			e.text("Edit");
+			$("#editDiv").find(".neip").remove();
+			$("#editDiv").hide();
+			editFlag = 0;
 		}
 		
 	}
@@ -542,9 +544,9 @@ function commitChange(t, u) {
 	//div 的title当id。
 	//p标签下面的label标签的title
 	//p标签下面的label的text当
-	var tmpname = t.parent().children("label").prop("title");
+	var tmpname = t.parent().find("textarea").prop("name");
 	formdata.append("id", tmpname);
-	var tmpvalue = t.parent().children("label").text();
+	var tmpvalue = t.parent().find("textarea").val();
 	//用一连串的规则去拼目标字符串。
 	var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g, "");
 	var string3 = string2.replace(/<\/span>/g, "");
@@ -562,10 +564,15 @@ function commitChange(t, u) {
 	if (u === 'a') {
 		formdata.append("question", string9);
 		urlString = "../../apcompany/data/updateQuesion";
-	} else if (u === 'b') {
-		string10 = string9.substr(3);
-		formdata.append("choise", string10);
-		urlString = "../../apcompany/data/updateChoise";
+	} else if (u === 'b') {		
+		urlString = "../../apcompany/data/insertOrUpdateChoise";
+		if(tmpname === "0"){
+			formdata.append("questionid",$("#editDiv").parent().find(".quesT").prop("title"));
+			formdata.append("choise", string9);
+		} else {
+			formdata.append("choise", string9);
+		}
+			
 	} else if (u === 'c') {
 		formdata.append("answer", string9);
 		urlString = "../../apcompany/data/updateAnswers";
@@ -579,18 +586,31 @@ function commitChange(t, u) {
 		contentType: false,
 		success: function(data) {
 			console.log("over..");
+			if(u === 'a'){
+				$(".quesT").text(string9);
+			}else if(u === 'b'){
+				//console.log($(".opT [title='"+ tmpname +"']").get(0).tagName);
+				var tmpstr11 = $(".opT[title='"+ tmpname +"']").text();				
+				$(".opT[title='"+ tmpname +"']").text(tmpstr11.slice(0,4)+ string9);
+			}else if(u === 'c'){
+				$(".anT").text(string9);
+			}
+			MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+			$.growl.notice({title: "提交修改问题", message: "修改成功!" });
 		}
 	});
 	$("#tabUp").next().remove();
+	
 }
 
 function AddOptionBt(t) {
 	//其实就是添加一个input
-	var tmpP = $("<p>选项：</p>", {
+	var tmpP = $("<p></p>", {
 		class: "neip"
 	});
-	var tmpIn = $("<input />");
-	tmpIn.attr('value', '0');
+	var tmpIn = $("<textarea style='width:500px;height:100px;'></textarea>");
+	tmpIn.val("请输入选项内容");
+	tmpIn.attr('name', '0');
 	tmpIn.appendTo(tmpP);
 	var tmpBt = $("<button>Commit</button>");
 	tmpBt.attr('onclick', "commitChange($(this),'b')");
@@ -710,75 +730,24 @@ function commitLableChange() {
 		}
 	});
 	formdata.append("tLabelsQuestionRel[0].labelsrelid", strreLabel);
-	var tmpquesId = $("#editDiv").parent().children(".quesT").prop("title");
-	formdata.append("questionid", tmpquesId);
+	console.log(strreLabel);
+	var tmpquesId = $("#editDiv").parent().find(".quesT").prop("title");
+	formdata.append("tLabelsQuestionRel[0].questionid", tmpquesId);
+	console.log(tmpquesId);
 	$.ajax({
 		//调用更新接口。
-		url: "../../apcompany/data/updateQuestionLabel",
+		url: "../../apcompany/data/updateQL",
 		type: "post",
 		data: formdata,
 		processData: false,
 		contentType: false,
 		success: function(data) {
 			console.log("over..");
+			$.growl.notice({title: "提交修改", message: "修改成功!" });
 		}
 	});
 
 	$("form").remove();
-}
-
-function commitChange(t,u) {
-	//我之前的方案应该是这三个选项一起提交，然后根据不同的，选择不同的url
-	var tmpFormData = $("<form></form>");
-	tmpFormData.attr("enctype","multipart/form-data");
-	tmpFormData.insertAfter($("#tabUp"));
-	var formdata = new FormData(tmpFormData);
-	//div 的title当id。
-	//p标签下面的label标签的title
-	//p标签下面的label的text当
-	var tmpname = t.parent().children("input").prop("value");
-	formdata.append("id",tmpname);
-	var tmpvalue = t.parent().children("input").val();
-	//用一连串的规则去拼目标字符串。
-	var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g,"");		
-	var string3 = string2.replace(/<\/span>/g,"");
-	var string4 = string3.replace(/<\/nobr>/g,"");		
-	var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
-	var string6 = string5.replace(/<\/script>/g,"}$");
-	var string7 = string6.replace(/<label.*?>/g,"");		
-	var string8 = string7.replace(/<\/label>/g,"");		
-	var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
-	
-	//$(this),父标签中的label的title情形，tQuestions.question tChoises[0].choise tAnswers.answer
-	//但是这样的话，我就得把id考虑进去。title就不能放那些东西了。
-	//根据第二个参数进行判断吧。
-	var urlString = "";
-	if(u === 'a')
-	{	 
-		formdata.append("question",string9);
-		urlString="../../apcompany/data/updateQuesion";
-	} else if(u === 'b') {
-		string10 = string9.substr(3);
-		formdata.append("choise",string10);
-		urlString="../../apcompany/data/updateChoise";
-	} else if(u === 'c') {
-		formdata.append("answer",string9);
-		urlString="../../apcompany/data/updateAnswers";
-	}
-	console.log(urlString);
-	//ajax返回数据
-	$.ajax({
-        url:urlString,
-        type:"post",
-        data:formdata,
-        processData:false,
-        contentType:false,
-        success:function(data){
-            console.log("over..");
-        }
-	});
-	$("#tabUp").next().remove();
-
 }
 
 
@@ -789,16 +758,23 @@ function deloption(t){
 	tmpFormData.attr("enctype","multipart/form-data");
 	tmpFormData.insertAfter($("#tabUp"));
 	var formdata = new FormData(tmpFormData);
-	formdata.append("id",t.parent().children("input").attr("value"));
+	formdata.append("id",t.parent().find("textarea").attr("name"));
 	//删除选项的接口也没写。
-	// $.ajax({
-	// 	//url: "../../apcompany/data/updateAnswers",
-	// 	type: formdata,
-	// 	processData:false,
- //        contentType:false,
- //        success:function(data){
- //            console.log("over..");
-	// });
-	t.parent().remove();
+	 $.ajax({
+	 	url: "../../apcompany/data/delChoise",
+	 	type: "post",
+		data: formdata,
+	 	processData:false,
+         contentType:false,
+         success:function(data){
+             console.log("over..");
+             $.growl.notice({title: "删除选项", message: "删除成功!" });
+             t.parent().remove();
+         }
+	 });
+	
 	tmpFormData.remove();
+}
+function delUiOption(t) {
+	$(".editChildw .neip:last").prev().remove();
 }

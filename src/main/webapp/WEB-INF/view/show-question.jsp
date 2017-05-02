@@ -21,6 +21,8 @@
 		<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
 		<script type="text/javascript" async src="../js/editor.js"></script>
 		<script type="text/javascript" async src="../js/showquestion.js"></script>
+		<script src="https://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
+		<link href="https://static.runoob.com/assets/jquery/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 			#cmj {
 				width: 400px;
@@ -51,7 +53,7 @@
 						<hr />
 						<p>
 							<button onclick="AddOptionBt($(this))">AddOption</button>
-							<button onclick="">DeleteOption</button>
+							<button onclick="delUiOption($(this))">DeleteOption</button>
 						</p>
 						
 						<div class="nonrelativeLabel">
