@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -34,7 +35,6 @@ public class TranslationController {
 	public String insertOrUpdateKeyWords(TKeyWords tKeyWords){
 		if(tKeyWords.getId()>0){
 			transLateService.updateKeyWords(tKeyWords);
-			ArrayList<String> list=null;
 		}else{
 			transLateService.insertKeyWords(tKeyWords);
 		}
@@ -76,5 +76,12 @@ public class TranslationController {
 		String jsonText = JSON.toJSONString(tTranslations, true);
 		return jsonText;
 	} 
+	
+	@RequestMapping("/selectKeyWordsByFname")
+	@ResponseBody
+	public String selectKeyWordsByFname(@RequestParam("fname")String fname){
+		String name=transLateService.getKeyWordsByFname(fname);
+		return name;
+	}
 	
 }

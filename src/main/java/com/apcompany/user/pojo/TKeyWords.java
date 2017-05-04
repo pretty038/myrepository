@@ -3,6 +3,7 @@ package com.apcompany.user.pojo;
 public class TKeyWords {
     private int id;
     private String name;
+    private String fname;
 	public int getId() {
 		return id;
 	}
@@ -14,5 +15,11 @@ public class TKeyWords {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getFname() {
+		return fname;
+	}
+	public void setFname(String fname) {
+		this.fname = fname;
 	}
 }

@@ -24,4 +24,6 @@ public interface TransLateService {
 	public int updateTranslationsByQuestionId(TTranslations tTranslations);
 
 	public int deleteTranslations(int id);
+	
+	public String getKeyWordsByFname(String fName);
 }
