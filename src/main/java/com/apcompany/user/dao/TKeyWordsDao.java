@@ -1,5 +1,7 @@
 package com.apcompany.user.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
@@ -11,8 +13,8 @@ import com.apcompany.user.pojo.TKeyWords;
 public interface TKeyWordsDao {
 	@Select("select * from key_words where id=#{id}")
 	public TKeyWords getKeyWords(int id);
-	
-	@Insert("insert into key_words (name) values (#{name})")
+
+	@Insert("insert into key_words (name,fname) values (#{name},#{fname})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(TKeyWords tKeyWords);
 
@@ -21,4 +23,7 @@ public interface TKeyWordsDao {
 
 	@Delete("delete from key_words where id=#{id}")
 	public int delete(int id);
+
+	@Select("select * from key_words")
+	public List<TKeyWords> searchAll();
 }

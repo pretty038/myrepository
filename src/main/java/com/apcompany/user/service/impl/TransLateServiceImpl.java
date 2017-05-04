@@ -1,5 +1,7 @@
 package com.apcompany.user.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,7 @@ public class TransLateServiceImpl implements TransLateService {
 
 	@Override
 	public int insertKeyWords(TKeyWords tKeyWords) {
-		return  tKeyWordsDao.insert(tKeyWords);
+		return tKeyWordsDao.insert(tKeyWords);
 	}
 
 	@Override
@@ -65,6 +67,11 @@ public class TransLateServiceImpl implements TransLateService {
 	@Override
 	public int deleteTranslations(int id) {
 		return tTranslationsDao.delete(id);
+	}
+
+	@Override
+	public List<TKeyWords> selectAllKey() {
+		return tKeyWordsDao.searchAll();
 	}
 
 }

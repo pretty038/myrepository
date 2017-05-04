@@ -145,3 +145,19 @@
 	text-align: left;
 	padding-top:0px;
 }
+.anT,.opT,.fl{
+	position: relative;
+	float: left;
+	height:60px;
+	display: table-cell;/*img设置成表格元素属性*/
+    vertical-align: middle;/*两个display设置后这个属性就起作用*/
+}
+.newDiv {
+	clear:both;
+	display:table;
+}
+.anT p,.opT p,.fl p {
+	height:60px;
+	display: table-cell;/*img设置成表格元素属性*/
+    vertical-align: middle;/*两个display设置后这个属性就起作用*/
+}

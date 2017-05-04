@@ -577,7 +577,7 @@ var initSample = ( function() {
 			CKEDITOR.replace( id,{
 				extraPlugins: 'mathjax,base64image',
 				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',			
-				height: 60
+				height: 100
 			} );
 			
 		} else {
@@ -585,7 +585,7 @@ var initSample = ( function() {
 			CKEDITOR.inline( id ,{
 				extraPlugins: 'mathjax,base64image',
 				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',
-				height: 60
+				height: 100
 			});			
 
 			// TODO we can consider displaying some info box that

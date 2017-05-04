@@ -217,4 +217,9 @@ public class DataController {
 		return "index";
 	}
 
+	@RequestMapping("/insertkeyword")
+	public String insertkey(HttpServletRequest request) {
+		return "insertkey";
+	}
+
 }

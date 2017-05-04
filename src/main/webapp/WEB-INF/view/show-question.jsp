@@ -19,9 +19,9 @@
 		<script type="text/javascript" async src="../js/MathJax-master/MathJax.js?config=default"></script>
 		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
-		<script type="text/javascript" async src="../js/editor.js"></script>
 		<script type="text/javascript" async src="../js/showquestion.js"></script>
 		<script src="https://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/ckeditor/ckeditor.js"></script>
 		<link href="https://static.runoob.com/assets/jquery/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
 		<style type="text/css">
 			#cmj {

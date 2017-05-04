@@ -4,6 +4,8 @@ var arrayNonSelect = new Array();
 var aleng1 = 0;
 var aleng2 = 0;
 var editFlag = 0;
+CKEDITOR.config.height = 150;
+CKEDITOR.config.width = '700px';
 function stringPar(str){
 	//用一连串的规则去拼目标字符串。
 	var string2 = str.replace(/<span.*?>.*?<\/span>/g,"");		
@@ -16,6 +18,15 @@ function stringPar(str){
 	var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
 	
 	return string9;
+}
+//这个是最新的。
+function parseStr(str){
+	var str2 = str.replace(/<span class="MathJax_Preview" style="display: none;"><\/span>/g,"");
+	var str3 = str2.replace(/<nobr>.*<\/nobr>/g,"");
+	var str4 = str3.replace(/<span class="MathJax" id="MathJax-Element.*?><\/span>/g,"");
+	var str5 = str4.replace(/<script type="math\/tex" id="MathJax-Element.*?>/g,"\\(");
+	var str6 = str5.replace(/<\/script>/g,"\\)");
+	return str6;
 }
 
 function initNonrelativeLabel() {
@@ -221,24 +232,30 @@ function editOpen(e) {
 		//quesT,opT,anT三个类，每个类都要添加一个div框，里面有一个input，一个commitChange
 		//如果是新加的option，里面的button应该是commitAdd，
 		//$(e.target).parent().children('.quesT').
-		var tmpQues = $("<p></p>",{class:"neip"});
-		var tmpQIn = $("<textarea style='width:500px;height:100px;'></textarea>");
-		tmpQIn.val(stringPar(e.parent().find('.quesT').html()));
-		tmpQIn.prop("name",e.parent().find('.quesT').prop('title'));
+		//我要引入ckeditor,那么之前的那个呢？现在我已经能处理了。用parseStr来处理下，扔到CKEditor中
+		var tmpQues = $("<div></div>",{class:"neip"});
+		var tmpQIn = $("<div></div>");
+		tmpQIn.attr("id","editorQues");
+		//tmpQIn.val(stringPar(e.parent().find('.quesT').html()));
+		tmpQIn.prop("title",e.parent().find('.quesT').prop('title'));
 		var tmpBtQ = $("<button>CommitChange</button>");
 		tmpBtQ.attr('onclick', "commitChange($(this),'a')");
 		tmpQIn.appendTo(tmpQues);
 		tmpBtQ.appendTo(tmpQues);
 		tmpQues.appendTo($(".editChildw"));
+		initSample("editorQues");
+		CKEDITOR.instances.editorQues.setData(parseStr(e.parent().find('.quesT').html()));
+		//直接查找该类里面的quesT是可以的，然后就是 html，然后将进行替换。
 
 		//对于选项还要添加一个 deleteoption
+		var flagopt = 0;
 		e.parent().find('.opT').each(function() {
-			var tmpOpt = $("<p></p>",{class:"neip"});
-			var tmpInp = $("<textarea style='width:500px;height:100px;'></textarea>");
-			
-			var tmpstr = $(this).html();
-			tmpInp.val(stringPar(tmpstr.slice(4,tmpstr.length)));
-			tmpInp.prop("name",$(this).attr("title"));
+			var tmpOpt = $("<div></div>",{class:"neip"});
+			var tmpInp = $("<div></div>");			
+			//var tmpstr = $(this).html();
+			//tmpInp.val(stringPar(tmpstr.slice(4,tmpstr.length)));
+			tmpInp.prop("title",$(this).attr("title"));
+			tmpInp.prop("id","editorOpt" + flagopt);
 			var tmpBtCommitChange = $("<button>CommitChange</button>");
 			tmpBtCommitChange.attr('onclick',"commitChange($(this),'b')");
 			var tmpBtDel = $("<button>delOption</button>");
@@ -247,19 +264,60 @@ function editOpen(e) {
 			tmpBtCommitChange.appendTo(tmpOpt);
 			tmpBtDel.appendTo(tmpOpt);
 			tmpOpt.appendTo($(".editChildw"));
+			switch(flagopt){
+				case 0: {
+					initSample('editorOpt0');
+					CKEDITOR.instances.editorOpt0.setData(parseStr($(this).html()));
+				}
+				break;
+				case 1: {
+					initSample('editorOpt1');
+					CKEDITOR.instances.editorOpt1.setData(parseStr($(this).html()));
+				}
+				break;
+				case 2: {
+					initSample('editorOpt2');
+					CKEDITOR.instances.editorOpt2.setData(parseStr($(this).html()));
+				}
+				break;
+				case 3: {
+					initSample('editorOpt3');
+					CKEDITOR.instances.editorOpt3.setData(parseStr($(this).html()));
+				}
+				break;
+				case 4: {
+					initSample('editorOpt4');
+					CKEDITOR.instances.editorOpt4.setData(parseStr($(this).html()));
+				}
+				break;
+				case 5: {
+					initSample('editorOpt5');
+					CKEDITOR.instances.editorOpt5.setData(parseStr($(this).html()));
+				}
+				break;
+				case 6: {
+					initSample('editorOpt6');
+					CKEDITOR.instances.editorOpt6.setData(parseStr($(this).html()));
+				}
+				break;				
+			}
+			flagopt++;
 
 		});
 		//答案选项
-		var tmpAn = $("<p></p>",{class:"neip"});
-		var tmpAInp = $("<textarea style='width:500px;height:100px;'></textarea>");
-		var strAn = e.parent().find('.anT').html();
-		tmpAInp.val(stringPar(strAn.slice(15,strAn.length)));
-		tmpAInp.prop('name', e.parent().find('.anT').attr("title"));
+		var tmpAn = $("<div></div>",{class:"neip"});
+		var tmpAInp = $("<div></div>");
+		tmpAInp.attr("id","editorAn");
+		//var strAn = e.parent().find('.anT').html();
+		//tmpAInp.val(stringPar(strAn.slice(15,strAn.length)));
+		tmpAInp.prop('title', e.parent().find('.anT').attr("title"));
 		var tmpbtCom = $("<button>CommitChange</button>");
 		tmpbtCom.attr('onclick', "commitChange($(this),'c')");
 		tmpAInp.appendTo(tmpAn);
 		tmpbtCom.appendTo(tmpAn);
 		tmpAn.appendTo($(".editChildw"));
+		initSample("editorAn");
+		CKEDITOR.instances.editorAn.setData(parseStr(e.parent().find('.anT').html()));
 		editFlag = 1;
 		e.text("Save");
 	} else if(editFlag === 1){
@@ -304,6 +362,8 @@ $(document).ready(function() {
 			tmpoption.appendTo($(e.target).parent().next().children("select"));
 		}
 	});
+	if ( CKEDITOR.env.ie && CKEDITOR.env.version < 9 )
+		CKEDITOR.tools.enableHtml5Elements( document );
 });
 
 function refresh() {
@@ -324,10 +384,14 @@ function test2() {
 			tmpbt.attr("onclick","editOpen($(this))");
 			tmpbt.addClass("editBt");
 			tmpbt.appendTo(chw);
+			//添加一个删除按钮.
+			var tmpbt2 = $("<button>Delete</button>");
+			tmpbt.addClass("delBt");
+			tmpbt.appendTo(chw);
 			//我要添加标签了，一个是非相关标签，一个非相关标签。
 			var labelDiv = $("<div></div>", {
 					class: "labelDiv"
-				})
+				});
 				//利用ajax取回字符串，然后将
 			var strNonRelLabel = jsonObj[jn].labels[0].labelid;
 			var tmpSt = new Array(0, 2, 4, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20);
@@ -444,8 +508,8 @@ function test2() {
 			tmpLabelRel.appendTo(labelDiv);
 			labelDiv.appendTo(chw);
 			//问题标签,一段标签由 p包含一个label和一个button组成.
-			var pQs = $("<p></p>");
-			var qs = $("<label></label>", {
+			var pQs = $("<div></div>",{class:"newDiv"});
+			var qs = $("<div></div>", {
 				class: "quesT"
 			});
 			qs.attr("title", jsonObj[jn].id);
@@ -456,12 +520,18 @@ function test2() {
 			$("<br />").appendTo(pQs);
 			pQs.appendTo(chw);
 			//下面是答案标签
-			var pAn = $("<p></p>");
-			var an = $("<label></label>", {
+			//答案标签，我需要弄个对称.
+			var pAn = $("<div></div>",{class:"newDiv"});
+			var an = $("<div></div>", {
 				class: "anT"
 			});
 			an.attr("title", jsonObj[jn].tAnswers.id);
-			an.html("The answer is: " + jsonObj[jn].tAnswers.answer);
+			an.html(jsonObj[jn].tAnswers.answer);
+			var anFl = $("<div></div>");
+			anFl.addClass("fl");
+			var anflp = $("<p>The answer is: </p>");
+			anflp.appendTo(anFl);
+			anFl.appendTo(pAn);
 			an.appendTo(pAn);
 			$("<br />").appendTo(pAn);
 
@@ -469,13 +539,18 @@ function test2() {
 			var i = 0;
 			var str = new String("ABCDEFGHIJK");
 			for (var jn2 in jsonObj[jn].choices) {
-				var tmpP = $("<p></p>");
+				var tmpP = $("<div></div>",{class:"newDiv"});
 				//console.log("option:" +jsonObj[jn].choices[jn2].choise);
-				var op1 = $("<label></label>", {
+				var op1 = $("<div></div>", {
 					class: "opT"
 				});
 				op1.attr("title", jsonObj[jn].choices[jn2].id);
-				op1.html("(" + str.charAt(i) + ") " + jsonObj[jn].choices[jn2].choise);
+				op1.html(jsonObj[jn].choices[jn2].choise);				
+				var opfl = $("<div></div>");
+				opfl.addClass("fl");
+				var opflp = $("<p>(" + str.charAt(i) + ")</p>");
+				opflp.appendTo(opfl);
+				opfl.appendTo(tmpP);
 				op1.appendTo(tmpP);
 				$("<br />").appendTo(tmpP);
 				tmpP.appendTo(chw);
@@ -544,37 +619,71 @@ function commitChange(t, u) {
 	//div 的title当id。
 	//p标签下面的label标签的title
 	//p标签下面的label的text当
-	var tmpname = t.parent().find("textarea").prop("name");
-	formdata.append("id", tmpname);
-	var tmpvalue = t.parent().find("textarea").val();
+	//var tmpname = t.parent().find("textarea").prop("title");
+	//formdata.append("id", tmpname);
+	//var tmpvalue = t.parent().find("textarea").val();
 	//用一连串的规则去拼目标字符串。
-	var string2 = tmpvalue.replace(/<span.*?>.*?<\/span>/g, "");
-	var string3 = string2.replace(/<\/span>/g, "");
-	var string4 = string3.replace(/<\/nobr>/g, "");
-	var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g, "${");
-	var string6 = string5.replace(/<\/script>/g, "}$");
-	var string7 = string6.replace(/<label.*?>/g, "");
-	var string8 = string7.replace(/<\/label>/g, "");
-	var string9 = string8.replace(/<button.*?>.*?<\/button>/g, "");
+	//直接getdata了.
+	
 
 	//$(this),父标签中的label的title情形，tQuestions.question tChoises[0].choise tAnswers.answer
 	//但是这样的话，我就得把id考虑进去。title就不能放那些东西了。
 	//根据第二个参数进行判断吧。
 	var urlString = "";
+	var editorData = "";
 	if (u === 'a') {
-		formdata.append("question", string9);
+		editorData = CKEDITOR.instances.editorQues.getData();
+		formdata.append("id",$("#editorQues").prop("title"));
+		formdata.append("question", editorData);
 		urlString = "../../apcompany/data/updateQuesion";
 	} else if (u === 'b') {		
 		urlString = "../../apcompany/data/insertOrUpdateChoise";
-		if(tmpname === "0"){
-			formdata.append("questionid",$("#editDiv").parent().find(".quesT").prop("title"));
-			formdata.append("choise", string9);
-		} else {
-			formdata.append("choise", string9);
+		var tmpname = t.parent().children("div:first").prop("title");
+		formdata.append("id",tmpname);
+		//我要判定是第几个editor，然后好提取数据.
+		var optflag = Number(t.parent().children("div:first").prop("id").charAt(9));
+		switch(optflag) {
+			case 0:{
+				editorData = CKEDITOR.instances.editorOpt0.getData();
+				break;
+			}
+			case 1:{
+				editorData = CKEDITOR.instances.editorOpt1.getData();
+				break;
+			}
+			case 2:{
+				editorData = CKEDITOR.instances.editorOpt2.getData();
+				break;
+			}
+			case 3:{
+				editorData = CKEDITOR.instances.editorOpt3.getData();
+				break;
+			}
+			case 4:{
+				editorData = CKEDITOR.instances.editorOpt4.getData();
+				break;
+			}
+			case 5:{
+				editorData = CKEDITOR.instances.editorOpt5.getData();
+				break;
+			}
+			case 6:{
+				editorData = CKEDITOR.instances.editorOpt6.getData();
+				break;
+			}
+			//7这个选项用来默认添加新东西的。
+			case 7:{
+				editorData = CKEDITOR.instances.editorOpt7.getData();
+				break;
+			}
 		}
-			
+		if(tmpname === "0")
+			formdata.append("questionid",$("#editorQues").prop("title"));
+		formdata.append("choise", editorData);	
 	} else if (u === 'c') {
-		formdata.append("answer", string9);
+		editorData = CKEDITOR.instances.editorAn.getData();
+		formdata.append("id",$("#editorAn").prop("title"));
+		formdata.append("answer", editorData );
 		urlString = "../../apcompany/data/updateAnswers";
 	}
 	//ajax返回数据
@@ -586,37 +695,27 @@ function commitChange(t, u) {
 		contentType: false,
 		success: function(data) {
 			console.log("over..");
-			if(u === 'a'){
-				$(".quesT").text(string9);
-			}else if(u === 'b'){
-				//console.log($(".opT [title='"+ tmpname +"']").get(0).tagName);
-				var tmpstr11 = $(".opT[title='"+ tmpname +"']").text();				
-				$(".opT[title='"+ tmpname +"']").text(tmpstr11.slice(0,4)+ string9);
-			}else if(u === 'c'){
-				$(".anT").text(string9);
-			}
-			MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 			$.growl.notice({title: "提交修改问题", message: "修改成功!" });
+			window.location.reload();
 		}
 	});
 	$("#tabUp").next().remove();
-	
 }
-<<<<<<< HEAD
 
-function AddOptionBt(t) {
+function AddOptionBt(t) {	
 	//其实就是添加一个input
 	var tmpP = $("<p></p>", {
 		class: "neip"
 	});
-	var tmpIn = $("<textarea style='width:500px;height:100px;'></textarea>");
-	tmpIn.val("请输入选项内容");
-	tmpIn.attr('name', '0');
+	var tmpIn = $("<div></div>");
+	tmpIn.prop('title', '0');
+	tmpIn.prop("id","editorOpt7");
 	tmpIn.appendTo(tmpP);
 	var tmpBt = $("<button>Commit</button>");
 	tmpBt.attr('onclick', "commitChange($(this),'b')");
 	tmpBt.appendTo(tmpP);
 	tmpP.insertBefore(t.parent().parent().children(".neip:last"));
+	initSample("editorOpt7");
 }
 
 function commitLableChange() {
@@ -759,7 +858,7 @@ function deloption(t){
 	tmpFormData.attr("enctype","multipart/form-data");
 	tmpFormData.insertAfter($("#tabUp"));
 	var formdata = new FormData(tmpFormData);
-	formdata.append("id",t.parent().find("textarea").attr("name"));
+	formdata.append("id",t.parent().children("div:first").attr("title"));
 	//删除选项的接口也没写。
 	 $.ajax({
 	 	url: "../../apcompany/data/delChoise",
@@ -770,7 +869,7 @@ function deloption(t){
          success:function(data){
              console.log("over..");
              $.growl.notice({title: "删除选项", message: "删除成功!" });
-             t.parent().remove();
+             window.location.reload();
          }
 	 });
 	
@@ -779,10 +878,50 @@ function deloption(t){
 function delUiOption(t) {
 	$(".editChildw .neip:last").prev().remove();
 }
-=======
-function delOption(t){
-	//获取id 
-	//ajax上传
-	//删除标签.
-}
->>>>>>> e72d7865d9b018c6287e5b179a8b5bc5a8aae859
+
+var initSample = ( function() {
+	var wysiwygareaAvailable = isWysiwygareaAvailable(),
+		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
+
+	return function(id) {
+		var editorElement = CKEDITOR.document.getById( id );
+
+		// :(((
+		if ( isBBCodeBuiltIn ) {
+			editorElement.setHtml(
+				'Hello world!\n\n' +
+				'I\'m an instance of [url=http://ckeditor.com]CKEditor[/url].'
+			);
+		}
+
+		// Depending on the wysiwygare plugin availability initialize classic or inline editor.
+		if ( wysiwygareaAvailable ) {
+			CKEDITOR.replace( id,{
+				extraPlugins: 'mathjax,base64image',
+				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',			
+				height: 100
+			} );
+			
+		} else {
+			editorElement.setAttribute( 'contenteditable', 'true' );
+			CKEDITOR.inline( id ,{
+				extraPlugins: 'mathjax,base64image',
+				mathJaxLib: '../js/MathJax-master/MathJax.js?config=TeX-AMS_HTML',
+				height: 100
+			});			
+
+			// TODO we can consider displaying some info box that
+			// without wysiwygarea the classic editor may not work.
+		}
+	};
+
+	function isWysiwygareaAvailable() {
+		// If in development mode, then the wysiwygarea must be available.
+		// Split REV into two strings so builder does not replace it :D.
+		if ( CKEDITOR.revision == ( '%RE' + 'V%' ) ) {
+			return true;
+		}
+
+		return !!CKEDITOR.plugins.get( 'wysiwygarea' );
+	}
+})();
