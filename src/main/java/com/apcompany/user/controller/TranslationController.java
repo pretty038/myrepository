@@ -1,5 +1,7 @@
 package com.apcompany.user.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,11 +29,12 @@ public class TranslationController {
 		return "successfully!!";
 	}
 	
-	@RequestMapping("/insertOrUpdateTranslations")
+	@RequestMapping("/insertOrUpdateKeyWords")
 	@ResponseBody
 	public String insertOrUpdateKeyWords(TKeyWords tKeyWords){
 		if(tKeyWords.getId()>0){
 			transLateService.updateKeyWords(tKeyWords);
+			ArrayList<String> list=null;
 		}else{
 			transLateService.insertKeyWords(tKeyWords);
 		}
@@ -72,6 +75,6 @@ public class TranslationController {
 		TTranslations tTranslations=transLateService.getTranslations(id);
 		String jsonText = JSON.toJSONString(tTranslations, true);
 		return jsonText;
-	}
+	} 
 	
 }
