@@ -26,6 +26,12 @@
 			.header {
 				background-color: #FFFFFF;
 			}
+			.divch {
+				border-style: solid;
+				border-width: 1px;
+				border-color: #66AFE9;
+				padding:4px;
+			}
 		</style>
 	</head>
 
@@ -34,7 +40,7 @@
 		<div class="header" style="margin-left:50px;margin:50px;width: 1200px;padding: 10px;">
 			<h1>吾优woyoo</h1>
 		</div>
-		<div style="margin-left:150px;margin:30px;">
+		<div style="margin-left:50px;margin-top:10px;width: 1200px;background-color: #FFFFFF;padding: 10px;height: 800px;">
 			<div style="margin: 5px;">
 				<input  id="word" placeholder="输入中文" />
 				<input id="fword" placeholder="输入英文" /> 

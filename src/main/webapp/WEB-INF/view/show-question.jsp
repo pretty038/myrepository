@@ -36,9 +36,6 @@
 		<div class="header">
 			<h1>吾优woyoo</h1>
 		</div>
-		<div>		
-			<button onclick="refresh()">refresh</button>			
-		</div>
 		<div class="main">
 			<form id="tabUp" enctype="multipart/form-data">
 			</form>

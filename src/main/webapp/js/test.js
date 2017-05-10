@@ -2,7 +2,8 @@
 var arraySelect = new Array();
 CKEDITOR.config.height = 150;
 CKEDITOR.config.width = '700px';
-
+var stepNum = 0;
+var strChoice = "ABCDEFGHIJK";
 function initNonrelativeLabel(){	
 	$(".label-selectSubject,.label-selectPublisher").find("select").each(function() {
 		var tmpopt22 = $("<option>__</option>");
@@ -177,35 +178,15 @@ $(document).ready(function(){
 		CKEDITOR.tools.enableHtml5Elements( document );
 });
 function formUp(){
-	var formdata = new FormData($("#tabUp"));
+	var formdata = new FormData($("#tabUp").get(0));
 	//虽然添加了label，没有什么问题
-//	$(".childw:first p label").each(function(){
-//		//console.log($(this).children("label").text());
-//		//console.log($(this).children("input").prop("name"));
-//		var tmpname = $(this).prop("title");
-//		formdata.append(tmpname,string9);
-//		
-//	});
 	//添加问题
 	formdata.append($("#ques").prop("title"),CKEDITOR.instances.ques.getData());	
 	//添加答案
 	formdata.append($("#answer").prop("title"),CKEDITOR.instances.ques.getData());
 	//添加选项
 	for(var i = 0;i <= num;i++){
-		if(i === 0)
-			formdata.append($("#option0").prop("title"),CKEDITOR.instances.option0.getData());
-		else if(i === 1)
-			formdata.append($("#option1").prop("title"),CKEDITOR.instances.option1.getData());
-		else if(i === 2)
-			formdata.append($("#option2").prop("title"),CKEDITOR.instances.option2.getData());
-		else if(i === 3)
-			formdata.append($("#option3").prop("title"),CKEDITOR.instances.option3.getData());
-		else if(i === 4)
-			formdata.append($("#option4").prop("title"),CKEDITOR.instances.option4.getData());
-		else if(i === 5)
-			formdata.append($("#option5").prop("title"),CKEDITOR.instances.option5.getData());
-		else if(i === 6)
-			formdata.append($("#option6").prop("title"),CKEDITOR.instances.option6.getData());
+		eval("formdata.append($('#optionChoice" + i + "').prop('title'),CKEDITOR.instances.optionChoice" + i + ".getData())");
 	}
 	//我要拼接label的标签。如果是相关标签，我要用哪个字段呢？tLabelsQuestionRel[0].
 	var strnonrelLabel = "";
@@ -324,114 +305,53 @@ function formUp(){
         processData:false,
         contentType:false,
         success:function(data){
-            console.log("over..");
+            console.log("success:question id is:"+data);            
+            //在插入成功的情况下调用step接口。
+            //var formstep = new FormData($("#tabStep"));
+            //framestep 下面的div 循环一下，提取，并且执行插入操作。
+            //判断step0是不是为空，如果是空，那么就别传了，
+            var strStep = CKEDITOR.instances.step0.getData();
+            if(strStep === ""){
+            	console.log("step is null");
+            } else {
+            	//关键是那个步骤怎么弄，确定是0,1,2这样排列下来了。
+            	for(var i = 0;i <= stepNum;i++){
+            		eval("strStep = CKEDITOR.instances.step" + i + ".getData()");
+            		var formstep = new FormData($("#tabStep").get(0));
+            		formstep.append("id",0);
+            		formstep.append("question_id",parseInt(data));
+            		formstep.append("step",i);
+            		formstep.append("img_string",strStep);
+            		$.ajax({
+            	        url:"../../apcompany/hits/insertOrUpdateHits",
+            	        type:"post",
+            	        data:formstep,
+            	        processData:false,
+            	        contentType:false,
+            	        success:function(res){
+            	        	console.log("over...");
+            	        }
+            		});
+            	}
+            }
             $.growl.notice({title: "插入问题", message: "插入成功!" });
             window.location.reload();
         }
 	});
 	
 }
-function editorOK(){
-		
-}
+
 function refresh(){
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
-//test2()用来展示select得到的数据。
-function test2(){
-	$.get("/apcompany/data/select", function(result) {  
-       //console.log(result); 
-       //将result转为对象。
-       var jsonObj = JSON.parse(result);
-       //对对象执行循环操作。
-       for(var jn in jsonObj)
-		{
-    	   var chw = $("<div></div>" ,{class:"childw"});
-    	   //chw.attr("title",jsonObj[jn].id);
-    	   //两个button
-    	   var pBt = $("<p></p>");
-    	   var btAddOp=$("<button>AddOption</button>");
-    	   var btDelOp=$("<button>DelOption</button>");
-    	   btAddOp.attr("onclick","AddOptionBt($(this))");
-    	   btDelOp.attr("onclick","deleteDiv($(this))");
-    	   btAddOp.appendTo(pBt);
-    	   btDelOp.appendTo(pBt);
-    	   pBt.appendTo(chw);
-    	   //问题标签,一段标签由 p包含一个label和一个button组成.
-    	   var pQs = $("<p></p>");
-    	   var qs = $("<label></label>",{class:"quesT"});
-    	   qs.attr("title",jsonObj[jn].id);
-    	   var btQs = $("<button>Edit</button>");
-    	   btQs.attr("onclick","editAndSaveBt($(this))");
-    	   btQs.addClass("editAndsave");
-    	   var btCommitQs = $("<button>Commit</button>");
-    	   btCommitQs.addClass=$("btCommit");
-    	   btCommitQs.attr("onclick","commitChange($(this),'a')");   	   
-    	   qs.html(jsonObj[jn].question);
-    	   qs.appendTo(pQs);
-    	   btQs.appendTo(pQs);
-    	   btCommitQs.appendTo(pQs);
-    	   $("<br />").appendTo(pQs);   	   
-    	   pQs.appendTo(chw);
-    	 //下面是答案标签
-    	   var pAn = $("<p></p>");
-    	   var an = $("<label></label>",{class:"anT"});
-    	   an.attr("title",jsonObj[jn].tAnswers.id);
-    	   var btAn = $("<button>Edit</button>");
-    	   btAn.attr("onclick","editAndSaveBt($(this))");
-    	   btAn.addClass("editAndsave");
-    	   var btCommitAn = $("<button>Commit</button>");
-    	   btCommitAn.addClass=$("btCommit");
-    	   btCommitAn.attr("onclick","commitChange($(this),'c')");    	   
-    	   an.html( "The answer is: "+jsonObj[jn].tAnswers.answer);
-    	   an.appendTo(pAn);
-    	   btAn.appendTo(pAn);
-    	   btCommitAn.appendTo(pAn);
-    	   $("<br />").appendTo(pAn); 
-    	   //pAn.appendTo(chw);
-    	   
-    	   //下面是选项标签.
-    	   var i = 0;
-    	   var str = new String("ABCDEFGHIJK");
-			for(var jn2 in jsonObj[jn].choices)
-			{
-				var tmpP = $("<p></p>");
-				//console.log("option:" +jsonObj[jn].choices[jn2].choise);
-				var op1 = $("<label></label>",{class:"opT"});
-				op1.attr("title",jsonObj[jn].choices[jn2].id);
-				var opButton = $("<button>Edit</button>");
-				opButton.addClass("editAndsave");
-				opButton.attr("onclick","editAndSaveBt($(this))");
-				var btCommitTmp = $("<button>Commit</button>");
-		    	btCommitTmp.addClass=$("btCommit");
-		    	btCommitTmp.attr("onclick","commitChange($(this),'b')");		    	
-				op1.html("("+ str.charAt(i)+ ") " + jsonObj[jn].choices[jn2].choise);
-				op1.appendTo(tmpP);
-				opButton.appendTo(tmpP);
-				btCommitTmp.appendTo(tmpP);
-				$("<br />").appendTo(tmpP);
-				tmpP.appendTo(chw);				
-				i++;
-				
-			}
-			
-			pAn.appendTo(chw);
-			chw.appendTo($("#dv2"));
-			
-		}
-       //在每个循环里都执行一次插入节点的操作。
-    });
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-}
-function test3(){
-	test2();
-	refresh();
-}
+
 var num=0;
 function AddOptionBt(t){
 	num++;
+	var tmpPtext = $("<p>(" + strChoice.charAt(num) +")</p>");
+	tmpPtext.appendTo($("#frameChoice"));
 	var title= "tChoises[" + num + "].choise";
-	var id="option"+num;
+	var id="optionChoice"+num;
 	var tmpdiv = $("<div></div>");
 	tmpdiv.attr("id",id);
 	tmpdiv.attr("title",title);
@@ -439,62 +359,18 @@ function AddOptionBt(t){
 	initSample(id);
 }
 function deleteDiv(t){
-	//t.parent().parent().children("p:last").prev().remove();
-	//$("#cinQues p:last").remove();
-	$("#frameChoice").children("div:last").remove();
+	//$("#frameChoice").children("div:last").remove();
+	$("#optionChoice" + num).prev().remove();
+	$("#optionChoice" + num).remove();
+	$("#cke_optionChoice" + num).remove();
 	num--;
 }
-function goInput(t){
-	console.log("go input");
-}
-function exitInput(t){
-	//console.log("exit input");
-	//t.next().next().html("$\{ " + t.next().next().children("span").text() + t.val() +" \}$");
-	//refresh();
-	//MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-}
-//if the answer is
+
+
 
 function tmpClick(t){
-//	console.log("in");
-//	//console.log($("#tmpPage").text());
-//	var str = $("#flg").text();
-//	$("#tmpPage" + str).text( "$\{" + $(".tmpInput").val() + "\}$" );
-//	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-//	$("#tmpPage" + str).css("background-color","#FFFFFF");
-//	var num = Number(str);
-//	num++;
-//	$("#flg").text(num);
-//	//$("#tmpPage").removeAttr("id");
-//	$(".tmpInput").remove();
-//	$(".tmpBt").remove();
-	console.log("go editor");
 	$("#editor").appendTo(t.parent());
 	$("#editor").show();
-}
-function clickNeipP(t){
-	//弹出一个input和两个button,一个button关联打开editor,未必会需要打开editor。
-	//---另一个button关联提交修改。再加一个，三个button。第三个button，进入编辑模式。
-}
-function editAndSaveBt(t){
-	//需要做什么呢。插入一个input按钮和一个打开editor的button.
-	if($("#editorFlg").text() === "0")
-	{
-		//进入修改模式.
-		t.html("Save");
-		$("#editorFlg").text("1");
-		//将editorck,将ckeditor转移到上面。
-		//我的想法是，写一个函数来初始化，
-		//初始化多个ckeditor这样我就不需要多个
-	} else {
-		t.text("Edit");
-		var txtInput = t.parent().children("textarea").val();
-		t.parent().children("label").text(txtInput);
-		$("#editorFlg").text("0");
-		$(".editAndSaveInput").remove();
-		$(".editorOpenBt").remove();
-		//将input的值放入到lable中,清空本身。
-	}
 }
 function commitChange(t,u){
 	//先生成数据格式。
@@ -552,11 +428,6 @@ function commitChange(t,u){
 }
 
 
-	
-
-	// The trick to keep the editor in the sample quite small
-	// unless user specified own height.
-
 var initSample = ( function() {
 	var wysiwygareaAvailable = isWysiwygareaAvailable(),
 		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
@@ -603,7 +474,7 @@ var initSample = ( function() {
 		return !!CKEDITOR.plugins.get( 'wysiwygarea' );
 	}
 } )();
-var stepNum = 0;
+
 function AddStepBt(t){
 	stepNum++;
 	//var title= "tChoises[" + num + "].choise";

@@ -41,17 +41,20 @@ public class DataController {
 	}
 
 	@RequestMapping("/insert")
+	@ResponseBody
 	public String insert(SuperData superData, Model model) {
 		System.out.println(superData);
+		String quesId = "";
 		if (superData != null && superData.gettQuestions().getId() == 0) {
-			boolean out = dataService.addData(superData.gettQuestions(),
+			int out = dataService.addData(superData.gettQuestions(),
 					superData.gettChoises(), superData.gettAnswers(),
 					superData.gettLabelsQuestionRel());
-			if (out) {
-				model.addAttribute("message", "insert true");
+			if (out != 0) {
+				model.addAttribute("message", out);
 			} else {
 				model.addAttribute("message", "insert failed !!");
 			}
+			quesId = Integer.toString(out);
 
 		} else if (superData != null && superData.gettQuestions().getId() > 0) {
 			boolean out = dataService.updateData(superData.gettQuestions(),
@@ -62,13 +65,16 @@ public class DataController {
 			} else {
 				model.addAttribute("message", "update failed !!");
 			}
+			quesId = Boolean.toString(out);
 		}
 
 		else {
 			model.addAttribute("message",
 					"super data is null!!!, please check the parameter !!!");
 		}
-		return "outcome";
+		String strqid = quesId.toString();
+		return strqid;
+		// return "outcome";
 	}
 
 	@RequestMapping("/insertLabel")

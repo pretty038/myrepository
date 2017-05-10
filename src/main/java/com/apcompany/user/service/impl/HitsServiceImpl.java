@@ -1,11 +1,14 @@
 package com.apcompany.user.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apcompany.user.dao.THitsDao;
 import com.apcompany.user.pojo.THits;
 import com.apcompany.user.service.HitsService;
+
 @Service
 public class HitsServiceImpl implements HitsService {
 
@@ -31,6 +34,10 @@ public class HitsServiceImpl implements HitsService {
 	@Override
 	public int deleteTHits(int id) {
 		return tHitsDao.delete(id);
+	}
+
+	public List<THits> getTHitsByQuestionId(int question_id) {
+		return tHitsDao.getTHitsByQuestionid(question_id);
 	}
 
 }

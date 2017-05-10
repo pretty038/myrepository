@@ -74,4 +74,10 @@ public class TransLateServiceImpl implements TransLateService {
 		return tKeyWordsDao.searchAll();
 	}
 
+	@Override
+	public String getKeyWordsByFname(String fName) {
+		// TODO Auto-generated method stub
+		return tKeyWordsDao.getKeyWordsByFName(fName);
+	}
+
 }

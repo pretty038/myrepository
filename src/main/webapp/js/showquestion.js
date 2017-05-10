@@ -6,19 +6,6 @@ var aleng2 = 0;
 var editFlag = 0;
 CKEDITOR.config.height = 150;
 CKEDITOR.config.width = '700px';
-function stringPar(str){
-	//用一连串的规则去拼目标字符串。
-	var string2 = str.replace(/<span.*?>.*?<\/span>/g,"");		
-	var string3 = string2.replace(/<\/span>/g,"");
-	var string4 = string3.replace(/<\/nobr>/g,"");		
-	var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g,"${");
-	var string6 = string5.replace(/<\/script>/g,"}$");
-	var string7 = string6.replace(/<label.*?>/g,"");		
-	var string8 = string7.replace(/<\/label>/g,"");		
-	var string9 = string8.replace(/<button.*?>.*?<\/button>/g,"");
-	
-	return string9;
-}
 //这个是最新的。
 function parseStr(str){
 	var str2 = str.replace(/<span class="MathJax_Preview" style="display: none;"><\/span>/g,"");
@@ -319,6 +306,35 @@ function editOpen(e) {
 		initSample("editorAn");
 		CKEDITOR.instances.editorAn.setData(parseStr(e.parent().find('.anT').html()));
 		editFlag = 1;
+		//下面是步骤的那几图片。
+		var tmpStep = $("<div></div>",{class:"neip"});
+		tmpStep.appendTo($(".editChildw"));
+		var tmpStepArr = new Array();
+		e.parent().children(".frameStep").children("div").each(function(){
+			var tmpframeEditor =  $("<div></div>");
+			tmpframeEditor.prop("id",$(this).prop("id").replace("step","framestep"));
+			tmpframeEditor.prop("title",$(this).prop("title"));
+			var tmpStepEditor = $("<div></div>");
+			tmpStepEditor.prop("id",$(this).prop("id"));
+			tmpStepEditor.appendTo(tmpframeEditor);
+			tmpStepArr.push(tmpStepEditor.prop("id"));
+//			initSample(tmpStepEditor.get(0));
+//			var tmphtmlstr = $(this).html();
+//			//eval("CKEDITOR.instances." + tmpStepEditor.prop("id") +".setData('" + tmphtmlstr + "')");
+			tmpStepBt = $("<button>ComStepChange</button>");
+			tmpStepBt.attr('onclick',"commitChange($(this),'d')");
+			tmpStepBt.appendTo(tmpframeEditor);
+			tmpStepBt2 = $("<button>DelStep</button>");
+			tmpStepBt2.attr('onclick',"delStep($(this))");
+			tmpStepBt2.appendTo(tmpframeEditor);
+			tmpframeEditor.appendTo(tmpStep);
+			//必须先将各个dom节点插入到页面中
+			initSample(tmpStepEditor.get(0));
+			var tmphtmlstr = $(this).html();
+			eval("CKEDITOR.instances." + tmpStepEditor.prop("id") +".setData('" + tmphtmlstr + "')");
+			//console.log("open");
+		});
+		
 		e.text("Save");
 	} else if(editFlag === 1){
 		//save的话，我选择重新刷新整个页面吧，还要加一个局部刷新的函数。
@@ -558,60 +574,50 @@ function test2() {
 			}
 
 			pAn.appendTo(chw);
+			//要把chw添加个title吧。
+			chw.prop("title",jsonObj[jn].id);
+			//jsonObj[jn].id我要用这个来取出step.
+			//已经确定要用这个东西了。
+			var stepDiv = $("<div></div>");
+			stepDiv.addClass("frameStep");
+			var stepText = $("<p>解题步骤</p>");
+			stepText.appendTo(stepDiv);
+			
+			//console.log("jsonObj[jn].id:" + jsonObj[jn].id);
+			//为什么会出现把所有的步骤都堆到最后一个问题下面呢？是ajax的异步原因吧？
+			var tmpurl = "/apcompany/hits/selectHitsByQuestionid2?questionId=" + jsonObj[jn].id;
+			//var tmpurl = "/apcompany/hits/selectHitsByQuestionid2";
+			//var tmpformdata = new FormData();
+			//tmpformdata.append("questionId",jsonObj[jn].id);
+			$.ajax({  
+		          type : "get",  
+		          url : tmpurl, 		      
+		          async : false,  
+		          success : function(resultStep){  
+		        	  var jsonStep = JSON.parse(resultStep);
+						//json数据我要弄一个 
+						for(var jnstep in jsonStep){
+							var stepChild = $("<div></div>");
+							stepChild.prop("id","stepid"+jsonStep[jnstep].id);
+							stepChild.prop("title",jsonStep[jnstep].step);
+							stepChild.html(jsonStep[jnstep].img_string);
+							//这里的异步模式，所以要去根据quesitonid来寻找要插入的节点。
+							stepChild.appendTo(stepDiv);
+						}  
+		          }
+			});
+					
+			stepDiv.appendTo(chw);
 			chw.appendTo($("#dv2"));
-
 		}
 		//在每个循环里都执行一次插入节点的操作。
 	});
 	MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
 }
-
-function test3() {
-	test2();
-	refresh();
-}
 var num = 0;
-
-function editAndSaveBt(t) {
-	//需要做什么呢。插入一个input按钮和一个打开editor的button.
-	if ($("#editorFlg").text() === "0") {
-		//进入修改模式.
-		t.html("Save");
-		$("#editorFlg").text("1");
-		var tmpInput = $("<input />");
-		var tmpEditorBt = $("<button>openEditor</button>");
-
-		tmpInput.addClass("editAndSaveInput");
-		tmpEditorBt.addClass("editorOpenBt");
-		tmpEditorBt.attr("onclick", "tmpClick($(this))");
-		tmpInput.appendTo(t.parent());
-		tmpEditorBt.appendTo(t.parent());
-		//进入修改模式，将lable中的text()引入到input中.
-		var oldInputTxt = t.parent().children("label").html();
-		//用一连串的规则去拼目标字符串。
-		var string2 = oldInputTxt.replace(/<span.*?>.*?<\/span>/g, "");
-		var string3 = string2.replace(/<\/span>/g, "");
-		var string4 = string3.replace(/<\/nobr>/g, "");
-		var string5 = string4.replace(/<script type="math\/tex" id="MathJax-Element-.*?">/g, "${");
-		var string6 = string5.replace(/<\/script>/g, "}$");
-		var string7 = string6.replace(/<label.*?>/g, "");
-		var string8 = string7.replace(/<\/label>/g, "");
-		var string9 = string8.replace(/<button.*?>.*?<\/button>/g, "");
-		t.parent().children("input").val(string9);
-	} else {
-		t.html("Edit");
-		var txtInput = t.parent().children("input").val();
-		t.parent().children("label").text(txtInput);
-		$("#editorFlg").text("0");
-		$(".editAndSaveInput").remove();
-		$(".editorOpenBt").remove();
-		//将input的值放入到lable中,清空本身。
-	}
-}
-
 function commitChange(t, u) {
 	//先生成数据格式。
-	//u的值为  'a','b','c'分别代表问题，选项，答案。	
+	//u的值为  'a','b','c'分别代表问题，选项，答案，'d'代表step.	
 	var tmpFormData = $("<form></form>");
 	tmpFormData.attr("enctype", "multipart/form-data");
 	tmpFormData.insertAfter($("#tabUp"));
@@ -642,41 +648,8 @@ function commitChange(t, u) {
 		formdata.append("id",tmpname);
 		//我要判定是第几个editor，然后好提取数据.
 		var optflag = Number(t.parent().children("div:first").prop("id").charAt(9));
-		switch(optflag) {
-			case 0:{
-				editorData = CKEDITOR.instances.editorOpt0.getData();
-				break;
-			}
-			case 1:{
-				editorData = CKEDITOR.instances.editorOpt1.getData();
-				break;
-			}
-			case 2:{
-				editorData = CKEDITOR.instances.editorOpt2.getData();
-				break;
-			}
-			case 3:{
-				editorData = CKEDITOR.instances.editorOpt3.getData();
-				break;
-			}
-			case 4:{
-				editorData = CKEDITOR.instances.editorOpt4.getData();
-				break;
-			}
-			case 5:{
-				editorData = CKEDITOR.instances.editorOpt5.getData();
-				break;
-			}
-			case 6:{
-				editorData = CKEDITOR.instances.editorOpt6.getData();
-				break;
-			}
-			//7这个选项用来默认添加新东西的。
-			case 7:{
-				editorData = CKEDITOR.instances.editorOpt7.getData();
-				break;
-			}
-		}
+		//用eval应该就可以了.
+		eval("editorData = CKEDITOR.instances.editorOpt" + optflag + ".getData()");
 		if(tmpname === "0")
 			formdata.append("questionid",$("#editorQues").prop("title"));
 		formdata.append("choise", editorData);	
@@ -685,6 +658,13 @@ function commitChange(t, u) {
 		formdata.append("id",$("#editorAn").prop("title"));
 		formdata.append("answer", editorData );
 		urlString = "../../apcompany/data/updateAnswers";
+	} else if(u === 'd') {
+		eval("editorData = CKEDITOR.instances."+ t.parent().prop("id").replace("framestep","step") +".getData()");
+		formdata.append("id",t.parent().prop("id").replace("framestepid",""));
+		formdata.append("step",t.parent().prop("title"));
+		formdata.append("question_id",$("#editorQues").prop("title"));
+		formdata.append("img_string", editorData );
+		urlString = "/apcompany/hits/insertOrUpdateHits";
 	}
 	//ajax返回数据
 	$.ajax({
@@ -925,3 +905,20 @@ var initSample = ( function() {
 		return !!CKEDITOR.plugins.get( 'wysiwygarea' );
 	}
 })();
+
+function delStep(t){
+	var formdata = new FormData();
+	formdata.append("id",t.parent().prop("id").replace("framestepid",""));
+	$.ajax({
+		url: "/apcompany/hits/deleleHits",
+	 	type: "post",
+		data: formdata,
+	 	processData:false,
+         contentType:false,
+         success:function(data){
+             console.log("over..");
+             $.growl.notice({title: "删除步骤", message: "删除成功!" });
+             window.location.reload();
+         }
+	});
+}

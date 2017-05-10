@@ -12,14 +12,12 @@
 		<link href="../css/responsive.css" rel="stylesheet">
 		<link href="../css/test.css" rel="stylesheet">
 		<link href="../css/public.css" rel="stylesheet">
-		<link href="../css/editor.css" rel="stylesheet">
 		<script type="text/x-mathjax-config">
 			MathJax.Hub.Config({ tex2jax: { inlineMath: [["$","$"],["\\(","\\)"]] } }, {TeX: {equationNumbers: { autoNumber: ["AMS"], useLabelIds: true}}, "HTML-CSS": {linebreaks: {automatic: true}}, SVG: {linebreaks: {automatic: true}}});
 		</script>
 		<script type="text/javascript" async src="../js/MathJax-master/MathJax.js?config=default"></script>
 		<script type="text/javascript" src="../js/jquery-3.1.1.min.js"></script>
 		<script type="text/javascript" src="../js/My97DatePicker/WdatePicker.js"></script>
-		<script type="text/javascript" async src="../js/editor.js"></script>
 		<script type="text/javascript" async src="../js/test.js"></script>
 		<script src="https://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../js/ckeditor/ckeditor.js"></script>
@@ -41,7 +39,9 @@
 			
 		</div>
 		<div class="main">
-			<form id="tabUp" enctype="multipart/form-data">
+			<form id="tabUp" enctype="multipart/form-data">			
+			</form>
+			<form id="tabStep" enctype="multipart/form-data">
 			</form>
 			<div class="col" id="dv2">				
 				<div class="childW">
@@ -109,31 +109,15 @@
 						<div class="relativeLabel" id="relativeDiv">
 							
 						</div>							
-						<br />
-						<!--  
-						<p class="neip">
-							<label class="inputRes" title="tQuestions.question">问题</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
-							<br />						
-						</p>
-						
-						<p class="neip">
-							<label class="inputRes" title="tChoises[0].choise">选项</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>
-							<br />							
-						</p>
-						<p class="neip">
-							<label class="inputRes" title="tAnswers.answer">答案</label>
-							<button class="editAndsave" onclick="editAndSaveBt($(this))"> Edit</button>	
-							<br />						
-						</p> -->
+						<br />			
 						<div class="neip">
 							<span>问题是：</span>
 							<div id="ques" title="tQuestions.question"></div>
 						</div>
-						<div class="neip" id="frameChoice">
-							<span>选项：</span>
-							<div id="option0" title="tChoises[0].choise"></div>
+						<div class="neip" id="frameChoice" style="height: auto;">
+							<span>选项：</span>							
+								<p>(A)</p>
+								<div id="optionChoice0" title="tChoises[0].choise"></div>							
 						</div>
 						<div class="neip">
 							<span>答案是：</span>
@@ -151,7 +135,7 @@
 		<p style="display: none;" id="editorUIFlg">0</p>
 		<script>
 			initSample('ques');
-			initSample('option0');
+			initSample('optionChoice0');
 			initSample('answer');
 			initSample('step0');
 		</script>

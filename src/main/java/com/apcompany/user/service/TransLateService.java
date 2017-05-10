@@ -28,4 +28,6 @@ public interface TransLateService {
 	public int deleteTranslations(int id);
 
 	public List<TKeyWords> selectAllKey();
+
+	public String getKeyWordsByFname(String fName);
 }
