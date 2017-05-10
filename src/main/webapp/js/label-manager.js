@@ -164,7 +164,7 @@ function commitBt(){
 	}
 	var objDiv = $(this).parent();
 	$.ajax({
-        url:"../../apcompany/data/labelUpdateOrInsert",
+        url:"../../apcompany/data/labelRelUpdateOrInsert",
         type:"post",
         data:formdata,
         processData:false,
@@ -175,6 +175,7 @@ function commitBt(){
             {
             	//我需要根据传回的数值，设置id。
             	objDiv.attr("id","frame" + data);
+            	$.growl.notice({title: "插入标签", message: "插入标签成功!" });
             }
         }
 	});
@@ -205,6 +206,8 @@ function delLables(){
 function showAllLabels(){
 }
 function showLabelTree(){
+	$(".depth0").children("div").remove();
+	$("#optionDiv").children("div").remove();
 	$.get("/apcompany/data/labelRelAll",function(result){
 		var jsonObj = JSON.parse(result);
 		var array = new Array();

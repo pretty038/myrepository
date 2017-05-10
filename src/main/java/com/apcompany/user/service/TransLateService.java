@@ -1,5 +1,7 @@
 package com.apcompany.user.service;
 
+import java.util.List;
+
 import com.apcompany.user.pojo.TKeyWords;
 import com.apcompany.user.pojo.TTranslations;
 
@@ -24,6 +26,8 @@ public interface TransLateService {
 	public int updateTranslationsByQuestionId(TTranslations tTranslations);
 
 	public int deleteTranslations(int id);
-	
+
+	public List<TKeyWords> selectAllKey();
+
 	public String getKeyWordsByFname(String fName);
 }

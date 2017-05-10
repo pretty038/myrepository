@@ -1,5 +1,7 @@
 package com.apcompany.user.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,14 +35,30 @@ public class HitsController {
 	public String deleleHits(int id) {
 		return hitsService.deleteTHits(id) > 0 ? "successfully!!" : "error";
 	}
-	
+
 	@RequestMapping("/selectHits")
 	@ResponseBody
-	public String selectHits(@RequestParam("questionId")String question_id,@RequestParam("step")String step) {
-		String jsonText="";
-		if(question_id!=null&&step!=null&&!"".equals(question_id)&&!"".equals(step)){
-			THits tHits =hitsService.getTHits(Integer.valueOf(question_id), Integer.valueOf(step));
+	public String selectHits(@RequestParam("questionId") String question_id,
+			@RequestParam("step") String step) {
+		String jsonText = "";
+		if (question_id != null && step != null && !"".equals(question_id)
+				&& !"".equals(step)) {
+			THits tHits = hitsService.getTHits(Integer.valueOf(question_id),
+					Integer.valueOf(step));
 			jsonText = JSON.toJSONString(tHits, true);
+		}
+		return jsonText;
+	}
+
+	@RequestMapping("/selectHitsByQuestionid2")
+	@ResponseBody
+	public String selectHitsByQuestionid(
+			@RequestParam("questionId") String question_id) {
+		String jsonText = "";
+		if (question_id != null && !"".equals(question_id)) {
+			List<THits> tHitsList = hitsService.getTHitsByQuestionId(Integer
+					.valueOf(question_id));
+			jsonText = JSON.toJSONString(tHitsList, true);
 		}
 		return jsonText;
 	}

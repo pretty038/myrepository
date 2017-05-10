@@ -22,25 +22,15 @@ $(document).ready(function() {
 });
 
 function editorAppValue(t) {
-	//document.getElementById("inp").value += (t.value + " ");
-	var tmp = $("#editor").parent().children("input").val();
+	var tmp = $("#editor").parent().children("textarea").val();
 	tmp += (t.value);
-	$("#editor").parent().children("input").val(tmp);
+	$("#editor").parent().children("textarea").val(tmp);
 }
 
 function editorOverBt() {
 	var txt = $("#editor").prev().prev().prev().val();
-	var oldtxt = $("#editor").prev().children("span").text();
-	console.log(" over new is:" + txt);
-	console.log("old orgin is" + oldtxt);
-	//oldtxt = oldtxt.substring(3, oldtxt.length - 3);
-	console.log(" overbt old substring is:" + oldtxt);
-	//旧的默认添加公式标识符的.
-	//var newtxt = "${ " + oldtxt + " " + txt + " }$";
-	var newtxt = oldtxt + " " + txt;
-	console.log(newtxt);
-	//var lbl = document.getElementById("etr2");
-	//lbl.innerHTML = newtxt;
+	var oldtxt = $("#editor").prev().children("span").text();	
+	var newtxt = oldtxt + " " + txt;		
 	$("#editor").prev().text(newtxt);
 	$("#editor").prev().prev().prev().val("");
 	MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
