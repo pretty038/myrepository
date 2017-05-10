@@ -3,7 +3,6 @@ package com.apcompany.user.pojo;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 public class TQuestions {
 	private int id;
 	private String question;
