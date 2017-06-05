@@ -16,14 +16,14 @@ import com.apcompany.privilege.pojo.UserRole;
 
 public interface UserRoleDao {
 
-	@Insert("insert into user_role (user_id, role_id) values (#{user_id},#{role.id})")
+	@Insert("insert into user_role (user_id, role_id) values (#{userId},#{role.id})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(UserRole userRole);
 
-	@Update("update user_role set user_id=#{user_id},role_id=#{role.id} where id=#{id}")
+	@Update("update user_role set user_id=#{userId},role_id=#{role.id} where id=#{id}")
 	public int update(UserRole userRole);
 
-	@Update("update user_role set role_id=#{role.id} where user_id=#{user_id}")
+	@Update("update user_role set role_id=#{role.id} where user_id=#{userId}")
 	public int updateByUserId(UserRole userRole);
 
 	@Delete(value = { "delete from user_role where id=#{id}" })

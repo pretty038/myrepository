@@ -69,12 +69,28 @@ public class MyBatisPriviligeFramework {
 //		userDao.insert(user);
 //	}
 	
+//	@Test
+//	public void insertTest4() {
+//		User user=new User();
+//		user.setName("min");
+//		user.setPassword("123456");
+//		userDao.insert(user);
+//	}
+	
+//	@Test
+//	public void insertTest5() {
+//		Role role=new Role();
+//		role.setId(2);
+//		UserRole userRole=new UserRole();
+//		userRole.setUserId(2);
+//		userRole.setRole(role);
+//		userRoleDao.insert(userRole);
+//	}
+	
 	@Test
-	public void insertTest4() {
-		User user=new User();
-		user.setName("min");
-		user.setPassword("123456");
-		userDao.insert(user);
+	public void insertTest6() {
+		List<Permission> list=permissionDao.getPermissionByRoleId(1);
+		System.out.println(list);
+		System.out.println(roleDao.getRoleById(1));
 	}
-
 }

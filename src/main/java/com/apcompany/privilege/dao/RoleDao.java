@@ -33,9 +33,21 @@ public interface RoleDao {
 			{
 				@Result(column="id",property="id",id=true),
 				@Result(column="rolename",property="rolename"),
-				@Result(column="role_id",property="permissionslist",one=@One(select="com.apcompany.privilege.dao.PermissionDao.getPermissionByRoleId"))
+				@Result(column="id",property="permissionslist",many=@Many(select="com.apcompany.privilege.dao.PermissionDao.getPermissionByRoleId"))
 			}
 			)
 	public List<Role> getRoleById(int roleId);
+	
+	
+	
+	@Select("select * from role where id=#{roleId}")
+	@Results(
+			{
+				@Result(column="id",property="id",id=true),
+				@Result(column="rolename",property="rolename"),
+				@Result(column="id",property="permissionslist",many=@Many(select="com.apcompany.privilege.dao.PermissionDao.getPermissionByRoleId"))
+			}
+			)
+	public List<Role> getRoleUserById(int roleId);
 	
 }

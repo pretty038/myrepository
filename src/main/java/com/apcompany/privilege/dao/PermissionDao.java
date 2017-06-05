@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -23,5 +25,10 @@ public interface PermissionDao {
 	public int delete(int id);
 	
 	@Select("select * from permission where role_id=#{roleId}")
+	@Results({
+		@Result(column="id",property="id",id=true),
+		@Result(column="permissionname",property="permissionname"),
+		@Result(column="role_id",property="roleId")
+	})
 	public List<Permission> getPermissionByRoleId(int roleId);
 }
