@@ -13,15 +13,6 @@ import com.apcompany.privilege.dao.RoleDao;
 import com.apcompany.privilege.dao.UserDao;
 import com.apcompany.privilege.dao.UserRoleDao;
 import com.apcompany.privilege.pojo.Permission;
-import com.apcompany.privilege.pojo.Role;
-import com.apcompany.privilege.pojo.User;
-import com.apcompany.privilege.pojo.UserRole;
-import com.apcompany.user.dao.TAnswersDao;
-import com.apcompany.user.dao.TChoisesDao;
-import com.apcompany.user.dao.TQuestionsDao;
-import com.apcompany.user.pojo.TAnswers;
-import com.apcompany.user.pojo.TChoises;
-import com.apcompany.user.pojo.TQuestions;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 // 配置了@ContextConfiguration注解并使用该注解的locations属性指明spring和配置文件之后，

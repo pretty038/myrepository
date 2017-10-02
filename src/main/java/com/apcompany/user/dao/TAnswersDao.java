@@ -11,6 +11,9 @@ public interface TAnswersDao {
 
 	@Select("select * from answers where id=#{id}")
 	public TAnswers getAnswer(int id);
+	
+	@Select("select * from answers where questionid=#{questionid}")
+	public TAnswers getAnswerByQuestionId(int questionid);
 
 	@Insert("insert into answers (questionid, answer) values (#{questionid},#{answer})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")

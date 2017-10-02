@@ -1,15 +1,15 @@
-package com.apcompany.user.service.impl;
+package com.apcompany.learn.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apcompany.user.dao.TKeyWordsDao;
-import com.apcompany.user.dao.TTranslationsDao;
-import com.apcompany.user.pojo.TKeyWords;
-import com.apcompany.user.pojo.TTranslations;
-import com.apcompany.user.service.TransLateService;
+import com.apcompany.learn.dao.TKeyWordsDao;
+import com.apcompany.learn.dao.TTranslationsDao;
+import com.apcompany.learn.pojo.TKeyWords;
+import com.apcompany.learn.pojo.TTranslations;
+import com.apcompany.learn.service.TransLateService;
 
 @Service
 public class TransLateServiceImpl implements TransLateService {

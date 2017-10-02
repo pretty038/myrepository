@@ -7,6 +7,8 @@ public class TQuestions {
 	private int id;
 	private String question;
 	private int status;
+	private int keypointId;
+	private int type;
 	private Timestamp ctime;
 	private Timestamp utime;
 	private List<TChoises> choices;
@@ -57,16 +59,30 @@ public class TQuestions {
 	public void setLabels(List<TLabelsQuestionRel> labels) {
 		this.labels = labels;
 	}
-	@Override
-	public String toString() {
-		return "TQuestions [id=" + id + ", question=" + question + ", status=" + status + ", ctime=" + ctime
-				+ ", utime=" + utime + ", choices=" + choices + ", labels=" + labels + ", tAnswers=" + tAnswers + "]";
-	}
+
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getKeypointId() {
+		return keypointId;
+	}
+	public void setKeypointId(int keypointId) {
+		this.keypointId = keypointId;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	@Override
+	public String toString() {
+		return "TQuestions [id=" + id + ", question=" + question + ", status=" + status + ", keypointId=" + keypointId
+				+ ", type=" + type + ", ctime=" + ctime + ", utime=" + utime + ", choices=" + choices + ", labels="
+				+ labels + ", tAnswers=" + tAnswers + "]";
 	}
 
 }

@@ -2,15 +2,10 @@ package com.apcompany;
 
 
 
-import java.util.Date;
-import java.util.UUID;
-
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.apcompany.user.pojo.TUser;
 import com.apcompany.user.service.TUserServiceI;
 
 public class MyBatisTest {

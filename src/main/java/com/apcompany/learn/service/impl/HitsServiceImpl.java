@@ -1,13 +1,13 @@
-package com.apcompany.user.service.impl;
+package com.apcompany.learn.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apcompany.user.dao.THitsDao;
-import com.apcompany.user.pojo.THits;
-import com.apcompany.user.service.HitsService;
+import com.apcompany.learn.dao.THitsDao;
+import com.apcompany.learn.pojo.THits;
+import com.apcompany.learn.service.HitsService;
 
 @Service
 public class HitsServiceImpl implements HitsService {

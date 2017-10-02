@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import com.apcompany.user.pojo.TLabelsQuestionRel;
 import com.apcompany.user.pojo.TLabelsRel;
 import com.apcompany.user.pojo.TQuestions;
 import com.apcompany.user.service.DataService;
+import com.apcompany.user.utils.JsonUtil;
 
 @Controller
 @RequestMapping("/data")
@@ -89,14 +91,15 @@ public class DataController {
 		return "outcome";
 	}
 
-	@RequestMapping(value = "/select", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/select/{keypointId}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String selectAll(Model model, Integer curPage, Integer pageSize) {
+	public String selectAll(Model model, Integer curPage, Integer pageSize,@PathVariable("keypointId") Integer keypointId) {
 		int totalcount = dataService.getDataCount();
 		curPage = curPage == null ? 0 : curPage;
 		pageSize = pageSize == null ? 200 : pageSize;
 		List<TQuestions> datalist = dataService.getDataList(0, totalcount,
-				curPage, pageSize);
+				curPage, pageSize,keypointId);
+		
 		model.addAttribute("datalist", datalist);
 		String jsonText = JSON.toJSONString(datalist, true);
 		return jsonText;
@@ -226,6 +229,23 @@ public class DataController {
 	@RequestMapping("/insertkeyword")
 	public String insertkey(HttpServletRequest request) {
 		return "insertkey";
+	}
+	
+	@RequestMapping("/getExample/{keypointId}")
+	@ResponseBody
+	public String getExample(@PathVariable("keypointId") Integer keypointId) {
+		TQuestions tQuestions=dataService.getExample(keypointId, 0);
+		String outcome = JsonUtil.ObjectToJson(tQuestions);
+		return outcome;
+	}
+	
+	@RequestMapping("/answers/valid/{questionId}")
+	@ResponseBody
+	public String answersValid(@PathVariable("questionId") Integer questionId,HttpServletRequest request) {
+		String input=(String) request.getParameter("input");
+		boolean outcome=dataService.checkAnswer(questionId, input);
+//		String outcome = JsonUtil.ObjectToJson(tQuestions);
+		return outcome?"true":"false";
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.apcompany.user.pojo;
+package com.apcompany.learn.pojo;
 
 public class TKeyWords {
 

@@ -1,9 +1,9 @@
-package com.apcompany.user.service;
+package com.apcompany.learn.service;
 
 import java.util.List;
 
-import com.apcompany.user.pojo.TKeyWords;
-import com.apcompany.user.pojo.TTranslations;
+import com.apcompany.learn.pojo.TKeyWords;
+import com.apcompany.learn.pojo.TTranslations;
 
 public interface TransLateService {
 

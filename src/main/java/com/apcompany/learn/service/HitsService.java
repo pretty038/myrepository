@@ -1,8 +1,8 @@
-package com.apcompany.user.service;
+package com.apcompany.learn.service;
 
 import java.util.List;
 
-import com.apcompany.user.pojo.THits;
+import com.apcompany.learn.pojo.THits;
 
 public interface HitsService {
 

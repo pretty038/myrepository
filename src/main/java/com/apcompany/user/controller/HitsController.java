@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.apcompany.user.pojo.THits;
-import com.apcompany.user.service.HitsService;
+import com.apcompany.learn.pojo.THits;
+import com.apcompany.learn.service.HitsService;
 
 @Controller
 @RequestMapping("/hits")

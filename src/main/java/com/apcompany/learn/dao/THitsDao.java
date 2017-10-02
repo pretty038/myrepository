@@ -1,4 +1,4 @@
-package com.apcompany.user.dao;
+package com.apcompany.learn.dao;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.apcompany.user.pojo.THits;
+import com.apcompany.learn.pojo.THits;
 
 public interface THitsDao {
 

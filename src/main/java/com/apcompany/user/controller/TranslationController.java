@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.apcompany.user.pojo.TKeyWords;
-import com.apcompany.user.pojo.TTranslations;
-import com.apcompany.user.service.TransLateService;
+import com.apcompany.learn.pojo.TKeyWords;
+import com.apcompany.learn.pojo.TTranslations;
+import com.apcompany.learn.service.TransLateService;
 
 @Controller
 @RequestMapping("/translate")

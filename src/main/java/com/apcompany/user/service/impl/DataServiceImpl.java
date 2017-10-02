@@ -1,6 +1,7 @@
 package com.apcompany.user.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -124,8 +125,8 @@ public class DataServiceImpl implements DataService {
 	}
 
 	@Override
-	public TQuestions getData(int questionid) {
-		List<TQuestions> outlist = tQuestionsDao.searchAll(questionid, 0, 20);
+	public TQuestions getData(int questionid,Integer keypointId) {
+		List<TQuestions> outlist = tQuestionsDao.searchAll(questionid, 0, 20,keypointId);
 		if (outlist != null && outlist.size() > 0) {
 			return outlist.get(0);
 		}
@@ -134,11 +135,11 @@ public class DataServiceImpl implements DataService {
 
 	@Override
 	public List<TQuestions> getDataList(int questionid, Integer totalcount,
-			Integer curPage, Integer pageSize) {
+			Integer curPage, Integer pageSize,Integer keypointId) {
 		curPage = curPage < 1 ? 1 : curPage;
 		int pageStart = (curPage - 1) * pageSize;
 		if (pageStart <= totalcount) {
-			return tQuestionsDao.searchAll(questionid, pageStart, pageSize);
+			return tQuestionsDao.searchAll(questionid, pageStart, pageSize,keypointId);
 		} else {
 			return null;
 		}
@@ -283,6 +284,25 @@ public class DataServiceImpl implements DataService {
 		int out = 0;
 		out = tChoisedao.delete(id);
 		return out;
+	}
+
+	@Override
+	public TQuestions getExample(int keypointId, int type) {
+		return tQuestionsDao.getExample(keypointId, type);
+	}
+
+	@Override
+	public Map<String, Object> getExampleNew(int keypointId, int type) {
+		return tQuestionsDao.getExampleNew(keypointId, type);
+	}
+
+	@Override
+	public boolean checkAnswer(int questionId, String input) {
+		TAnswers tAnswers=tAnswerdao.getAnswerByQuestionId(questionId);
+		if(tAnswers!=null){
+			return tAnswers.getAnswer().equals(input);
+		}
+		return false;
 	}
 
 }

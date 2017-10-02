@@ -20,12 +20,6 @@
 			<result column="cquestionId" property="questionid" />
 			<result column="choise" property="choise" />
 		</collection>
-		<collection property="labels" ofType="com.apcompany.user.pojo.TLabelsQuestionRel">
-			<id column="did" property="id" />
-			<result column="dquestionId" property="questionid" />
-			<result column="labelid" property="labelid" />
-			<result column="labelsrelid" property="labelsrelid" />
-		</collection>
 	</resultMap>
 	
 	<select id="searchAll"  resultMap="BaseResultMap"  >
@@ -40,11 +34,13 @@
 	left join
 	labels_question_rel d 
 	on(a.id=d.questionid)
-	where  a.status=0 and b.status=0 and c.status=0  
+	where  a.status=0 and b.status=0 and c.status=0  and type= 1 and keypointId=#{keypointId}
 		<if test="questionid!=null and questionid>0" >
   			and a.id= #{questionid,jdbcType=INTEGER}
   		</if>
   	limit #{pageStart},#{pageSize}
 	</select>
+	
+	
 	
 </mapper>

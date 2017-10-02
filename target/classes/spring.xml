@@ -19,6 +19,12 @@
     <!-- 引入dbconfig.properties属性文件 -->
     <context:property-placeholder location="classpath:dbconfig.properties" />
     <!-- <mvc:annotation-driven /> -->
+  <!--   <mvc:annotation-driven>
+     	<mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+   		</mvc:message-converters>
+	</mvc:annotation-driven> -->
 	<!--注解说明  
     <context:annotation-config />--> 
     <!-- 自动扫描(自动注入)，扫描me.gacl.service这个包以及它的子包的所有使用@Service注解标注的类 -->

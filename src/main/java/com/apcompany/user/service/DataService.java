@@ -1,6 +1,7 @@
 package com.apcompany.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.apcompany.user.pojo.TAnswers;
 import com.apcompany.user.pojo.TChoises;
@@ -21,10 +22,10 @@ public interface DataService {
 
 	public int getDataCount();
 
-	public TQuestions getData(int questionid);
+	public TQuestions getData(int questionid,Integer keypointId);
 
 	public List<TQuestions> getDataList(int questionid, Integer totalcount,
-			Integer curPage, Integer pageSize);
+			Integer curPage, Integer pageSize,Integer keypointId);
 
 	public int updateQuestion(TQuestions tQuestions);
 
@@ -66,8 +67,12 @@ public interface DataService {
 
 	public int updateLabelRel(TLabelsRel tLabelsRel);
 
-	// Add By Haojian
-
 	public int delChoise(int id);
+	
+	public TQuestions getExample(int keypointId,int type);
+	
+	public Map<String, Object> getExampleNew(int keypointId,int type);
+	
+	public boolean checkAnswer(int questionId,String input);
 
 }

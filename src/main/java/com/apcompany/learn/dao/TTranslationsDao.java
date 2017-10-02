@@ -1,4 +1,4 @@
-package com.apcompany.user.dao;
+package com.apcompany.learn.dao;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.apcompany.user.pojo.TTranslations;
+import com.apcompany.learn.pojo.TTranslations;
 
 public interface TTranslationsDao {
 

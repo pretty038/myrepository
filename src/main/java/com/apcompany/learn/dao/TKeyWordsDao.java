@@ -1,4 +1,4 @@
-package com.apcompany.user.dao;
+package com.apcompany.learn.dao;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.apcompany.user.pojo.TKeyWords;
+import com.apcompany.learn.pojo.TKeyWords;
 
 public interface TKeyWordsDao {
 	@Select("select * from key_words where id=#{id}")
