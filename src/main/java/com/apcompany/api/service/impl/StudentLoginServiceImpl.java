@@ -27,8 +27,8 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 	public Student login(Student student) {
 		if (student == null) {
 			return null;
-		} else if (student.getPhone() > 0) {
-			return studentDao.loginin(student.getPhone(), student.getPassword());
+		} else if (!"".equals(student.getPhone())) {
+			return studentDao.logininbyPhone(student.getPhone(), student.getPassword());
 		} else {
 			return studentDao.loginin(student.getLoginname(), student.getPassword());
 		}
@@ -38,20 +38,44 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 	@Override
 	public boolean nameIsUsed(String loginname) {
 
-		return studentDao.isNameUsed(loginname) > 0 ? true : false;
+		return studentDao.existName(loginname) > 0 ? true : false;
 	}
 
 	@Override
 	public boolean updateStudent(Student student) {
-		
+
 		return studentDao.update(student) > 0 ? true : false;
-		
+
 	}
 
 	@Override
 	public boolean delStudent(int id) {
-		
+
 		return studentDao.delete(id) > 0 ? true : false;
+	}
+
+	@Override
+	public Student loginByPhone(String phone) {
+
+		return studentDao.loginByPhone(phone);
+	}
+
+	@Override
+	public Student loginByWechat(String openid) {
+		return studentDao.loginByWechat(openid);
+	}
+
+	@Override
+	public boolean phoneIsUsed(String phone) {
+
+		return studentDao.existPhone(phone) > 0 ? true : false;
+	}
+
+	@Override
+	public boolean wechatIsUsed(String openid) {
+		
+		return studentDao.existWechat(openid) > 0;
+		
 	}
 
 }

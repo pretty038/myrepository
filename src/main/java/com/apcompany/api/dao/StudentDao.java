@@ -3,6 +3,7 @@ package com.apcompany.api.dao;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -13,23 +14,35 @@ public interface StudentDao {
 	final String table="student";
 	
 	@Select("select * from "+table+" where loginname=#{loginname} and password=#{password}")
-	public Student loginin(String loginname,String password);
+	
+	public Student loginin(@Param("loginname") String loginname,@Param("password") String password);
 	
 	@Select("select * from "+table+" where phone=#{phone} and password=#{password}")
-	public Student loginin(Integer phone,String password);
+	public Student logininbyPhone(@Param("phone") String phone,@Param("password")  String password);
+	
+	@Select("select * from "+table+" where phone=#{phone}")
+	public Student loginByPhone(String phone);
+	
+	@Select("select * from "+table+" where openid=#{openid}")
+	public Student loginByWechat(String openid);
+	
+	@Select("select count(1) from "+table+" where openid=#{openid}")
+	public Integer existWechat(String openid);
+	
+	@Select("select count(1) from "+table+" where phone=#{phone}")
+	public Integer existPhone(String phone);
 	
 	@Select("select count(1) from "+table+" where loginname=#{loginname}")
-	public Integer isNameUsed(String loginname);
+	public Integer existName(String loginname);
 	
-	@Insert("insert into "+table+" (name, password,sex,loginname,birthday,grade,phone,deviceId) "
-			+ "values (#{name},#{password},#{sex},#{loginname},#{birthday},"
-			+ "#{grade},#{phone},#{deviceId})")
+	@Insert("insert into "+table+" (name, loginname,grade,phone,password,deviceId,school,openid,imageurl,type) "
+			+ "values (#{name},#{loginname},#{grade},#{phone},#{password},#{deviceId},#{school},#{openid},#{imageurl},#{type})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(Student student);
 
-	@Update("update "+table+" set name=#{name},password=#{password} sex=#{sex},"
-			+ "loginname=#{loginname},birthday=#{birthday},"
-			+ "grade=#{grade},phone=#{phone},deviceId=#{deviceId}"
+	@Update("update "+table+" set name=#{name},grade=#{grade},phone=#{phone},"
+			+ "password=#{password},deviceId=#{deviceId},"
+			+ "school=#{school},openid=#{openid},imageurl=#{imageurl},type=#{type} "
 			+ "where id=#{id}")
 	public int update(Student student);
 

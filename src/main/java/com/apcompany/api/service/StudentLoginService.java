@@ -15,4 +15,12 @@ public interface StudentLoginService {
 	
 	public boolean delStudent(int id);
 	
+	public Student loginByPhone(String phone);
+	
+	public Student loginByWechat(String openid);
+	
+	public boolean phoneIsUsed(String phone);
+	
+	public boolean wechatIsUsed(String openid);
+	
 }

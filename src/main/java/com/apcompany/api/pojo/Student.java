@@ -6,48 +6,46 @@ public class Student {
 	
 	private int id;
 	//显示用户名称
-	private String name;
+	private String name="";
 	//登录名称
-	private String loginname;
-	private int sex;
-	private Date birthday;
+	private String loginname="";
 	private int grade;
-	private int phone;
+	private String phone="";
 	//注册日期
 	private Date cDate;
 	//最后一次修改日期
 	private Date uDate;
-	private String password;
+	private String password="";
 	//设备号，如果用户登录设备发生改变后，需要更改设备
-	private String deviceId;
+	private String deviceId="";
+	
+	private String school="";
+	
+	private String openid="";
+	
+	private String imageurl="";
+	
+	private int isIdentity;
+	
+	private int type;
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getSex() {
-		return sex;
-	}
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-	public Date getBirthday() {
-		return birthday;
-	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
+
 	public int getGrade() {
 		return grade;
 	}
 	public void setGrade(int grade) {
 		this.grade = grade;
 	}
-	public int getPhone() {
+	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public Date getcDate() {
@@ -85,6 +83,36 @@ public class Student {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public String getSchool() {
+		return school;
+	}
+	public void setSchool(String school) {
+		this.school = school;
+	}
+	public String getOpendid() {
+		return openid;
+	}
+	public void setOpendid(String opendid) {
+		this.openid = opendid;
+	}
+	public String getImageurl() {
+		return imageurl;
+	}
+	public void setImageurl(String imageurl) {
+		this.imageurl = imageurl;
+	}
+	public int getIsIdentity() {
+		return isIdentity;
+	}
+	public void setIsIdentity(int isIdentity) {
+		this.isIdentity = isIdentity;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 	
