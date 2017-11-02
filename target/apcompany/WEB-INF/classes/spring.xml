@@ -52,7 +52,8 @@
         <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">  
             <property name="supportedMediaTypes">  
                 <list>  
-                    <value>application/json;charset=UTF-8</value>  
+                    <value>application/json;charset=UTF-8</value>
+                    <value>text/html;charset=UTF-8</value>
                 </list>  
             </property>  
         </bean>  
@@ -140,7 +141,7 @@
             <value>1024</value>  
         </property>  
     </bean>
-    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">    
+<!--     <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">    
     <property name="supportedMediaTypes">    
         <list>    
             <value>text/html;charset=UTF-8</value>    
@@ -150,8 +151,8 @@
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">    
     <property name="messageConverters">    
         <list>    
-            <ref bean="mappingJacksonHttpMessageConverter" /><!-- json转换器 -->    
+            <ref bean="mappingJacksonHttpMessageConverter" />json转换器    
         </list>    
     </property>    
-	</bean> 
+	</bean> --> 
 </beans>
