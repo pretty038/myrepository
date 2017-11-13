@@ -10,6 +10,7 @@ http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 http://www.springframework.org/schema/aop 
 http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 ">
+<import resource="/application-task.xml"/>
 	<!-- JNDI方式配置数据源 -->
 	<!-- <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
 		<property name="jndiName" value="${jndiName}"></property> </bean> -->

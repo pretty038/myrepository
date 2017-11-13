@@ -1,9 +1,6 @@
 package com.apcompany.api.service;
 
-import java.util.List;
-
 import com.apcompany.api.pojo.Teacher;
-import com.apcompany.api.pojo.TeacherClass;
 
 public interface TeacherService {
 	
@@ -16,8 +13,6 @@ public boolean register(Teacher teacher);
 	
 	public boolean updateTeacher(Teacher teacher);
 	
-	public boolean delTeacher(int id);
-	
 	public Teacher loginByPhone(String phone);
 	
 	public Teacher loginByWechat(String openid);
@@ -27,9 +22,5 @@ public boolean register(Teacher teacher);
 	public boolean wechatIsUsed(String openid);
 	
 	public int getIdbyname(String loginname);
-	
-	public boolean updateClass(List<TeacherClass> list);
-	
-	public boolean updateClass(Integer tid,List<Integer> types);
 
 }

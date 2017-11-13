@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.pojo.Student;
+import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.StudentLoginService;
 import com.apcompany.user.utils.MD5Util;
 import com.apcompany.user.utils.SendMessage;
@@ -23,7 +25,7 @@ import com.apcompany.user.utils.StringUtil;
 import com.apcompany.user.utils.TipUtil;
 
 @Controller
-@RequestMapping("/student")
+@RequestMapping("/login/student")
 public class StudentLoginController {
 
 	private static final String VALIDATE_PHONE_CODE = "VALIDATE_PHONE_CODE";
@@ -32,6 +34,8 @@ public class StudentLoginController {
 
 	@Autowired
 	private StudentLoginService studentLoginService;
+	
+	@Autowired private IUserOnlineInfoService infoService;
 	
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -75,8 +79,13 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object login(@RequestParam(value="loginname",required=false)  String loginname, @RequestParam(value="phone",required=false) String phone,
-			@RequestParam("password") String password) {
+	public Object login(
+			@RequestParam(value="loginname",required=false)  String loginname, 
+			@RequestParam(value="phone",required=false) String phone,
+			@RequestParam("password") String password,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng
+			) {
 
 		if (StringUtil.isEmpty(loginname) && StringUtil.isEmpty(phone)) {
 			return TipUtil.failed("loginname and phone is empty, at least one is not empty");
@@ -93,7 +102,7 @@ public class StudentLoginController {
 		student.setPassword(MD5Util.getStringMD5String(password));
 		student = studentLoginService.login(student);
 		if (student != null) {
-			return TipUtil.success("sucessful login", student);
+			return TipUtil.success("sucessful login", createToken(student.getId(), lat, lng));
 		} else {
 			return TipUtil.failed("password does not match loginname");
 		}
@@ -102,33 +111,40 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/phone", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object loginByPhone(@RequestParam("phone") String phone,@RequestParam("code") String code,HttpServletRequest request) {
+	public Object loginByPhone(@RequestParam("phone") String phone,
+			@RequestParam("code") String code,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng,
+			HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
         String validphone = (String) session.getAttribute(VALIDATE_PHONE);
         if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
         	Student student = studentLoginService.loginByPhone(phone);
-        	return TipUtil.success("sucessful login",student);	
+        	return TipUtil.success("sucessful login",createToken(student.getId(), lat, lng));	
         }
 		return TipUtil.failed("code do not match phone");
-
 	}
 
 	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object loginByPhone(@RequestParam("openid") String openid) {
+	public Object loginByPhone(
+			@RequestParam("openid") String openid,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng
+			) {
 
 		if (StringUtil.isEmpty(openid)) {
 			return TipUtil.failed("openid is empty");
 		}
 		if (studentLoginService.wechatIsUsed(openid)) {
 			Student student = studentLoginService.loginByWechat(openid);
-			return student;
+			return createToken(student.getId(), lat, lng);
 		} else {
 			Student student = new Student();
 			student.setOpendid(openid);
 			studentLoginService.register(student);
-			return null;
+			return createToken(student.getId(), lat, lng);
 		}
 
 	}
@@ -163,6 +179,11 @@ public class StudentLoginController {
 		} else {
 			return TipUtil.success(false);
 		}
+	}
+	
+	
+	private String createToken(int studentId,double lat,double lng){
+		return infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
 	}
 
 }
