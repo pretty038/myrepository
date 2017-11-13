@@ -51,11 +51,11 @@ public class TeachCourseController {
 		return teachCourseService.createTeachCourse(teacherId,courseId,moneyPerMinu);
 	}
 	
-	@RequestMapping(value="/online/list.json",method = RequestMethod.GET)
+	@RequestMapping(value="/search/onlineTeachCourse/list.json",method = RequestMethod.GET)
 	@ResponseBody
 	public Object searchOnlineTeachers(
 			@RequestParam(value="courseId",required=true) int courseId,
-			@RequestParam(value="orderType",required=false,defaultValue="0") int orderType,
+			@RequestParam(value="orderType",required=false,defaultValue="2") int orderType,
 			@RequestParam(value="queryIndex",required=false,defaultValue="0") int queryIndex,
 			@RequestParam(value="querySize",required=false,defaultValue="10") int querySize){		
 		return teachCourseService.getOnlineTeachCourseListByCourse(courseId,orderType, queryIndex, querySize);

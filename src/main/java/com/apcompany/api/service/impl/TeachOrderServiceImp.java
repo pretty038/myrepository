@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.dao.ITeachOrderDao;
 import com.apcompany.api.dao.TeacherDao;
 import com.apcompany.api.model.form.OrderTeacherScoreForm;
@@ -145,14 +146,17 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 	@Override
 	public TeachOrderDO createBookOrder(BookTimeTeachDO bookTimeTeachDO) {		
 		if(bookTimeTeachDO == null){
+			System.out.println("booktimeTeachDO is null");
 			return null;
 		}
 		BookDayTeachDO bookDayTeachDO= bookService.getBookDayById(bookTimeTeachDO.getBookDayId());
 		if(bookDayTeachDO==null){
+			System.out.println("bookDayTeachDO is null");
 			return null;
 		}
 		TeachCourseDO teachCourseDO= teachCourseService.getTCById(bookDayTeachDO.getTeachCourseId());
-		if(teachCourseDO== null || teachCourseDO.getStatus()==0){
+		if(teachCourseDO== null || teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSED.getKey()){
+			System.out.println("teachCourseDO is null or closed");
 			return null;
 		}
 		TeachOrderDO teachOrderDO = new TeachOrderDO();

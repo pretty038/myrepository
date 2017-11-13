@@ -18,12 +18,12 @@ public interface ITeachOrderDao {
 			+ "teacher_skill_score=#{teacherSkillScore},modified= now() where id=#{id} ")
 	public void markOrder(TeachOrderDO order);
 	
-	@Insert("insert into teach_order(book_id,student_id,teach_course_id,begin_time,"
+	@Insert("insert into teach_order(type,src_id,student_id,teach_course_id,begin_time,"
 			+ "end_time,use_minute,money,status,teacher_customer_score,"
 			+ "teacher_manner_score,teacher_skill_score,created,modified) "
-			+ "values(#{bookId},#{studentId},#{teachCourseId},#{beginTime},#{endTime},"
+			+ "values(#{type},#{srcId},#{studentId},#{teachCourseId},#{beginTime},#{endTime},"
 			+ "#{useMinute},#{money},#{status},#{teacherCustomerScore},"
-			+ "#{teacherMannerScore},#{teacherSkillScore},#{status},now(),now() )")
+			+ "#{teacherMannerScore},#{teacherSkillScore},now(),now() )")
 	public void addTeachOrder(TeachOrderDO teachOrderDO);
 	
 	@Update("update teach_order set end_time=now(),use_minute=#{useMinute},"

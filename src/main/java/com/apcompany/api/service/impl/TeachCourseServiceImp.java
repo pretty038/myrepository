@@ -10,7 +10,7 @@ import com.apcompany.api.constrant.Constrant;
 import com.apcompany.api.constrant.OnlineTeachCourseOrderByEnum;
 import com.apcompany.api.dao.ITeachCourseDao;
 import com.apcompany.api.model.pojo.CourseDO;
-import com.apcompany.api.model.pojo.OnlineTeacherDO;
+import com.apcompany.api.model.pojo.OnlineTeachCourseDetailInfoDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 import com.apcompany.api.service.IBookTeachService;
 import com.apcompany.api.service.ITeachCourseService;
@@ -43,9 +43,9 @@ public class TeachCourseServiceImp implements ITeachCourseService {
 	}
 
 	@Override
-	public List<OnlineTeacherDO> getOnlineTeachCourseListByCourse(int courseId,int orderType, int queryIndex,
+	public List<OnlineTeachCourseDetailInfoDO> getOnlineTeachCourseListByCourse(int courseId,int orderType, int queryIndex,
 			int querySize) {
-		List<OnlineTeacherDO> result = Lists.newArrayList();
+		List<OnlineTeachCourseDetailInfoDO> result = Lists.newArrayList();
 		if(courseId ==0){
 			return result;
 		}
@@ -53,7 +53,7 @@ public class TeachCourseServiceImp implements ITeachCourseService {
 		if(querySize <= 0){
 			querySize= Constrant.ONLINE_TEACHER_QUERY_SIZE;
 		}
-		return teachCourseDao.getOnlineListBySubject(courseId,OnlineTeachCourseOrderByEnum.valueOf(orderType).getValue(), queryIndex, querySize);	    
+		return teachCourseDao.getOnlineListBySubject(courseId,OnlineTeachCourseOrderByEnum.valueOf(orderType).getValue(), queryIndex, querySize);
 	}
 	
 	

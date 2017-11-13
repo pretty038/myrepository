@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 
 public enum OnlineTeachCourseOrderByEnum {
 	
-	MONEY(1,"t_c.money_per_minute"),SCORE(2,"t_c.score");
+	MONEY(1,"t_c.money_per_minute"),SCORE(2,"t_c.teach_score");
 	
 	public final int key;
 	public final String value;
@@ -33,9 +33,10 @@ public enum OnlineTeachCourseOrderByEnum {
 	
 	public static OnlineTeachCourseOrderByEnum valueOf(Integer key) {
 		if(key==null){
-			return null;
+			return SCORE;
 		}
-		return allUserTypes.get(key);
+		OnlineTeachCourseOrderByEnum result =allUserTypes.get(key);
+		return result==null?SCORE:result;
 	}
 
 

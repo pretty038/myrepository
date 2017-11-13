@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 import com.apcompany.api.model.pojo.CourseDO;
-import com.apcompany.api.model.pojo.OnlineTeacherDO;
+import com.apcompany.api.model.pojo.OnlineTeachCourseDetailInfoDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 
 public interface ITeachCourseDao {
@@ -22,15 +22,17 @@ public interface ITeachCourseDao {
 	public boolean addCourse(
 			@Param("name")String name);
 	
-	@Select("select t_c.teach_score as teach_score,t_c.money_per_minu as money_per_minu,"
-			+ "t.name as teacher_name,t.id as teacher_id,t.address as address, "
-			+ "t.college as college, t.profession as profession,t.photo as photo from "
-			+ "teach_course as t_c "
-			+ "inner join user_online_info as t "
-			+ "on t.type=1 and  t_c.techer_id=t.user_id "
-			+ " where t_c.course_id=#{courseId} and t.status=1 order by #{orderType} "
+	@Select("select t_c.teach_score  teach_score,t_c.money_per_minute  money_per_minute,t_c.status as teach_course_status,"
+			+ "t.name as teacher_name,t.id as teacher_id, "
+			+ "t.imageurl as photo, "
+			+ " online.status as teacher_status, x(online.address) as lat,y(online.address) as lng "
+			+ "from teach_course as t_c "
+			+ "inner join teacher as t  on t.id=t_c.teacher_id "
+			+"inner join user_online_info as online "
+			+ "on online.type=1 and  t_c.teacher_id=online.user_id "
+			+ " where t_c.course_id=#{courseId} and online.status=1 order by #{orderType} "
 			+ " limit #{queryIndex},#{querySize}")
-	public List<OnlineTeacherDO> getOnlineListBySubject(
+	public List<OnlineTeachCourseDetailInfoDO> getOnlineListBySubject(
 			@Param("courseId") int courseId,
 			@Param("orderType") String orderType,
 			@Param("queryIndex") int queryIndex,

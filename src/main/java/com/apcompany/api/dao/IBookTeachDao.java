@@ -17,13 +17,16 @@ public interface IBookTeachDao {
 	@Insert("insert into book_day_teach(book_day,status,teach_course_id,created,modified) values(#{bookDay},#{status},#{teachCourseId},NOW(),NOW())")
 	public void addBookDay(BookDayTeachDO bookDayDO);
 	
-	@Select("select book_day,status from book_day_teach where book_day>=#{firstDay} and book_day<=#{lastDay} and teach_course_id=#{teachCourseId}")
-	public List<BookDayTeachDO> getBookDayListByMonth(int teachCourseId,int firstDay,int lastDay);
+	@Select("select id, book_day,status from book_day_teach where book_day>=#{firstDay} and book_day<=#{lastDay} and teach_course_id=#{teachCourseId}")
+	public List<BookDayTeachDO> getBookDayListByMonth(
+			@Param("teachCourseId")int teachCourseId,
+			@Param("firstDay")int firstDay,
+			@Param("lastDay")int lastDay);
 	
 	@Update("update book_day_teach set status=#{status} where id=#{id}")
 	public void updateBookDayStatus(BookDayTeachDO bookDayTeachDO);
 	
-	@Select("select book_day_id,start_hour,end_hour from book_time_teach where book_day_id=#{bookDayId} and status in (0,1) ")
+	@Select("select book_day_id,start_hour,end_hour from book_time_teach where book_day_id=#{bookDayId} and status in (0,1) order by start_hour ")
 	public List<BookTimeTeachDO> getBookTimeListByBookDay(int bookDayId);
 	
 	@Select("select * from book_time_teach where book_day_id=#{bookDayId} and "
@@ -31,7 +34,10 @@ public interface IBookTeachDao {
 			+ "(start_hour<#{startHour}  and end_hour>#{endHour}) or "
 			+ "(start_hour>=#{startHour} and start_hour<#{endHour}) or "
 			+ "(end_hour<#{endHour} and end_hour>#{startHour}) and status in (0,1) limit 1")
-	public BookTimeTeachDO checkBookTimeIsExit(int bookDayId,int startHour,int endHour);
+	public BookTimeTeachDO checkBookTimeIsExit(
+			@Param("bookDayId")int bookDayId,
+			@Param("startHour")int startHour,
+			@Param("endHour")int endHour);
 	
 	@Insert("insert into book_time_teach(student_id,book_day_id,"
 			+ "start_hour,end_hour,status,created,modified) "
@@ -40,7 +46,7 @@ public interface IBookTeachDao {
 	public void addBookTime(BookTimeTeachDO book);
 	
 	@Select("select sum(start_hour - end_hour) from book_time_teach where book_day_id=#{bookDayId}")
-	public int getTotalHoursByBookDay(int bookDayId);
+	public Integer getTotalHoursByBookDay(int bookDayId);
 	
 	@Select("select * from book_time_teach where student_id=#{studentId} order by created")
 	public List<BookTimeTeachDO> getStudentBookList(int studentId);

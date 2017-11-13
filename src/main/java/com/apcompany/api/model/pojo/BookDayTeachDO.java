@@ -1,5 +1,7 @@
 package com.apcompany.api.model.pojo;
 
+import com.apcompany.api.constrant.BookDayStatusEnum;
+
 public class BookDayTeachDO {
 	
 	private int id;
@@ -19,10 +21,10 @@ public class BookDayTeachDO {
 		
 	}
 	
-	public BookDayTeachDO(int bookDay,int teachCouseId,int status){
+	public BookDayTeachDO(int bookDay,int teachCouseId,BookDayStatusEnum status){
 		this.bookDay=bookDay;
 		this.teachCourseId=teachCouseId;
-		this.status=status;
+		this.status=status.getKey();
 	}
 	
 	public int getId() {

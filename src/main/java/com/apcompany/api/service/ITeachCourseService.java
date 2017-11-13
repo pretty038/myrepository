@@ -3,7 +3,7 @@ package com.apcompany.api.service;
 import java.util.List;
 
 import com.apcompany.api.model.pojo.CourseDO;
-import com.apcompany.api.model.pojo.OnlineTeacherDO;
+import com.apcompany.api.model.pojo.OnlineTeachCourseDetailInfoDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 
 public interface ITeachCourseService {
@@ -21,7 +21,7 @@ public interface ITeachCourseService {
 	 * 
 	 * @Param subject 查询的科目， queryindex 开始查询的角标，querySize：每页显示数量，默认：10
 	 */
-	List<OnlineTeacherDO> getOnlineTeachCourseListByCourse(int courseId,
+	List<OnlineTeachCourseDetailInfoDO> getOnlineTeachCourseListByCourse(int courseId,
 			int orderType, int queryIndex, int querySize);
 	
 	

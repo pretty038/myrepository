@@ -3,6 +3,7 @@ package com.apcompany.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,10 +39,10 @@ public class StudentBookController {
 	}
 
 	// 预约时间
-	@RequestMapping(value = "/create/book.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/create/book.do", method = RequestMethod.GET)
 	@ResponseBody
 	public Object addBook(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId,
+			@RequestAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "bookDayId", required = true) int bookDayId,
 			@RequestParam(value = "startHour", required = true) int startHour,
 			@RequestParam(value = "endHour", required = true) int endHour) {

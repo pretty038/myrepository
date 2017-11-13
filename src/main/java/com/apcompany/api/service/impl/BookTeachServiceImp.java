@@ -50,8 +50,12 @@ public class BookTeachServiceImp implements IBookTeachService  {
 				@Override
 				public void run() {
 					Date date = new Date();
-					for(int i=0;i<365;i++){				
-						BookDayTeachDO bookDayTeachDO =new BookDayTeachDO(DateUtil.formateDateToYMDIntDay(date),teachCourseIdF,BookDayStatusEnum.NOT_BOOK.getKey());
+					for(int i=0;i<365;i++){	
+						BookDayStatusEnum bookDayStatus=BookDayStatusEnum.NOT_BOOK;
+						if(i<30){
+							bookDayStatus=BookDayStatusEnum.NORMAL_BOOK;
+						}
+						BookDayTeachDO bookDayTeachDO =new BookDayTeachDO(DateUtil.formateDateToYMDIntDay(date),teachCourseIdF,bookDayStatus);
 						bookDao.addBookDay(bookDayTeachDO);
 						date =DateUtil.addDays(date, 1);
 					}				
@@ -82,6 +86,7 @@ public class BookTeachServiceImp implements IBookTeachService  {
 	@Override
 	public TeachOrderDO addBookTime(int studentId,int bookDayId,int startHour,int endHour){
         if(checkBookDayCanBookAndRefresh(bookDayId, startHour, endHour)==false){
+        	System.out.println("bookTimeTeachDO is exit");
         	return null;
         }
 		BookTimeTeachDO bookTimeDO =new BookTimeTeachDO(studentId, bookDayId, startHour, endHour);		
@@ -156,7 +161,8 @@ public class BookTeachServiceImp implements IBookTeachService  {
 		if(teachCourseDO==null|| teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSED.getKey()){
 			return false;
 		}
-		int totalBookHour= bookDao.getTotalHoursByBookDay(bookDayId);
+		Integer totalBookHour= bookDao.getTotalHoursByBookDay(bookDayId);
+		totalBookHour=totalBookHour==null?0:totalBookHour;
 		if((totalBookHour+bookHour)>Constrant.MAX_BOOK_HOURS_PER_DAY){
 			return false;
 		}
