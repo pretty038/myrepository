@@ -170,7 +170,7 @@ public class StudentLoginController {
 		}
 	}
 
-	@RequestMapping(value = "/validphone/{phone}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/validphone/{phone}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object validPhone(@PathVariable String phone) {
 		boolean out = studentLoginService.phoneIsUsed(phone);
