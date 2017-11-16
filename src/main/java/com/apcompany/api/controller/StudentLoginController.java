@@ -94,8 +94,8 @@ public class StudentLoginController {
 			@RequestParam(value="loginname",required=false)  String loginname, 
 			@RequestParam(value="phone",required=false) String phone,
 			@RequestParam("password") String password,
-			@RequestParam("password") double lat,
-			@RequestParam("password") double lng
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng
 			) {
 
 		if (StringUtil.isEmpty(loginname) && StringUtil.isEmpty(phone)) {
