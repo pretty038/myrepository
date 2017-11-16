@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.pojo.Student;
+import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.StudentLoginService;
 import com.apcompany.user.utils.MD5Util;
 import com.apcompany.user.utils.SendMessage;
@@ -47,7 +49,7 @@ public class StudentLoginController {
 	@Autowired private IUserOnlineInfoService infoService;
 	
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Object register(@RequestParam("phone") String phone,@RequestParam("password") String password,
 			@RequestParam("code") String code,
@@ -75,7 +77,7 @@ public class StudentLoginController {
 
 	}
 	
-	@RequestMapping(value ="/sendCode",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")  
+	@RequestMapping(value ="/sendCode",method = RequestMethod.POST)  
     @ResponseBody  
     public Object sendCode(@RequestParam("phone") String phone, HttpServletRequest request) throws HttpException, IOException {  
 		String code=String .valueOf((int)((Math.random()*9+1)*100000));
@@ -86,7 +88,7 @@ public class StudentLoginController {
 		return SendMessage.sentMessage(phone, code);	
     } 
 
-	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET)
 	@ResponseBody
 	public Object login(
 			@RequestParam(value="loginname",required=false)  String loginname, 
@@ -118,7 +120,7 @@ public class StudentLoginController {
 
 	}
 
-	@RequestMapping(value = "/login/phone", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/login/phone", method = RequestMethod.POST)
 	@ResponseBody
 	public Object loginByPhone(@RequestParam("phone") String phone,
 			@RequestParam("code") String code,
@@ -135,23 +137,15 @@ public class StudentLoginController {
 		return TipUtil.failed("code do not match phone");
 	}
 
-	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST)
 	@ResponseBody
-<<<<<<< HEAD
-	public Object loginByWechat(@RequestParam("code") String code) {
-=======
-	public Object loginByPhone(
-			@RequestParam("openid") String openid,
-			@RequestParam("password") double lat,
-			@RequestParam("password") double lng
-			) {
->>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
+	public Object loginByWechat(@RequestParam("code") String code,@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng) {
 
 		if (StringUtil.isEmpty(code)) {
 			return TipUtil.failed("openid is empty");
 		}
-<<<<<<< HEAD
-		
+
 		JSONObject jsonObject=getAccessToken(code);
 		
 		String openID = jsonObject.getString("openid");
@@ -159,27 +153,19 @@ public class StudentLoginController {
 		if(openID==null||"".equals(openID)){
 			return TipUtil.failed("wechat failed!!!");
 		}
-		
 		if (studentLoginService.wechatIsUsed(openID)) {
 			Student student = studentLoginService.loginByWechat(openID);
-			return TipUtil.success(student);
-		} else {
-	
-			return  TipUtil.success("new user!!",jsonObject);
-=======
-		if (studentLoginService.wechatIsUsed(openid)) {
-			Student student = studentLoginService.loginByWechat(openid);
 			return createToken(student.getId(), lat, lng);
 		} else {
 			Student student = new Student();
-			student.setOpendid(openid);
+			student.setOpenid(openID);
 			studentLoginService.register(student);
 			return createToken(student.getId(), lat, lng);
->>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
 		}
 	}
+		
 	
-	@RequestMapping(value = "/register/wechat/", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/register/wechat/", method = RequestMethod.POST)
 	@ResponseBody
 	public Object registerByWechat(@RequestParam("phone") String phone,@RequestParam("code") String code,@RequestParam("openid") String openid,HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
@@ -202,7 +188,7 @@ public class StudentLoginController {
 	}
 	
 
-	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST)
 	@ResponseBody
 	public Object update(Student student) {
 		if (studentLoginService.updateStudent(student)) {
@@ -212,7 +198,7 @@ public class StudentLoginController {
 		}
 	}
 
-	@RequestMapping(value = "/validname/{name}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/validname/{name}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object validName(@PathVariable String name) {
 		boolean out = studentLoginService.nameIsUsed(name);
@@ -234,7 +220,6 @@ public class StudentLoginController {
 		}
 	}
 	
-<<<<<<< HEAD
 	private  JSONObject getAccessToken(String code) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1cc921938ad2e075"
         		+ "&secret=6940113a75b6b15bd596960e0c6a5dd9&code="+code+"&grant_type=authorization_code";
@@ -280,11 +265,9 @@ public class StudentLoginController {
         return null;
     }
 	
-=======
 	
 	private String createToken(int studentId,double lat,double lng){
 		return infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
 	}
->>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
 
 }
