@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.constrant.UserStatusEnum;
+import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.model.pojo.TokenModel;
 import com.apcompany.api.pojo.Student;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.StudentLoginService;
@@ -124,8 +126,8 @@ public class StudentLoginController {
 	@ResponseBody
 	public Object loginByPhone(@RequestParam("phone") String phone,
 			@RequestParam("code") String code,
-			@RequestParam("password") double lat,
-			@RequestParam("password") double lng,
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng,
 			HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
@@ -139,7 +141,8 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST)
 	@ResponseBody
-	public Object loginByWechat(@RequestParam("code") String code,@RequestParam("lat") double lat,
+	public Object loginByWechat(@RequestParam("code") String code,
+			@RequestParam("lat") double lat,
 			@RequestParam("lng") double lng) {
 
 		if (StringUtil.isEmpty(code)) {
@@ -266,8 +269,9 @@ public class StudentLoginController {
     }
 	
 	
-	private String createToken(int studentId,double lat,double lng){
-		return infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
+	private TokenModel createToken(int studentId,double lat,double lng){
+		String token= infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
+		return new TokenModel(token,studentId,UserType.Student);
 	}
 
 }

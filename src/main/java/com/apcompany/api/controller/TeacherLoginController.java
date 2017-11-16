@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apcompany.api.constrant.UserStatusEnum;
+import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.model.pojo.TokenModel;
 import com.apcompany.api.pojo.Teacher;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.TeacherService;
@@ -78,8 +80,8 @@ public class TeacherLoginController {
 			@RequestParam(value="loginname",required=false)  String loginname, 
 			@RequestParam(value="phone",required=false) String phone,
 			@RequestParam("password") String password,
-			@RequestParam("password") double lat,
-			@RequestParam("password") double lng
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng
 			) {
 
 		if (StringUtil.isEmpty(loginname) && StringUtil.isEmpty(phone)) {
@@ -109,8 +111,8 @@ public class TeacherLoginController {
 	public Object loginByPhone(
 			@RequestParam("phone") String phone,
 			@RequestParam("code") String code,
-			@RequestParam("password") double lat,
-			@RequestParam("password") double lng,
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng,
 			HttpServletRequest request
 			) {
 		HttpSession session = request.getSession(); 		
@@ -134,8 +136,9 @@ public class TeacherLoginController {
 		}
 	}
 	
-	private String createToken(int teacherId,double lat,double lng){
-		return infoService.addWithLogin(teacherId, 0,UserStatusEnum.ONLINE, lat, lng);
+	private TokenModel createToken(int teacherId,double lat,double lng){
+		String token= infoService.addWithLogin(teacherId, 0,UserStatusEnum.ONLINE, lat, lng);
+		return new TokenModel(token,teacherId,UserType.Teacher);
 	}
 	
 	
