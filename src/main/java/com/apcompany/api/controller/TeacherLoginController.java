@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.pojo.Teacher;
+import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.TeacherService;
 import com.apcompany.user.utils.MD5Util;
 import com.apcompany.user.utils.SendMessage;
@@ -22,7 +24,7 @@ import com.apcompany.user.utils.StringUtil;
 import com.apcompany.user.utils.TipUtil;
 
 @Controller
-@RequestMapping("/teacher")
+@RequestMapping("/login/teacher")
 public class TeacherLoginController {
 
 	private static final String VALIDATE_PHONE_CODE = "VALIDATE_PHONE_CODE";
@@ -31,6 +33,7 @@ public class TeacherLoginController {
 	
 	@Autowired
 	private TeacherService teacherService;
+	@Autowired private IUserOnlineInfoService infoService;
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -71,8 +74,13 @@ public class TeacherLoginController {
 	
 	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object login(@RequestParam(value="loginname",required=false)  String loginname, @RequestParam(value="phone",required=false) String phone,
-			@RequestParam("password") String password) {
+	public Object login(
+			@RequestParam(value="loginname",required=false)  String loginname, 
+			@RequestParam(value="phone",required=false) String phone,
+			@RequestParam("password") String password,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng
+			) {
 
 		if (StringUtil.isEmpty(loginname) && StringUtil.isEmpty(phone)) {
 			return TipUtil.failed("loginname and phone is empty, at least one is not empty");
@@ -89,7 +97,7 @@ public class TeacherLoginController {
 		teacher.setPassword(MD5Util.getStringMD5String(password));
 		teacher = teacherService.login(teacher);
 		if (teacher != null) {
-			return TipUtil.success("sucessful login", teacher);
+			return TipUtil.success("sucessful login", createToken(teacher.getId(), lat, lng));
 		} else {
 			return TipUtil.failed("password does not match loginname");
 		}
@@ -98,13 +106,19 @@ public class TeacherLoginController {
 
 	@RequestMapping(value = "/login/phone", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object loginByPhone(@RequestParam("phone") String phone,@RequestParam("code") String code,HttpServletRequest request) {
+	public Object loginByPhone(
+			@RequestParam("phone") String phone,
+			@RequestParam("code") String code,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng,
+			HttpServletRequest request
+			) {
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
         String validphone = (String) session.getAttribute(VALIDATE_PHONE);
         if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
         	Teacher teacher = teacherService.loginByPhone(phone);
-        	return TipUtil.success("sucessful login",teacher);	
+        	return TipUtil.success("sucessful login",createToken(teacher.getId(), lat, lng));	
         }
 		return TipUtil.failed("code do not match phone");
 
@@ -120,7 +134,9 @@ public class TeacherLoginController {
 		}
 	}
 	
-	
+	private String createToken(int teacherId,double lat,double lng){
+		return infoService.addWithLogin(teacherId, 0,UserStatusEnum.ONLINE, lat, lng);
+	}
 	
 	
 	

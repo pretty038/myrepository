@@ -34,7 +34,7 @@ import com.apcompany.user.utils.StringUtil;
 import com.apcompany.user.utils.TipUtil;
 
 @Controller
-@RequestMapping("/student")
+@RequestMapping("/login/student")
 public class StudentLoginController {
 
 	private static final String VALIDATE_PHONE_CODE = "VALIDATE_PHONE_CODE";
@@ -43,6 +43,8 @@ public class StudentLoginController {
 
 	@Autowired
 	private StudentLoginService studentLoginService;
+	
+	@Autowired private IUserOnlineInfoService infoService;
 	
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -86,8 +88,13 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object login(@RequestParam(value="loginname",required=false)  String loginname, @RequestParam(value="phone",required=false) String phone,
-			@RequestParam("password") String password) {
+	public Object login(
+			@RequestParam(value="loginname",required=false)  String loginname, 
+			@RequestParam(value="phone",required=false) String phone,
+			@RequestParam("password") String password,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng
+			) {
 
 		if (StringUtil.isEmpty(loginname) && StringUtil.isEmpty(phone)) {
 			return TipUtil.failed("loginname and phone is empty, at least one is not empty");
@@ -104,7 +111,7 @@ public class StudentLoginController {
 		student.setPassword(MD5Util.getStringMD5String(password));
 		student = studentLoginService.login(student);
 		if (student != null) {
-			return TipUtil.success("sucessful login", student);
+			return TipUtil.success("sucessful login", createToken(student.getId(), lat, lng));
 		} else {
 			return TipUtil.failed("password does not match loginname");
 		}
@@ -113,25 +120,37 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/phone", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object loginByPhone(@RequestParam("phone") String phone,@RequestParam("code") String code,HttpServletRequest request) {
+	public Object loginByPhone(@RequestParam("phone") String phone,
+			@RequestParam("code") String code,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng,
+			HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
         String validphone = (String) session.getAttribute(VALIDATE_PHONE);
         if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
         	Student student = studentLoginService.loginByPhone(phone);
-        	return TipUtil.success("sucessful login",student);	
+        	return TipUtil.success("sucessful login",createToken(student.getId(), lat, lng));	
         }
 		return TipUtil.failed("code do not match phone");
-
 	}
 
 	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
+<<<<<<< HEAD
 	public Object loginByWechat(@RequestParam("code") String code) {
+=======
+	public Object loginByPhone(
+			@RequestParam("openid") String openid,
+			@RequestParam("password") double lat,
+			@RequestParam("password") double lng
+			) {
+>>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
 
 		if (StringUtil.isEmpty(code)) {
 			return TipUtil.failed("openid is empty");
 		}
+<<<<<<< HEAD
 		
 		JSONObject jsonObject=getAccessToken(code);
 		
@@ -147,6 +166,16 @@ public class StudentLoginController {
 		} else {
 	
 			return  TipUtil.success("new user!!",jsonObject);
+=======
+		if (studentLoginService.wechatIsUsed(openid)) {
+			Student student = studentLoginService.loginByWechat(openid);
+			return createToken(student.getId(), lat, lng);
+		} else {
+			Student student = new Student();
+			student.setOpendid(openid);
+			studentLoginService.register(student);
+			return createToken(student.getId(), lat, lng);
+>>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
 		}
 	}
 	
@@ -194,7 +223,7 @@ public class StudentLoginController {
 		}
 	}
 
-	@RequestMapping(value = "/validphone/{phone}", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/validphone/{phone}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object validPhone(@PathVariable String phone) {
 		boolean out = studentLoginService.phoneIsUsed(phone);
@@ -205,6 +234,7 @@ public class StudentLoginController {
 		}
 	}
 	
+<<<<<<< HEAD
 	private  JSONObject getAccessToken(String code) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1cc921938ad2e075"
         		+ "&secret=6940113a75b6b15bd596960e0c6a5dd9&code="+code+"&grant_type=authorization_code";
@@ -250,5 +280,11 @@ public class StudentLoginController {
         return null;
     }
 	
+=======
+	
+	private String createToken(int studentId,double lat,double lng){
+		return infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
+	}
+>>>>>>> 7c5aec36ffed6ed6da5df3bddef3d730179b8daa
 
 }

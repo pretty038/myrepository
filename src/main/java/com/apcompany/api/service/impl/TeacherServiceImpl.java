@@ -1,23 +1,16 @@
 package com.apcompany.api.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.apcompany.api.dao.TeacherClassDao;
 import com.apcompany.api.dao.TeacherDao;
 import com.apcompany.api.pojo.Teacher;
-import com.apcompany.api.pojo.TeacherClass;
 import com.apcompany.api.service.TeacherService;
+
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
 	@Autowired
 	private TeacherDao teacherDao;
-
-	@Autowired
-	private TeacherClassDao teacherClassDao;
 
 	@Override
 	public boolean register(Teacher teacher) {
@@ -30,15 +23,6 @@ public class TeacherServiceImpl implements TeacherService {
 
 		if (teacherDao.insert(teacher) == 0) {
 			return false;
-		}
-
-		for (Integer type : teacher.getTypes()) {
-			TeacherClass teacherClass = new TeacherClass();
-			teacherClass.setTid(teacher.getId());
-			teacherClass.setType(type);
-			if (teacherClassDao.insert(teacherClass) == 0) {
-				return false;
-			}
 		}
 		return true;
 	}
@@ -68,10 +52,7 @@ public class TeacherServiceImpl implements TeacherService {
 		return teacherDao.update(teacher) > 0;
 	}
 
-	@Override
-	public boolean delTeacher(int id) {
-		return teacherDao.delete(id) > 0 && teacherClassDao.delByTid(id) > 0;
-	}
+	
 
 	@Override
 	public Teacher loginByPhone(String phone) {
@@ -99,22 +80,6 @@ public class TeacherServiceImpl implements TeacherService {
 	public int getIdbyname(String loginname) {
 
 		return teacherDao.getIdbyname(loginname);
-	}
-
-	@Override
-	public boolean updateClass(List<TeacherClass> list) {
-		for (TeacherClass teacherClass : list) {
-			int outcome = teacherClassDao.updateByObject(teacherClass);
-			if (outcome == 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public boolean updateClass(Integer tid, List<Integer> types) {
-		return false;
 	}
 
 }

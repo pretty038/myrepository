@@ -49,7 +49,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<!-- 配置spring.xml和spring-mybatis.xml这两个配置文件的位置，固定写法 -->
-		<param-value>classpath:spring.xml,classpath:spring-mybatis.xml</param-value>
+		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
 	<!-- Spring view分发器 -->
 	<servlet>
@@ -57,7 +57,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:spring.xml</param-value>
+			<param-value>classpath:spring-mvc.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
