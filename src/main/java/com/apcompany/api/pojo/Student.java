@@ -90,12 +90,7 @@ public class Student {
 	public void setSchool(String school) {
 		this.school = school;
 	}
-	public String getOpendid() {
-		return openid;
-	}
-	public void setOpendid(String opendid) {
-		this.openid = opendid;
-	}
+	
 	public String getImageurl() {
 		return imageurl;
 	}
@@ -113,6 +108,12 @@ public class Student {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public String getOpenid() {
+		return openid;
+	}
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 	
 	

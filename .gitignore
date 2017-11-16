@@ -19,6 +19,7 @@ yes
 yes.pub
 src/main/resources/dbconfig.properties
 src/main/webapp/js/MathJax-master/
+target/apcompany.war
 
 
 # External tool builders

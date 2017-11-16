@@ -1,12 +1,21 @@
 package com.apcompany.api.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.httpclient.HttpException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.pojo.Student;
 import com.apcompany.api.service.StudentLoginService;
 import com.apcompany.user.utils.MD5Util;
@@ -116,22 +127,51 @@ public class StudentLoginController {
 
 	@RequestMapping(value = "/login/wechat", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public Object loginByPhone(@RequestParam("openid") String openid) {
+	public Object loginByWechat(@RequestParam("code") String code) {
 
-		if (StringUtil.isEmpty(openid)) {
+		if (StringUtil.isEmpty(code)) {
 			return TipUtil.failed("openid is empty");
 		}
-		if (studentLoginService.wechatIsUsed(openid)) {
-			Student student = studentLoginService.loginByWechat(openid);
-			return student;
-		} else {
-			Student student = new Student();
-			student.setOpendid(openid);
-			studentLoginService.register(student);
-			return null;
+		
+		JSONObject jsonObject=getAccessToken(code);
+		
+		String openID = jsonObject.getString("openid");
+		
+		if(openID==null||"".equals(openID)){
+			return TipUtil.failed("wechat failed!!!");
 		}
+		
+		if (studentLoginService.wechatIsUsed(openID)) {
+			Student student = studentLoginService.loginByWechat(openID);
+			return TipUtil.success(student);
+		} else {
+	
+			return  TipUtil.success("new user!!",jsonObject);
+		}
+	}
+	
+	@RequestMapping(value = "/register/wechat/", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public Object registerByWechat(@RequestParam("phone") String phone,@RequestParam("code") String code,@RequestParam("openid") String openid,HttpServletRequest request) {
+		HttpSession session = request.getSession(); 		
+		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
+        String validphone = (String) session.getAttribute(VALIDATE_PHONE);
+        if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)&&!"".equals(openid)){
+        		Student student=new Student();
+        		student.setPhone(phone);
+        		student.setOpenid(openid);
+        		boolean isSucessful = studentLoginService.register(student);
+        		if(isSucessful){
+        			return TipUtil.success("register successful",student);
+        		}else{
+        			return TipUtil.failed("register failed!");
+        		}
+        		
+        }
+		return TipUtil.failed("code do not match phone");
 
 	}
+	
 
 	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -164,5 +204,51 @@ public class StudentLoginController {
 			return TipUtil.success(false);
 		}
 	}
+	
+	private  JSONObject getAccessToken(String code) {
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1cc921938ad2e075"
+        		+ "&secret=6940113a75b6b15bd596960e0c6a5dd9&code="+code+"&grant_type=authorization_code";
+        URI uri = URI.create(url);
+        HttpClient client = new DefaultHttpClient();
+        HttpGet get = new HttpGet(uri);
+
+        HttpResponse response;
+        try {
+            response = client.execute(get);
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+
+                for (String temp = reader.readLine(); temp != null; temp = reader.readLine()) {
+                    sb.append(temp);
+                }
+
+//                JSONObject object = new JSONObject(sb.toString().trim());
+//                accessToken = object.getString("access_token");
+//                openID = object.getString("openid");
+//                refreshToken = object.getString("refresh_token");
+//                expires_in = object.getLong("expires_in");
+                JSONObject object=JSONObject.parseObject(sb.toString().trim());         
+                return object;
+            }
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block 
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+	
 
 }
