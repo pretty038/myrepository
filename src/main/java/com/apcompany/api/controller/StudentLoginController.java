@@ -158,7 +158,7 @@ public class StudentLoginController {
 			return TipUtil.failed("wechat failed!!!");
 		}
 		Student student=studentLoginService.loginByWechat(openID);
-		if (student!=null&&student.getPhone()!=null&&!"".equals(student.getPhone().equals(""))) {		
+		if (student!=null&&student.getPhone()!=null&&!"".equals(student.getPhone())) {		
 			return TipUtil.success("login",createToken(student.getId(), lat, lng));
 		} else if(student==null) {
 			student = new Student();
