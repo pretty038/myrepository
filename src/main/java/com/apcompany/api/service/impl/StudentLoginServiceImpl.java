@@ -78,4 +78,27 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 		
 	}
 
+	@Override
+	public String changePassword(Integer id, String password, String newpassword) {
+		
+		int exits=studentDao.existpassword(id, password);
+		if(exits>0){
+			studentDao.updatePassword(id, newpassword);
+			return "successfull!";
+		}else{
+			return "old password is wrong!";
+		}
+
+	}
+
+	@Override
+	public String bandPhone(Integer id, String phone) {
+		
+		int exits=studentDao.updateBandPhone(id, phone);
+		if(exits>0){
+			return "successfull!";
+		}
+		return "failed!";
+	}
+
 }

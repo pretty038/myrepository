@@ -23,4 +23,8 @@ public interface StudentLoginService {
 	
 	public boolean wechatIsUsed(String openid);
 	
+	public String changePassword(Integer id ,String password,String newpassword);
+	
+	public String  bandPhone(Integer id,String phone);
+	
 }

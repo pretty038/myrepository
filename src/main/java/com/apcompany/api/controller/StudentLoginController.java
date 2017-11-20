@@ -223,6 +223,53 @@ public class StudentLoginController {
 		}
 	}
 	
+	/**
+	 * 登陆状态修改密码
+	 * @param studentId
+	 * @param oldPassword
+	 * @param newpassword
+	 * @return
+	 */
+	@RequestMapping(value = "/login/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
+	@ResponseBody
+	public Object changeWord(@PathVariable("studentId") int studentId,@PathVariable("oldPassword") String oldPassword,@PathVariable("newpassword") String newpassword){
+		if(studentId>0&&oldPassword!=null&&newpassword!=null){
+			String outcome=studentLoginService.changePassword(studentId, MD5Util.getStringMD5String(oldPassword), MD5Util.getStringMD5String(newpassword));
+			return TipUtil.success(outcome);
+		}else{
+			return TipUtil.failed("parames is wrong");
+		}
+	}
+	
+	/**
+	 * 绑定手机号
+	 * @param studentId
+	 * @param phone
+	 * @param code
+	 * @return
+	 */
+	public Object bandPhone(@RequestParam("studentId") int studentId,@RequestParam("phone") String phone,
+			@RequestParam("code") String code,HttpServletRequest request){
+		HttpSession session = request.getSession(); 		
+		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
+        String validphone = (String) session.getAttribute(VALIDATE_PHONE);
+        if(validCode==null||validphone==null){
+        	return TipUtil.failed("手机号或者验证码为空");
+        }
+        if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
+        	boolean exits=studentLoginService.phoneIsUsed(phone);
+        	if(exits){
+        		return TipUtil.success("phone exits !!");
+        	}else{
+        		String outcome=studentLoginService.bandPhone(studentId, phone);
+        		return TipUtil.success(outcome);
+        	}
+        }
+		return TipUtil.failed("手机号和验证码不匹配");
+	}
+	
+	
+	
 	private  JSONObject getAccessToken(String code) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx1cc921938ad2e075"
         		+ "&secret=6940113a75b6b15bd596960e0c6a5dd9&code="+code+"&grant_type=authorization_code";
@@ -267,6 +314,8 @@ public class StudentLoginController {
 
         return null;
     }
+	
+	
 	
 	
 	private TokenModel createToken(int studentId,double lat,double lng){
