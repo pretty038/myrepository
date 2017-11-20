@@ -22,7 +22,7 @@ public interface ITeachCourseDao {
 	public boolean addCourse(
 			@Param("name")String name);
 	
-	@Select("select t_c.teach_score  teach_score,t_c.money_per_minute  money_per_minute,t_c.status as teach_course_status,"
+	@Select("select t_c.id as teach_course_id ,t_c.teach_score  teach_score,t_c.money_per_minute  money_per_minute,t_c.status as teach_course_status,"
 			+ "t.name as teacher_name,t.id as teacher_id, "
 			+ "t.imageurl as photo, "
 			+ " online.status as teacher_status, x(online.address) as lat,y(online.address) as lng "
