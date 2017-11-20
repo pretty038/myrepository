@@ -257,6 +257,8 @@ public class StudentLoginController {
 			@RequestAttribute("studentId") int studentId,
 			@RequestParam("phone") String phone,
 			@RequestParam("code") String code,
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng,
 			HttpServletRequest request){
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
@@ -270,6 +272,10 @@ public class StudentLoginController {
         		return TipUtil.success("phone exits !!");
         	}else{
         		String outcome=studentLoginService.bandPhone(studentId, phone);
+        		if("successful".equals(outcome)){
+        			Student student=studentLoginService.loginByPhone(phone);
+        			return TipUtil.success(createToken(student.getId(), lat, lng));
+        		}
         		return TipUtil.success(outcome);
         	}
         }

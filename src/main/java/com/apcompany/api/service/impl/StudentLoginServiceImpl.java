@@ -96,9 +96,9 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 		
 		int exits=studentDao.updateBandPhone(id, phone);
 		if(exits>0){
-			return "successfull!";
+			return "successful";
 		}
-		return "failed!";
+		return "failed";
 	}
 
 }
