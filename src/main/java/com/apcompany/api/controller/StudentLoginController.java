@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.constrant.UserStatusEnum;
@@ -155,16 +157,15 @@ public class StudentLoginController {
 		if(openID==null||"".equals(openID)){
 			return TipUtil.failed("wechat failed!!!");
 		}
-		if (studentLoginService.wechatIsUsed(openID)) {
-			Student student = studentLoginService.loginByWechat(openID);
-			
+		Student student=studentLoginService.loginByWechat(openID);
+		if (student!=null&&student.getPhone()!=null&&!"".equals(student.getPhone().equals(""))) {		
 			return TipUtil.success("login",createToken(student.getId(), lat, lng));
-		} else {
-			Student student = new Student();
+		} else if(student==null) {
+			student = new Student();
 			student.setOpenid(openID);
 			studentLoginService.register(student);
-			return TipUtil.success("phone",createToken(student.getId(), lat, lng));
 		}
+		return TipUtil.success("phone",student);
 	}
 		
 	
