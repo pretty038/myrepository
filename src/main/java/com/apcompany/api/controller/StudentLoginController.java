@@ -49,7 +49,7 @@ public class StudentLoginController {
 	@Autowired private IUserOnlineInfoService infoService;
 	
 
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Object register(@RequestParam("phone") String phone,
 			@RequestParam("password") String password,
@@ -190,7 +190,7 @@ public class StudentLoginController {
 	}
 	
 
-	@RequestMapping(value = "/updateMessage", method = RequestMethod.GET)
+	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST)
 	@ResponseBody
 	public Object update(Student student) {
 		if (studentLoginService.updateStudent(student)) {
@@ -250,7 +250,7 @@ public class StudentLoginController {
 	 * @param code
 	 * @return
 	 */
-	@RequestMapping("/bandphone")
+	@RequestMapping(value="/bandphone",method = RequestMethod.GET)
 	public Object bandPhone(
 			@RequestAttribute("studentId") int studentId,
 			@RequestParam("phone") String phone,
