@@ -158,12 +158,13 @@ public class StudentLoginController {
 		}
 		if (studentLoginService.wechatIsUsed(openID)) {
 			Student student = studentLoginService.loginByWechat(openID);
-			return createToken(student.getId(), lat, lng);
+			
+			return TipUtil.success("login",createToken(student.getId(), lat, lng));
 		} else {
 			Student student = new Student();
 			student.setOpenid(openID);
 			studentLoginService.register(student);
-			return createToken(student.getId(), lat, lng);
+			return TipUtil.success("phone",createToken(student.getId(), lat, lng));
 		}
 	}
 		
@@ -232,7 +233,8 @@ public class StudentLoginController {
 	 */
 	@RequestMapping(value = "/login/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object changeWord(@PathVariable("studentId") int studentId,@PathVariable("oldPassword") String oldPassword,@PathVariable("newpassword") String newpassword){
+	public Object changeWord(@PathVariable("studentId") int studentId,@PathVariable("oldPassword") String oldPassword,
+			@PathVariable("newpassword") String newpassword){
 		if(studentId>0&&oldPassword!=null&&newpassword!=null){
 			String outcome=studentLoginService.changePassword(studentId, MD5Util.getStringMD5String(oldPassword), MD5Util.getStringMD5String(newpassword));
 			return TipUtil.success(outcome);
