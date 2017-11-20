@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.httpclient.HttpException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,16 +17,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.constrant.UserType;
-import com.apcompany.api.model.pojo.TokenModel;
 import com.apcompany.api.pojo.Student;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.StudentLoginService;
@@ -37,8 +34,9 @@ import com.apcompany.user.utils.SendMessage;
 import com.apcompany.user.utils.StringUtil;
 import com.apcompany.user.utils.TipUtil;
 
+@SuppressWarnings("deprecation")
 @Controller
-@RequestMapping("/login/student")
+@RequestMapping("/student")
 public class StudentLoginController {
 
 	private static final String VALIDATE_PHONE_CODE = "VALIDATE_PHONE_CODE";
@@ -51,9 +49,10 @@ public class StudentLoginController {
 	@Autowired private IUserOnlineInfoService infoService;
 	
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	@ResponseBody
-	public Object register(@RequestParam("phone") String phone,@RequestParam("password") String password,
+	public Object register(@RequestParam("phone") String phone,
+			@RequestParam("password") String password,
 			@RequestParam("code") String code,
 			HttpServletRequest request) {
 		
@@ -79,7 +78,7 @@ public class StudentLoginController {
 
 	}
 	
-	@RequestMapping(value ="/sendCode",method = RequestMethod.POST)  
+	@RequestMapping(value ="/login/sendCode",method = RequestMethod.POST)  
     @ResponseBody  
     public Object sendCode(@RequestParam("phone") String phone, HttpServletRequest request) throws HttpException, IOException {  
 		String code=String .valueOf((int)((Math.random()*9+1)*100000));
@@ -90,10 +89,10 @@ public class StudentLoginController {
 		return SendMessage.sentMessage(phone, code);	
     } 
 
-	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/nomal", method = RequestMethod.POST)
 	@ResponseBody
 	public Object login(
-			@RequestParam(value="loginname",required=false)  String loginname, 
+			@RequestParam(value="loginname",required=false)String loginname, 
 			@RequestParam(value="phone",required=false) String phone,
 			@RequestParam("password") String password,
 			@RequestParam("lat") double lat,
@@ -168,7 +167,7 @@ public class StudentLoginController {
 	}
 		
 	
-	@RequestMapping(value = "/register/wechat/", method = RequestMethod.POST)
+	@RequestMapping(value = "/register/wechat", method = RequestMethod.POST)
 	@ResponseBody
 	public Object registerByWechat(@RequestParam("phone") String phone,@RequestParam("code") String code,@RequestParam("openid") String openid,HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
@@ -191,7 +190,7 @@ public class StudentLoginController {
 	}
 	
 
-	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateMessage", method = RequestMethod.GET)
 	@ResponseBody
 	public Object update(Student student) {
 		if (studentLoginService.updateStudent(student)) {
@@ -201,7 +200,7 @@ public class StudentLoginController {
 		}
 	}
 
-	@RequestMapping(value = "/validname/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/register/validname/{name}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object validName(@PathVariable String name) {
 		boolean out = studentLoginService.nameIsUsed(name);
@@ -212,7 +211,7 @@ public class StudentLoginController {
 		}
 	}
 
-	@RequestMapping(value = "/validphone/{phone}", method = RequestMethod.GET)
+	@RequestMapping(value = "/register/validphone/{phone}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object validPhone(@PathVariable String phone) {
 		boolean out = studentLoginService.phoneIsUsed(phone);
@@ -230,9 +229,12 @@ public class StudentLoginController {
 	 * @param newpassword
 	 * @return
 	 */
-	@RequestMapping(value = "/login/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
+	@RequestMapping(value = "/resetpassword/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
 	@ResponseBody
-	public Object changeWord(@PathVariable("studentId") int studentId,@PathVariable("oldPassword") String oldPassword,@PathVariable("newpassword") String newpassword){
+	public Object changeWord(
+			@RequestAttribute("studentId") int studentId,
+			@PathVariable("oldPassword") String oldPassword,
+			@PathVariable("newpassword") String newpassword){
 		if(studentId>0&&oldPassword!=null&&newpassword!=null){
 			String outcome=studentLoginService.changePassword(studentId, MD5Util.getStringMD5String(oldPassword), MD5Util.getStringMD5String(newpassword));
 			return TipUtil.success(outcome);
@@ -248,8 +250,12 @@ public class StudentLoginController {
 	 * @param code
 	 * @return
 	 */
-	public Object bandPhone(@RequestParam("studentId") int studentId,@RequestParam("phone") String phone,
-			@RequestParam("code") String code,HttpServletRequest request){
+	@RequestMapping("/bandphone")
+	public Object bandPhone(
+			@RequestAttribute("studentId") int studentId,
+			@RequestParam("phone") String phone,
+			@RequestParam("code") String code,
+			HttpServletRequest request){
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
         String validphone = (String) session.getAttribute(VALIDATE_PHONE);
@@ -318,9 +324,8 @@ public class StudentLoginController {
 	
 	
 	
-	private TokenModel createToken(int studentId,double lat,double lng){
-		String token= infoService.addWithLogin(studentId, 0,UserStatusEnum.ONLINE, lat, lng);
-		return new TokenModel(token,studentId,UserType.Student);
+	private String createToken(int studentId,double lat,double lng){
+		return infoService.addWithLogin(studentId, UserType.Student,UserStatusEnum.ONLINE, lat, lng);
 	}
 
 }
