@@ -2,10 +2,8 @@ package com.apcompany.api.controller;
 
 import java.io.IOException;
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.httpclient.HttpException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.constrant.UserType;
-import com.apcompany.api.model.pojo.TokenModel;
 import com.apcompany.api.pojo.Teacher;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.TeacherService;
@@ -26,7 +22,7 @@ import com.apcompany.user.utils.StringUtil;
 import com.apcompany.user.utils.TipUtil;
 
 @Controller
-@RequestMapping("/login/teacher")
+@RequestMapping("/teacher")
 public class TeacherLoginController {
 
 	private static final String VALIDATE_PHONE_CODE = "VALIDATE_PHONE_CODE";
@@ -63,7 +59,7 @@ public class TeacherLoginController {
 		
 	}
 	
-	@RequestMapping(value ="/sendCode",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")  
+	@RequestMapping(value ="/login/sendCode",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")  
     @ResponseBody  
     public Object sendCode(@RequestParam("phone") String phone, HttpServletRequest request) throws HttpException, IOException {  
 		String code=String .valueOf((int)((Math.random()*9+1)*100000));
@@ -136,11 +132,8 @@ public class TeacherLoginController {
 		}
 	}
 	
-	private TokenModel createToken(int teacherId,double lat,double lng){
-		String token= infoService.addWithLogin(teacherId, 0,UserStatusEnum.ONLINE, lat, lng);
-		return new TokenModel(token,teacherId,UserType.Teacher);
-	}
-	
-	
+	private String createToken(int teacherId,double lat,double lng){
+		return infoService.addWithLogin(teacherId, UserType.Teacher,UserStatusEnum.ONLINE, lat, lng);
+	}	
 	
 }

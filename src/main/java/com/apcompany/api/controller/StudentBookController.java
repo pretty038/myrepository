@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.apcompany.api.service.IBookTeachService;
+import com.apcompany.user.utils.TipUtil;
 
 @Controller
 @RequestMapping("/book/student")
@@ -54,15 +55,15 @@ public class StudentBookController {
 	@RequestMapping(value = "/booklist.json", method = RequestMethod.GET)
 	@ResponseBody
 	public Object studentBookList(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId) {
-		return iBookingService.getStudentBookingList(studentId);
+			@RequestAttribute(value = "studentId", required = true) Integer studentId) {
+		return TipUtil.success(iBookingService.getStudentBookingList(studentId));
 	}
 
 	// 查看我的某一个预约
 	@RequestMapping(value = "/book/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object showBook(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId,
+			@SessionAttribute(value = "studentId", required = true) Integer studentId,
 			@PathVariable("id") int id) {
 		return iBookingService.getBookTimeById(id);
 	}
@@ -71,7 +72,7 @@ public class StudentBookController {
 	@RequestMapping(value = "/cancel.do", method = RequestMethod.GET)
 	@ResponseBody
 	public Object cancelBookBeforePay(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId,
+			@SessionAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "bookId", required = true) int bookId) {
 		return iBookingService.cancelBook(studentId, bookId);
 	}

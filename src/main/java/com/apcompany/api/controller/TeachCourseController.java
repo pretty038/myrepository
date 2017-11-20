@@ -76,9 +76,9 @@ public class TeachCourseController {
 	@ResponseBody
 	public Object saveTeachCourse(
 			@RequestAttribute(value="studentId",required=true)  Integer studentId,
-			@RequestParam(value="teachCoueseId",required=true) int teachCoueseId){		
+			@RequestParam(value="teachCourseId",required=true) int teachCoueseId){		
 		studentSaveService.saveTeachCourse(studentId, teachCoueseId);
-		return "success";
+		return TipUtil.success("success");
 	}
 	
 	@RequestMapping(value="/student/saveTeachCourse/delete/{id}",method = RequestMethod.GET)
@@ -87,10 +87,17 @@ public class TeachCourseController {
 			@RequestAttribute(value= "studentId",required=true)  int studentId,
 			@PathVariable int id
 			){
-		return studentSaveService.deleteById(id);
+		return TipUtil.success(studentSaveService.deleteById(id));
 	}
 	
-	
+	@RequestMapping(value="/student/savelist.json",method = RequestMethod.GET)
+	@ResponseBody
+	public Object saveList(
+			@RequestAttribute(value= "studentId",required=true)  int studentId,
+			@RequestParam(value="queryIndex",required=false,defaultValue="0") int queryIndex,
+			@RequestParam(value="querySize",required=false,defaultValue="10") int querySize){	
+		return studentSaveService.getStudentSavaTeachCourseList(studentId, queryIndex, querySize);
+	}
 	
 	
 	

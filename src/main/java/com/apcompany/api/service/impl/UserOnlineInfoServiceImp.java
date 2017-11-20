@@ -11,6 +11,7 @@ import com.apcompany.api.dao.UserOnlineInfoDao;
 import com.apcompany.api.model.pojo.UserOnlineInfoDO;
 import com.apcompany.api.service.ITeachCourseService;
 import com.apcompany.api.service.IUserOnlineInfoService;
+import com.apcompany.api.util.CommonUtil;
 
 @Service
 public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
@@ -20,9 +21,12 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	@Autowired private ITeachCourseService teachCourseService;
 
 	@Override
-	public boolean checkAccessStatus(int userId, UserType userType, String token) {
-		UserOnlineInfoDO  userOnlineInfoDO = onlineInfoDao.checkAccessByToken(userId, userType.getKey(),token);
-		if(userOnlineInfoDO==null){
+	public boolean checkAccessToken(String token) {
+		if(token==null){
+			return false;
+		}
+		UserOnlineInfoDO  userOnlineInfoDO = onlineInfoDao.checkAccessByToken(token);
+		if(userOnlineInfoDO == null){
 			return false;
 		}
 		onlineInfoDao.refreshAccessTime(userOnlineInfoDO.getId());
@@ -45,9 +49,9 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	}
 
 	@Override
-	public String addWithLogin(int userId, int type,UserStatusEnum status,double lat, double lng) {
+	public String addWithLogin(int userId, UserType type,UserStatusEnum status,double lat, double lng) {
 		try {
-			String token= UUID.randomUUID().toString().replaceAll("-", "");
+			String token= CommonUtil.createToken(userId, type);
 			UserOnlineInfoDO userOnlineInfoDO = new UserOnlineInfoDO(userId, type,status, token, lat, lng);
 			onlineInfoDao.addwithLogin(userOnlineInfoDO);
 			return token;

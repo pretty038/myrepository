@@ -8,6 +8,7 @@ public class OnlineTeachCourseDetailInfoDO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -5730347846885813508L;
+	private int teachCourseId;
 	private int teacherId;
 	private String teacherName;
 	private String photo;
@@ -20,6 +21,15 @@ public class OnlineTeachCourseDetailInfoDO implements Serializable{
 	private double lat;
 	private double lng;
 	private int teacherStatus;
+	
+	
+	
+	public int getTeachCourseId() {
+		return teachCourseId;
+	}
+	public void setTeachCourseId(int teachCourseId) {
+		this.teachCourseId = teachCourseId;
+	}
 	public int getTeacherId() {
 		return teacherId;
 	}
