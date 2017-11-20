@@ -35,6 +35,9 @@ public interface StudentDao {
 	@Select("select count(1) from "+table+" where loginname=#{loginname}")
 	public Integer existName(String loginname);
 	
+	@Select("select count(1) from "+table+" where password=#{password} and id=#{id}")
+	public Integer existpassword(Integer id,String password);
+	
 	@Insert("insert into "+table+" (name, loginname,grade,phone,password,deviceId,school,openid,imageurl,type) "
 			+ "values (#{name},#{loginname},#{grade},#{phone},#{password},#{deviceId},#{school},#{openid},#{imageurl},#{type})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
@@ -45,7 +48,16 @@ public interface StudentDao {
 			+ "school=#{school},openid=#{openid},imageurl=#{imageurl},type=#{type} "
 			+ "where id=#{id}")
 	public int update(Student student);
+	
+	@Update("update "+table+" set "
+			+ " password=#{password} "
+			+ "where id=#{id}")
+	public int updatePassword(@Param("id") Integer id,@Param("password") String newpassword);
 
+	@Update("update "+table+" set "
+			+ " phone=#{phone} "
+			+ "where id=#{id}")
+	public int updateBandPhone(@Param("id") Integer id,@Param("phone") String phone);
 
 	@Delete(value = { "delete from "+table+" where id=#{id}" })
 	public int delete(int id);
