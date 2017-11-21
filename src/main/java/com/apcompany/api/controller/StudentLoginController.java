@@ -267,17 +267,12 @@ public class StudentLoginController {
         	return TipUtil.failed("手机号或者验证码为空");
         }
         if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
-        	boolean exits=studentLoginService.phoneIsUsed(phone);
-        	if(exits){
-        		return TipUtil.success("phone exits !!");
-        	}else{
         		String outcome=studentLoginService.bandPhone(studentId, phone);
         		if("successful".equals(outcome)){
         			Student student=studentLoginService.loginByPhone(phone);
         			return TipUtil.success(createToken(student.getId(), lat, lng));
         		}
         		return TipUtil.success(outcome);
-        	}
         }
 		return TipUtil.failed("手机号和验证码不匹配");
 	}
