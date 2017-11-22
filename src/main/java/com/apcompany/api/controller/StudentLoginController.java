@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.httpclient.HttpException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -23,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.druid.sql.ast.statement.SQLIfStatement.Else;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.constrant.UserStatusEnum;
@@ -165,13 +168,15 @@ public class StudentLoginController {
 			student.setOpenid(openID);
 			studentLoginService.register(student);
 		}
-		return TipUtil.success("phone",student);
+		return TipUtil.success("phone",createToken(student.getId(), lat, lng));
 	}
 		
 	
 	@RequestMapping(value = "/register/wechat", method = RequestMethod.POST)
 	@ResponseBody
-	public Object registerByWechat(@RequestParam("phone") String phone,@RequestParam("code") String code,@RequestParam("openid") String openid,HttpServletRequest request) {
+	public Object registerByWechat(@RequestParam("phone") String phone,@RequestParam("code") String code,
+			@RequestParam("openid") String openid,@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng,HttpServletRequest request) {
 		HttpSession session = request.getSession(); 		
 		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
         String validphone = (String) session.getAttribute(VALIDATE_PHONE);
@@ -181,7 +186,10 @@ public class StudentLoginController {
         		student.setOpenid(openid);
         		boolean isSucessful = studentLoginService.register(student);
         		if(isSucessful){
-        			return TipUtil.success("register successful",student);
+        			Map<String,String> map=new HashMap<String,String>();
+        			map.put("studentId", String.valueOf(student.getId()));
+        			map.put("token", createToken(student.getId(), lat, lng));
+        			return TipUtil.success("register successful",map);
         		}else{
         			return TipUtil.failed("register failed!");
         		}
@@ -192,7 +200,7 @@ public class StudentLoginController {
 	}
 	
 
-	@RequestMapping(value = "/updateMessage", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/updateMessage", method = RequestMethod.POST)
 	@ResponseBody
 	public Object update(Student student) {
 		if (studentLoginService.updateStudent(student)) {
@@ -231,7 +239,7 @@ public class StudentLoginController {
 	 * @param newpassword
 	 * @return
 	 */
-	@RequestMapping(value = "/resetpassword/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
+	@RequestMapping(value = "/login/resetpassword/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object changeWord(
 			@RequestAttribute("studentId") int studentId,
@@ -252,7 +260,7 @@ public class StudentLoginController {
 	 * @param code
 	 * @return
 	 */
-	@RequestMapping(value="/bandphone",method = RequestMethod.GET)
+	@RequestMapping(value="/login/bandphone",method = RequestMethod.GET)
 	public Object bandPhone(
 			@RequestAttribute("studentId") int studentId,
 			@RequestParam("phone") String phone,
@@ -272,7 +280,7 @@ public class StudentLoginController {
         			Student student=studentLoginService.loginByPhone(phone);
         			return TipUtil.success(createToken(student.getId(), lat, lng));
         		}
-        		return TipUtil.success(outcome);
+        		return TipUtil.success("resson",outcome);
         }
 		return TipUtil.failed("手机号和验证码不匹配");
 	}
