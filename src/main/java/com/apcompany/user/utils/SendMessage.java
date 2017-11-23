@@ -29,6 +29,7 @@ public class SendMessage {
 		NameValuePair[] data = { new NameValuePair("ac", "send"), new NameValuePair("uid", UID),
 				new NameValuePair("pwd", MD5Util.getStringMD5String(PWD + UID)),
 				new NameValuePair("mobile", phone),
+				new NameValuePair("encode","utf8"),
 				new NameValuePair("content", json.toString()), new NameValuePair("template", templateId) };
 		post.setRequestBody(data);
 		client.executeMethod(post);
@@ -56,6 +57,7 @@ public class SendMessage {
 		NameValuePair[] data = { new NameValuePair("ac", "send"), new NameValuePair("uid", "dugu61888"),
 				new NameValuePair("pwd", MD5Util.getStringMD5String(PWD + UID)),
 				new NameValuePair("mobile", "18901051605"),
+				new NameValuePair("encode","utf8"),
 				new NameValuePair("content", json.toString()), new NameValuePair("template", "411481") };
 		post.setRequestBody(data);
 
@@ -69,7 +71,7 @@ public class SendMessage {
 		System.out.println(post.getRequestCharSet());
 		
 		String result = new String(post.getResponseBodyAsString());
-		System.out.println(new String(post.getResponseBodyAsString().getBytes("iso-8859-1"),"utf-8"));
+		System.out.println(new String(post.getResponseBodyAsString().getBytes(),"utf-8"));
 		System.out.println(result);
 		post.releaseConnection();
 //		PostMethod post = new PostMethod("http://www.baidu.com");

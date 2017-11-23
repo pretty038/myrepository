@@ -242,7 +242,7 @@ public class StudentLoginController {
 	@RequestMapping(value = "/login/resetpassword/{studentId}/{oldPassword}/{newpassword}", method = RequestMethod.GET)
 	@ResponseBody
 	public Object changeWord(
-			@RequestAttribute("studentId") int studentId,
+			@PathVariable("studentId") int studentId,
 			@PathVariable("oldPassword") String oldPassword,
 			@PathVariable("newpassword") String newpassword){
 		if(studentId>0&&oldPassword!=null&&newpassword!=null){
@@ -261,8 +261,9 @@ public class StudentLoginController {
 	 * @return
 	 */
 	@RequestMapping(value="/login/bandphone",method = RequestMethod.GET)
+	@ResponseBody
 	public Object bandPhone(
-			@RequestAttribute("studentId") int studentId,
+			@RequestParam("studentId") int studentId,
 			@RequestParam("phone") String phone,
 			@RequestParam("code") String code,
 			@RequestParam("lat") double lat,
