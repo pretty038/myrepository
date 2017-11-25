@@ -101,4 +101,19 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 		return "failed";
 	}
 
+	@Override
+	public String validWechatPhone(String phone) {
+		
+		Student student=studentDao.loginByPhone(phone);
+		
+		if(student==null){
+			return "phone not exist";
+		}
+		if(student.getOpenid()!=null&&!"".equals(student.getOpenid())){
+			return "phone has openId";
+		}else{
+			return "phone regist,not openId";
+		}
+	}
+
 }

@@ -161,14 +161,19 @@ public class StudentLoginController {
 		}
 		Student student=studentLoginService.loginByWechat(openID);
 		if (student!=null&&student.getPhone()!=null&&!"".equals(student.getPhone())) {
-			
-			return TipUtil.success("login",createToken(student.getId(), lat, lng));
+			Map<String,String> map=new HashMap<String,String>();
+			map.put("studentId", String.valueOf(student.getId()));
+			map.put("token", createToken(student.getId(), lat, lng));
+			return TipUtil.success("login",map);
 		} else if(student==null) {
 			student = new Student();
 			student.setOpenid(openID);
 			studentLoginService.register(student);
 		}
-		return TipUtil.success("phone",createToken(student.getId(), lat, lng));
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("studentId", String.valueOf(student.getId()));
+		map.put("token", createToken(student.getId(), lat, lng));
+		return TipUtil.success("phone",map);
 	}
 		
 	
@@ -284,6 +289,22 @@ public class StudentLoginController {
         		return TipUtil.success("resson",outcome);
         }
 		return TipUtil.failed("手机号和验证码不匹配");
+	}
+	
+	
+	
+	@RequestMapping(value="/login/validation/wechat/{phone}",method = RequestMethod.GET)
+	@ResponseBody
+	public Object validPhoneWechat(@PathVariable("phone") String phone){
+		
+		if(phone==null||phone.equals("")){
+			return TipUtil.failed("phone parameter is wrong");
+		}
+		
+		String message=studentLoginService.validWechatPhone(phone);
+		
+		return TipUtil.success(message);
+		
 	}
 	
 	

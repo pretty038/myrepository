@@ -1,6 +1,7 @@
 package com.apcompany.api.service;
 
 import com.apcompany.api.pojo.Student;
+import com.hazelcast.com.eclipsesource.json.JsonObject;
 
 public interface StudentLoginService {
 
@@ -26,5 +27,7 @@ public interface StudentLoginService {
 	public String changePassword(Integer id ,String password,String newpassword);
 	
 	public String  bandPhone(Integer id,String phone);
+	
+    public String  validWechatPhone(String phone);
 	
 }
