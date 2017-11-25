@@ -29,5 +29,7 @@ public interface StudentLoginService {
 	public String  bandPhone(Integer id,String phone);
 	
     public String  validWechatPhone(String phone);
+    
+    public boolean changePwdByphone(String phone,String password);
 	
 }

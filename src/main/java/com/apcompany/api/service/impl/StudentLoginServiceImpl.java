@@ -116,4 +116,11 @@ public class StudentLoginServiceImpl implements StudentLoginService {
 		}
 	}
 
+	@Override
+	public boolean changePwdByphone(String phone, String password) {
+		int outcome=studentDao.updatePasswordByphone(phone, password);
+		return outcome>0;
+		
+	}
+
 }

@@ -258,6 +258,33 @@ public class StudentLoginController {
 		}
 	}
 	
+	@RequestMapping(value="/login/resetphone",method = RequestMethod.GET)
+	@ResponseBody
+	public Object forgotPassWord(
+			@RequestParam("phone") String phone,
+			@RequestParam("code") String code,
+			@RequestParam("pwd") String newpassword,
+			HttpServletRequest request){
+		
+		HttpSession session = request.getSession(); 	
+		String validCode = (String) session.getAttribute(VALIDATE_PHONE_CODE);  
+        String validphone = (String) session.getAttribute(VALIDATE_PHONE);
+		
+        if(validCode==null||validphone==null){
+        	return TipUtil.failed("phone or code is empty");
+        }
+        if(!"".equals(phone)&&validCode.equals(code)&&validphone.equals(phone)){
+        	boolean outcome=studentLoginService.changePwdByphone(validphone, MD5Util.getStringMD5String(newpassword));
+        	if(outcome){
+        		return TipUtil.success("update successful");
+        	}else{
+        		return TipUtil.success("update error");
+        	}
+        	
+        }
+        return TipUtil.failed("phone and password not match");
+	}
+	
 	/**
 	 * 绑定手机号
 	 * @param studentId
@@ -292,7 +319,11 @@ public class StudentLoginController {
 	}
 	
 	
-	
+	/**
+	 * 校验手机号与微信号存在关系
+	 * @param phone
+	 * @return
+	 */
 	@RequestMapping(value="/login/validation/wechat/{phone}",method = RequestMethod.GET)
 	@ResponseBody
 	public Object validPhoneWechat(@PathVariable("phone") String phone){
@@ -314,6 +345,7 @@ public class StudentLoginController {
         		+ "&secret=6940113a75b6b15bd596960e0c6a5dd9&code="+code+"&grant_type=authorization_code";
         URI uri = URI.create(url);
         HttpClient client = new DefaultHttpClient();
+        
         HttpGet get = new HttpGet(uri);
 
         HttpResponse response;

@@ -53,6 +53,12 @@ public interface StudentDao {
 			+ " password=#{password} "
 			+ "where id=#{id}")
 	public int updatePassword(@Param("id") Integer id,@Param("password") String newpassword);
+	
+	@Update("update "+table+" set "
+			+ " password=#{password} "
+			+ "where phone=#{phone}")
+	public int updatePasswordByphone(@Param("phone") String phone,@Param("password") String newpassword);
+	
 
 	@Update("update "+table+" set "
 			+ " phone=#{phone} "
