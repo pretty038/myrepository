@@ -15,7 +15,7 @@ public interface ITeachOrderService {
 	
 	TeachOrderDO commitInviteOrderByStudent(int studentId,int orderId);
 	
-	boolean markScoreForOrder(OrderTeacherScoreForm form);
+	boolean markScoreForOrder(int studentId,OrderTeacherScoreForm form);
 	
 	TeachOrderDO commitInviteOrderByTeacher(int teacherId,int orderId);
 	

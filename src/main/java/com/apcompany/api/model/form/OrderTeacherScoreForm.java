@@ -6,7 +6,6 @@ public class OrderTeacherScoreForm {
 	private Float teacherCustomerScore;
 	private Float teacherMannerScore;
 	private Float teacherSkillScore;
-	private Integer studentId;
 	
 	
 	public Integer getOrderId() {
@@ -32,12 +31,6 @@ public class OrderTeacherScoreForm {
 	}
 	public void setTeacherSkillScore(Float teacherSkillScore) {
 		this.teacherSkillScore = teacherSkillScore;
-	}
-	public Integer getStudentId() {
-		return studentId;
-	}
-	public void setStudentId(Integer studentId) {
-		this.studentId = studentId;
 	}
 	
 
