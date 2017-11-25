@@ -282,7 +282,7 @@ public class StudentLoginController {
         	}
         	
         }
-        return TipUtil.failed("phone and password not match");
+        return TipUtil.failed("phone and code not match");
 	}
 	
 	/**
