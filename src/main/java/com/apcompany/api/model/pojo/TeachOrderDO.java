@@ -1,5 +1,8 @@
 package com.apcompany.api.model.pojo;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class TeachOrderDO {
 	
 	private Integer id;
@@ -113,6 +116,18 @@ public class TeachOrderDO {
 	}
 	public void setSrcId(int srcId) {
 		this.srcId = srcId;
+	}
+	
+	public static void main(String[] args) {
+		ObjectMapper mapper= new ObjectMapper();
+		try {
+			String str = mapper.writeValueAsString(new TeachOrderDO());
+			System.out.println(str);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	

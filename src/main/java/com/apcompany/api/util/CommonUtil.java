@@ -39,9 +39,9 @@ public class CommonUtil {
 	 * if invalid return null
 	 */
 	public static TokenModel validToken(String token){
+		token= token.replace(" ", "");
 		if(token==null||token.length()<38){
-			return null;
-			
+			return null;			
 		}
 		token= token.replace(" ", "");
 		TokenModel model = getTokenModelFromToken(token);

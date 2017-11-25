@@ -75,13 +75,13 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 	}
 	
 	@Override
-	public boolean markScoreForOrder(OrderTeacherScoreForm form) {
+	public boolean markScoreForOrder(int studentId,OrderTeacherScoreForm form) {
 		if ( form ==null){
 			return false;
 		}
 		TeachOrderDO order = teachOrderDao.getOrderById(form.getOrderId());
 		//如果已经评论过 或者无此订单 ，返回false
-		if( order == null || !form.getStudentId().equals(form.getStudentId())
+		if( order == null || !order.getStudentId().equals(studentId)
 				|| order.getStatus() !=4){
 			return false;
 		}
