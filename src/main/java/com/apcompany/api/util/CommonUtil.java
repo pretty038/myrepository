@@ -41,6 +41,7 @@ public class CommonUtil {
 	public static TokenModel validToken(String token){
 		if(token==null||token.length()<38){
 			return null;
+			
 		}
 		token= token.replace(" ", "");
 		TokenModel model = getTokenModelFromToken(token);

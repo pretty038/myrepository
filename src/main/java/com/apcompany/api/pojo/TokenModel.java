@@ -12,6 +12,7 @@ public class TokenModel {
 	public TokenModel(){}
 	
 	public TokenModel(String token,Integer userId,UserType userType){
+		this.token=token;
 		this.userId = userId;
 		this.userType= userType;
 	}
