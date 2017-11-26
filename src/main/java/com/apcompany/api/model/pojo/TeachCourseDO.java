@@ -15,7 +15,7 @@ public class TeachCourseDO implements Serializable{
 	private String created;	
 	private String modified;
 	/*
-	 * 正常：1 ，取消：0 
+	 * 不接单：0  接单中：1  忙碌中：2
 	 */
 	private int status;	
 	private int startTeachDay;

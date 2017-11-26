@@ -6,17 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apcompany.api.constrant.Constrant;
-import com.apcompany.api.constrant.OnlineTeachCourseOrderByEnum;
+import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.dao.ITeachCourseDao;
 import com.apcompany.api.model.pojo.CourseDO;
-import com.apcompany.api.model.pojo.OnlineTeachCourseDetailInfoDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 import com.apcompany.api.service.IBookTeachService;
-import com.apcompany.api.service.ITeachCourseService;
-import com.google.common.collect.Lists;
+import com.apcompany.api.service.ITCService;
+import com.apcompany.api.service.IUserOnlineInfoService;
+
+
 @Service
-public class TeachCourseServiceImp implements ITeachCourseService {
+public class TCServiceImp implements ITCService {
+	
+	@Autowired private IUserOnlineInfoService userOnlineInfoService;
 	
 	@Autowired private ITeachCourseDao teachCourseDao;
 	@Autowired private IBookTeachService bookingTeachService;
@@ -42,22 +44,7 @@ public class TeachCourseServiceImp implements ITeachCourseService {
 		return teachCourseDao.getCourseById(id);
 	}
 
-	@Override
-	public List<OnlineTeachCourseDetailInfoDO> getOnlineTeachCourseListByCourse(int courseId,int orderType, int queryIndex,
-			int querySize) {
-		List<OnlineTeachCourseDetailInfoDO> result = Lists.newArrayList();
-		if(courseId ==0){
-			return result;
-		}
-		if(queryIndex<0) queryIndex=0;
-		if(querySize <= 0){
-			querySize= Constrant.ONLINE_TEACHER_QUERY_SIZE;
-		}
-		return teachCourseDao.getOnlineListBySubject(courseId,OnlineTeachCourseOrderByEnum.valueOf(orderType).getValue(), queryIndex, querySize);
-	}
 	
-	
-
 	@Transactional
 	@Override
 	public boolean createTeachCourse(int teacherId, int courseId,
@@ -90,12 +77,7 @@ public class TeachCourseServiceImp implements ITeachCourseService {
 			teachCourseDao.updateScoreOfTeachCourse(teacherCourseDO);
 		}
 		
-	}
-	
-	
-
-	
-	
+	}		
 	
 
 	@Override
@@ -117,12 +99,11 @@ public class TeachCourseServiceImp implements ITeachCourseService {
 	}
 
 	@Override
-	public boolean checkTeachCourseIsValid(int teachCourseId) {
-		TeachCourseDO teachCourseDO = getTCById(teachCourseId);
-		if(teachCourseDO==null|| teachCourseDO.getStatus()!=1){
-			return false;
-		}
-		return true;
+	public void updateTCStatus(int id,int teacherId, TeachCourseStatusEnum e) {
+		teachCourseDao.updateTCStatus(id, teacherId, e.getKey());
+		
 	}
+
+	
 
 }

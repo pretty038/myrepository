@@ -158,7 +158,7 @@ public class BookTeachServiceImp implements IBookTeachService  {
 		}
 		//check teach_course is normal
 		TeachCourseDO teachCourseDO=teachCourseDao.getTCById(bookDayDO.getTeachCourseId());
-		if(teachCourseDO==null|| teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSED.getKey()){
+		if(teachCourseDO==null|| teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSE.getKey()){
 			return false;
 		}
 		Integer totalBookHour= bookDao.getTotalHoursByBookDay(bookDayId);

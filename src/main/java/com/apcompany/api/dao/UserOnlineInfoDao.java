@@ -14,9 +14,10 @@ public interface UserOnlineInfoDao {
 			+ "now(),now()) ")
 	public void addwithLogin(UserOnlineInfoDO userOnlineInfoDO);
 		
-	@Select("select user_online_info.id as id from user_online_info where user_id=#{userId} and type=1 and "
-			+ "status=1 inner join teach_course on user_online_info.user_id=teach_course.teacher_id")
-	public Integer checkTeacherIsFree(int teacherCourseId);
+	@Select("select user_online_info.id as id from user_online_info where type=1 and "
+			+ " status=1 inner join teach_course on user_online_info.user_id=teach_course.teacher_id "
+			+ " and teach_course.status=1 and teach_course.id=#{id}")
+	public Integer checkTCNormal(@Param("id")int Id);
 	
 	@Update("update user_online_info set status=#{status} where id=#{id}")
 	public void updateStatusByID(int id, int status);
@@ -35,5 +36,12 @@ public interface UserOnlineInfoDao {
 	
 	@Update("update user_online_info set status=0 where access_time<#{lastAccessTime}")
 	public void offlineAuto(String lastAccessTime);
+	
+	@Update("update user_online_info set channel=#{channel} where userId=#{userId} and type=#{type}")
+	void addChannel(@Param("userId")int userId, @Param("type")int type,@Param("channel")String channel);
+	
+	@Select("select user_online_info.channel  from teach_course where teach_course.id=#{tcId} "
+			+ " inner join user_online_info on user_online_info.user_id=teach_course.teacher_id where user_online_info.type=1 ")
+	String getChannelByTCId(int tcId);
 
 }

@@ -1,15 +1,11 @@
 package com.apcompany.api.service.impl;
-
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.constrant.UserType;
 import com.apcompany.api.dao.UserOnlineInfoDao;
 import com.apcompany.api.model.pojo.UserOnlineInfoDO;
-import com.apcompany.api.service.ITeachCourseService;
+import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.util.CommonUtil;
 
@@ -18,7 +14,7 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	
 	@Autowired private UserOnlineInfoDao onlineInfoDao;
 
-	@Autowired private ITeachCourseService teachCourseService;
+	@Autowired private ITCService teachCourseService;
 
 	@Override
 	public boolean checkAccessToken(String token) {
@@ -34,12 +30,9 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	}
 
 	@Override
-	public boolean checkTeacherOnlineAndNotBusy(int teachCourseId) {
-		Integer id = onlineInfoDao.checkTeacherIsFree(teachCourseId);
-		if(id == null){
-			return false;
-		}
-		return true;
+	public boolean checkTCNormal(int tcId) {
+		Integer id = onlineInfoDao.checkTCNormal(tcId);
+		return id==null?false:true;
 	}
 
 	@Override
@@ -72,8 +65,25 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 		onlineInfoDao.offlineAuto(lastAccessTime);		
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(UUID.randomUUID().toString().replaceAll("-", "").length());
+	
+	@Override
+	public boolean addChannelInfo(int studentId, int teacherId, String channel) {
+		if(studentId==0&&teacherId==0){
+			return false;
+		}
+		int userId= studentId;
+		int type=UserType.Student.getKey();
+		if(studentId==0){
+			type=UserType.Teacher.getKey();
+			userId= teacherId;
+		}
+		onlineInfoDao.addChannel(userId, type, channel);
+		return true;
+	}
+	
+	@Override
+	public String getChannelByTCID(int tcid){
+		return onlineInfoDao.getChannelByTCId(tcid);
 	}
 
 }

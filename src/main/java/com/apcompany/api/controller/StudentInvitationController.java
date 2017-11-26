@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.apcompany.api.service.IInvitationService;
+import com.apcompany.api.service.IInviteVideoService;
+import com.apcompany.user.utils.TipUtil;
 
 @Controller
 @RequestMapping("/invitation/student")
 public class StudentInvitationController {
 	
-	@Autowired private IInvitationService invitationService;
+	@Autowired private IInviteVideoService invitationService;
 
 	// 学生主动发起邀请
 	@RequestMapping(value = "/invite.do", method = RequestMethod.GET)
@@ -22,23 +23,24 @@ public class StudentInvitationController {
 	public Object invite(
 			@SessionAttribute(value = "tokenId", required = true) Integer studentId,
 			@RequestParam(value = "teachCourseId", required = true) int teachCourseId) {
-		invitationService.createInvitation(studentId, teachCourseId);
-		return "success";
+		return TipUtil.success(invitationService.inviteVideo(studentId, teachCourseId));
 	}
 	
 	@RequestMapping(value = "/cancle.do", method = RequestMethod.GET)
 	@ResponseBody
 	public Object cancleInvitation(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId) {
+			@SessionAttribute(value = "studentId", required = true) Integer studentId) {
 		invitationService.cancleInvitationByStudent(studentId);
 		return "success";
 	}
 	
-	@RequestMapping(value = "/handle.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/result.do", method = RequestMethod.GET)
 	@ResponseBody
-	public Object getHandleInvitation(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId) {
-		return invitationService.getHandleInvitationByStudent(studentId);
+	public Object successVideo(
+			@SessionAttribute(value = "studentId", required = true) Integer studentId,
+			@RequestParam(value = "status", required = true) int status) {
+		invitationService.resultInvite(studentId,status);
+		return "success";
 	}
 
 }

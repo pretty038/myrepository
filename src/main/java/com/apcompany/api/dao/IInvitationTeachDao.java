@@ -8,12 +8,13 @@ import com.apcompany.api.model.pojo.InvitationTeachDO;
 
 public interface IInvitationTeachDao {
 	
-	@Select("select * from invitation_teach where student_id=#{studentId} and status=0 limit 1")
-	@SelectKey(statement = "SELECT LAST_INSERT_ID() as id", keyProperty = "id", before = false, resultType = Integer.class)
+	@Select("select * from invitation_teach where student_id=#{studentId} and status=1 limit 1")
+	
 	public InvitationTeachDO getHandleInvitationByStudent(int studentId);
 	
 	@Insert("insert into invitation_teach(student_id,teach_course_id,status,created,modified) values(#{studentId},#{teachCourseId},"
 			+ "#{status},now(),now())")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID() as id", keyProperty = "id", before = false, resultType = Integer.class)
 	public void addInvitation(InvitationTeachDO invitationTeachDO);
 	
 	@Update("update invitation_teach set status=#{status} and modified= now() where id=#{id}")

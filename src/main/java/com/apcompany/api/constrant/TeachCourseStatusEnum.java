@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 
 public enum TeachCourseStatusEnum {
 	
-	CLOSED(0,"关闭"),NORMAL(1,"正常"),;
+	CLOSE(0,"关闭"),NORMAL(1,"正常"),BUSY(2,"忙碌");
 	
 	public final int key;
 	public final String value;
@@ -14,8 +14,9 @@ public enum TeachCourseStatusEnum {
 	private static Map<Integer, TeachCourseStatusEnum> allUserStatusEnum = Maps.newHashMap();
 	
 	static{
-		allUserStatusEnum.put(0, CLOSED);
+		allUserStatusEnum.put(0, CLOSE);
 		allUserStatusEnum.put(1, NORMAL);
+		allUserStatusEnum.put(2, BUSY);
 	}
 	
 	TeachCourseStatusEnum(int key,String value){

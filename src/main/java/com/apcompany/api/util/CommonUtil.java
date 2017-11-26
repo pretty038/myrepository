@@ -39,7 +39,6 @@ public class CommonUtil {
 	 * if invalid return null
 	 */
 	public static TokenModel validToken(String token){
-		token= token.replace(" ", "");
 		if(token==null||token.length()<38){
 			return null;			
 		}
@@ -83,6 +82,17 @@ public class CommonUtil {
 	
 	public static void main(String[] args) {
 		System.out.println(getTokenModelFromToken(createToken(311, UserType.Teacher)));
+	}
+	
+	public static String toJson(Object obj){
+		ObjectMapper mapper=  new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(obj);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "null";
+		}
 	}
 	
 

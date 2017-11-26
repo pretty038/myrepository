@@ -13,7 +13,7 @@ public interface IUserOnlineInfoService {
 	boolean checkAccessToken(String token);
 	
 	//直接呼叫老师时，check 
-	boolean checkTeacherOnlineAndNotBusy(int teacherCourseId);
+	boolean checkTCNormal(int tcId);
 	
 	//退出登陆
 	boolean quitAccess(int userId, int type);
@@ -21,4 +21,8 @@ public interface IUserOnlineInfoService {
 	boolean updateTeacherStatus(int teacherId,int status);
 
 	void offlineAuto(String lastAccessTime);
+	
+	boolean addChannelInfo(int studentId,int teacherId,String channel);
+
+	String getChannelByTCID(int tcid);
 }

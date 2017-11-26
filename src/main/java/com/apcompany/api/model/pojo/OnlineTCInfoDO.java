@@ -2,7 +2,7 @@ package com.apcompany.api.model.pojo;
 
 import java.io.Serializable;
 
-public class OnlineTeachCourseDetailInfoDO implements Serializable{
+public class OnlineTCInfoDO implements Serializable{
 	
 	/**
 	 * 

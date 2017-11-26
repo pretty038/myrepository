@@ -13,19 +13,15 @@ import com.apcompany.api.model.pojo.StudentSaveDO;
 public interface IStudentSaveDao {
 	
 	@Select("select * from student_save_teach_course where student_id=#{studentId} limit #{index},#{pageSize}")
-	public List<StudentSaveDO> getStudentSavingList(@Param("studentId") int studentId,@Param("index") int index,@Param("pageSize") int pageSize);
+	List<StudentSaveDO> getStudentSavingList(@Param("studentId") int studentId,@Param("index") int index,@Param("pageSize") int pageSize);
 	
-	@Insert("insert into student_save_teach_course("
+	@Insert("insert ignore into student_save_teach_course("
 			+ "student_id,teach_course_id,save_time) "
 			+ " values(#{studentId},#{teachCourseId},NOW())")
-	public void saveTeachCourse(StudentSaveDO studentSaveDO);
+	int saveTeachCourse(StudentSaveDO studentSaveDO);
 	
-	@Select("select * from student_save_teach_course where student_id=#{studentId} and "
-			+ " teach_course_id=#{teachCourseId} limit 1")
-	public StudentSaveDO checkSavaIsExit(@Param("studentId") int studentId,@Param("teachCourseId") int teachCoueseId);
-
 	
 	@Delete("delete from student_save_teach_course where id=#{id}")
-	public void deleteById(int id);
+	void deleteById(int id);
 
 }

@@ -16,7 +16,7 @@ import com.apcompany.api.model.pojo.TeachCourseDO;
 import com.apcompany.api.model.pojo.TeachOrderDO;
 import com.apcompany.api.service.IBookTeachService;
 import com.apcompany.api.service.ITeachOrderService;
-import com.apcompany.api.service.ITeachCourseService;
+import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.util.DateUtil;
 
@@ -26,7 +26,7 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 	@Autowired private ITeachOrderDao teachOrderDao;
 	@Autowired private TeacherDao teacherDao;
 	
-	@Autowired private ITeachCourseService teachCourseService;
+	@Autowired private ITCService teachCourseService;
 	
 	@Autowired private IBookTeachService bookService;
 	@Autowired private IUserOnlineInfoService userOnlineInfoService;
@@ -38,7 +38,7 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 			return false;
 		}
 		if(checkTeacherHasHandleInviteOrder(invitationTeachDO.getTeachCourseId())|| 
-				!userOnlineInfoService.checkTeacherOnlineAndNotBusy(invitationTeachDO.getTeachCourseId())){
+				!userOnlineInfoService.checkTCNormal(invitationTeachDO.getTeachCourseId())){
 			return false;
 		}
 		TeachOrderDO teachOrderDO=new TeachOrderDO();
@@ -155,7 +155,7 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 			return null;
 		}
 		TeachCourseDO teachCourseDO= teachCourseService.getTCById(bookDayTeachDO.getTeachCourseId());
-		if(teachCourseDO== null || teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSED.getKey()){
+		if(teachCourseDO== null || teachCourseDO.getStatus()==TeachCourseStatusEnum.CLOSE.getKey()){
 			System.out.println("teachCourseDO is null or closed");
 			return null;
 		}
