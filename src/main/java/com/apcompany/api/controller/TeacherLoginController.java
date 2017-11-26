@@ -33,7 +33,7 @@ public class TeacherLoginController {
 	private TeacherService teacherService;
 	@Autowired private IUserOnlineInfoService infoService;
 	
-	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public Object register(@RequestParam("phone") String phone,@RequestParam("password") String password,
 			@RequestParam("code") String code,HttpServletRequest request){
@@ -50,6 +50,7 @@ public class TeacherLoginController {
         	Teacher teacher=new Teacher();
         	teacher.setPhone(phone);
         	teacher.setPassword(MD5Util.getStringMD5String(password));
+        	
         	boolean isSucessful = teacherService.register(teacher);
         	if(isSucessful){
         		return TipUtil.success("注册成功",teacher);
@@ -59,7 +60,7 @@ public class TeacherLoginController {
 		
 	}
 	
-	@RequestMapping(value ="/login/sendCode",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")  
+	@RequestMapping(value ="/login/sendCode",method = RequestMethod.POST)  
     @ResponseBody  
     public Object sendCode(@RequestParam("phone") String phone, HttpServletRequest request) throws HttpException, IOException {  
 		String code=String .valueOf((int)((Math.random()*9+1)*100000));
@@ -70,7 +71,7 @@ public class TeacherLoginController {
 		return SendMessage.sentMessage(phone, code);	
     }
 	
-	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/login/nomal", method = RequestMethod.GET)
 	@ResponseBody
 	public Object login(
 			@RequestParam(value="loginname",required=false)  String loginname, 
@@ -102,7 +103,7 @@ public class TeacherLoginController {
 
 	}
 
-	@RequestMapping(value = "/login/phone", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/login/phone", method = RequestMethod.POST)
 	@ResponseBody
 	public Object loginByPhone(
 			@RequestParam("phone") String phone,
@@ -122,7 +123,7 @@ public class TeacherLoginController {
 
 	}
 	
-	@RequestMapping(value = "/updateInfo", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/updateInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public Object updateInfo(Teacher teacher) {
 		if (teacherService.updateTeacher(teacher)) {

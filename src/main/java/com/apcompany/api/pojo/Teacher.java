@@ -16,7 +16,6 @@ public class Teacher {
 	private Date ctime;
 	private Date utime;
 	
-	private List<Integer> types;
 	
 	public int getId() {
 		return id;
@@ -78,12 +77,7 @@ public class Teacher {
 	public void setUtime(Date utime) {
 		this.utime = utime;
 	}
-	public List<Integer> getTypes() {
-		return types;
-	}
-	public void setTypes(List<Integer> types) {
-		this.types = types;
-	}
+
 	
 
 }

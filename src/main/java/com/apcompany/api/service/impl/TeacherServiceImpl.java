@@ -17,9 +17,6 @@ public class TeacherServiceImpl implements TeacherService {
 		if (teacher == null) {
 			return false;
 		}
-		if (teacher.getTypes() == null || teacher.getTypes().size() == 0) {
-			return false;
-		}
 
 		if (teacherDao.insert(teacher) == 0) {
 			return false;
