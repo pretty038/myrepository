@@ -58,6 +58,8 @@ public class StudentLoginController {
 	public Object register(@RequestParam("phone") String phone,
 			@RequestParam("password") String password,
 			@RequestParam("code") String code,
+			@RequestParam("lat") double lat,
+			@RequestParam("lng") double lng,
 			HttpServletRequest request) {
 		
 		HttpSession session = request.getSession(); 
@@ -75,7 +77,10 @@ public class StudentLoginController {
         	student.setPassword(MD5Util.getStringMD5String(password));
         	boolean isSucessful = studentLoginService.register(student);
         	if(isSucessful){
-        		return TipUtil.success("注册成功",student);
+        		Map<String,Object> map=new HashMap<String,Object>();
+        		map.put("studentId", student);
+        		map.put("token", createToken(student.getId(), lat, lng));
+        		return TipUtil.success("注册成功",map);
         	}	
         }
 		return TipUtil.failed("注册失败");
