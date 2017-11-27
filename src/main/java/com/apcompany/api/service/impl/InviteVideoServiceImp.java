@@ -97,6 +97,7 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 			return false;
 		}
 		invitationTeachDO.setStatus(InviteVideoStatusEnum.CUT.getKey());
+		teachCourseService.updateTCStatus(invitationTeachDO.getTeachCourseId(), teacherId, TeachCourseStatusEnum.NORMAL);
 		invitationTeachDao.updateStatus(invitationTeachDO);
 		return true;
 	}

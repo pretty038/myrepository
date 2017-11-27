@@ -18,7 +18,7 @@ public class TeacherInvitationController {
 	private IInviteVideoService invitationService;
 	
 	
-	@RequestMapping(value = "/get/videoaccount.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/get/videoaccount.json", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getCode(
 			@RequestAttribute(value = "teacherId", required = true) Integer teacherId) {
@@ -33,6 +33,15 @@ public class TeacherInvitationController {
 			) {
 		return TipUtil.success(invitationService.pushVideoKey(teacherId, videoKey));
 	}
+	
+	@RequestMapping(value = "/cancle", method = RequestMethod.GET)
+	@ResponseBody
+	public Object cancleVideo(
+			@RequestAttribute(value = "teacherId", required = true) Integer teacherId
+			) {
+		return TipUtil.success(invitationService.cancleInvitationByTeacher(teacherId));
+	}
+	
 	
 
 }

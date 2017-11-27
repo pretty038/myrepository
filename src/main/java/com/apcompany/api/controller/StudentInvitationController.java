@@ -18,15 +18,15 @@ public class StudentInvitationController {
 	@Autowired private IInviteVideoService invitationService;
 
 	// 学生主动发起邀请
-	@RequestMapping(value = "/invite.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/invite", method = RequestMethod.GET)
 	@ResponseBody
 	public Object invite(
-			@SessionAttribute(value = "tokenId", required = true) Integer studentId,
+			@SessionAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "teachCourseId", required = true) int teachCourseId) {
 		return TipUtil.success(invitationService.inviteVideo(studentId, teachCourseId));
 	}
 	
-	@RequestMapping(value = "/cancle.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/cancle", method = RequestMethod.GET)
 	@ResponseBody
 	public Object cancleInvitation(
 			@SessionAttribute(value = "studentId", required = true) Integer studentId) {
@@ -34,7 +34,7 @@ public class StudentInvitationController {
 		return "success";
 	}
 	
-	@RequestMapping(value = "/result.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/result", method = RequestMethod.GET)
 	@ResponseBody
 	public Object successVideo(
 			@SessionAttribute(value = "studentId", required = true) Integer studentId,
