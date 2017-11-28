@@ -30,7 +30,7 @@ public class StudentInvitationController {
 	@ResponseBody
 	public Object cancleInvitation(
 			@SessionAttribute(value = "studentId", required = true) Integer studentId) {
-		invitationService.cancleInvitationByStudent(studentId);
+		invitationService.closeInvitationByStudent(studentId);
 		return "success";
 	}
 	
@@ -39,7 +39,7 @@ public class StudentInvitationController {
 	public Object successVideo(
 			@SessionAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "status", required = true) int status) {
-		invitationService.resultInvite(studentId,status);
+		invitationService.successInvite(studentId);
 		return "success";
 	}
 

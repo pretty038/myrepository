@@ -1,12 +1,9 @@
 package com.apcompany.api.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.dao.ITeachCourseDao;
 import com.apcompany.api.model.pojo.CourseDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
@@ -81,8 +78,8 @@ public class TCServiceImp implements ITCService {
 	
 
 	@Override
-	public Integer getTIdByTeachCourseId(int teachCourseId) {
-		return teachCourseDao.getTeacherByTeachCourseId(teachCourseId);
+	public Integer getTeacherIdById(int teachCourseId) {
+		return teachCourseDao.getTeacherIdById(teachCourseId);
 	}
 
 	@Override
@@ -94,15 +91,10 @@ public class TCServiceImp implements ITCService {
 	}
 
 	@Override
-	public Integer getTCIdByTeacherId(Integer teacherId) {		
+	public List<Integer> getTCIdByTeacherId(Integer teacherId) {		
 		return teachCourseDao.getTCIdByTeacherId(teacherId);
 	}
 
-	@Override
-	public void updateTCStatus(int id,int teacherId, TeachCourseStatusEnum e) {
-		teachCourseDao.updateTCStatus(id, teacherId, e.getKey());
-		
-	}
 
 	
 

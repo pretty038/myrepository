@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.pojo.TokenModel;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.util.CommonUtil;
@@ -34,9 +34,9 @@ public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 //		    	return false;
 //		    }
 //			logger.info("check ok and refresh success");
-			TokenModel tokenModel =new TokenModel("", 1, UserType.Student);
+			TokenModel tokenModel =new TokenModel("", 1, UserTypeEnum.Student);
 			setDataToRequest(request, tokenModel);
-			TokenModel tokenModel1 =new TokenModel("", 1, UserType.Teacher);
+			TokenModel tokenModel1 =new TokenModel("", 1, UserTypeEnum.Teacher);
 			setDataToRequest(request, tokenModel1);
 			logger.info("set data ok");			
 		    return true;
@@ -50,10 +50,10 @@ public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 		if(tokenModel== null||tokenModel.getUserType()==null||tokenModel.getUserId()==null){
 			return;
 		}
-		if(tokenModel.getUserType()==UserType.Student){
-			request.setAttribute(UserType.Student.getValue(), tokenModel.getUserId());
+		if(tokenModel.getUserType()==UserTypeEnum.Student){
+			request.setAttribute(UserTypeEnum.Student.getValue(), tokenModel.getUserId());
 		}else{
-			request.setAttribute(UserType.Teacher.getValue(), tokenModel.getUserId());
+			request.setAttribute(UserTypeEnum.Teacher.getValue(), tokenModel.getUserId());
 		}
 	}
 	

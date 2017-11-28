@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.apcompany.api.constrant.UserStatusEnum;
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.pojo.Student;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.StudentLoginService;
@@ -395,7 +395,7 @@ public class StudentLoginController {
 	
 	
 	private String createToken(int studentId,double lat,double lng){
-		return infoService.addWithLogin(studentId, UserType.Student,UserStatusEnum.ONLINE, lat, lng);
+		return infoService.addWithLogin(studentId, UserTypeEnum.Student,UserStatusEnum.ONLINE, lat, lng);
 	}
 
 }

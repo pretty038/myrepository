@@ -32,4 +32,10 @@ public class TeacherTCServiceImp implements ITeacherTCService {
 		return result>0?true:false;
 	}
 
+	@Override
+	public boolean updateStatus(int teacherId, int teachCourseId,TeachCourseStatusEnum status) {
+		teachCourseDao.updateTCStatus(teachCourseId, teacherId, status.getKey());
+		return true;
+	}
+
 }

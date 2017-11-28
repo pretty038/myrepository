@@ -2,19 +2,22 @@ package com.apcompany.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.apcompany.api.config.VideoSecureConfig;
 import com.apcompany.api.constrant.InviteVideoStatusEnum;
 import com.apcompany.api.constrant.MessagePushEnum;
 import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.dao.IInvitationTeachDao;
 import com.apcompany.api.model.pojo.InvitationTeachDO;
+import com.apcompany.api.model.pojo.TeachCourseDO;
+import com.apcompany.api.model.pojo.TeachOrderDO;
 import com.apcompany.api.pojo.VideoAccount;
 import com.apcompany.api.service.IBookTeachService;
 import com.apcompany.api.service.IInviteVideoService;
 import com.apcompany.api.service.IMessagePushService;
+import com.apcompany.api.service.IWalletService;
 import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.ITeachOrderService;
+import com.apcompany.api.service.ITeacherTCService;
 import com.apcompany.api.service.IUserOnlineInfoService;
 
 @Service
@@ -28,78 +31,88 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 	@Autowired
 	private ITeachOrderService teachOrderService;
 	@Autowired
-	private ITCService teachCourseService;
+	private ITCService tcService;
+	@Autowired
+	private ITeacherTCService teacherTCService;
 	@Autowired
 	private IBookTeachService bookService;
 	@Autowired
 	private IUserOnlineInfoService userOnlineInfoService;
+	
+	@Autowired private IWalletService walletService;
 
 	@Override
-	public boolean inviteVideo(int studentId, int teachCourseId) {
+	public int inviteVideo(int studentId, int teachCourseId) {
 		// check 当前是否已经有在进行中的邀请。
 		InvitationTeachDO invitationTeachDO = getHandleInvitationByStudent(studentId);
 		if (invitationTeachDO != null) {
-			return true;
-		}
-		// 检查该老师是否正在被预约中。例如老师未同意邀请，但是也未处理其他用户的邀请信息。
-		invitationTeachDO = invitationTeachDao
-				.getHandleInvitationByTeachCourse(teachCourseId);
-		if (invitationTeachDO != null) {
-			return false;
+			return 0;
 		}
 		//tc is unnormal
 		if (!userOnlineInfoService.checkTCNormal(teachCourseId)) {
-			return false;
+			return 0;
 		}
-		invitationTeachDao.addInvitation(InvitationTeachDO.buildNew(studentId,
-				teachCourseId, InviteVideoStatusEnum.WAIT.getKey()));
-		String channel = userOnlineInfoService.getChannelByTCID(teachCourseId);
-		if(channel==null){
-			return false;
+		TeachCourseDO teachCourseDO = tcService.getTCById(teachCourseId);
+        if(teachCourseDO==null){
+        	return 0;
+        }
+		if (getHandleInvitationByTeacher(teachCourseDO.getTeacherId()) != null) {
+			return 0;
 		}
-		messagePushService.pushMessage(channel, MessagePushEnum.OPEN_VIDEO.getValue());
-		return true;
+		invitationTeachDao.add(InvitationTeachDO.buildNew(studentId,teachCourseDO.getTeacherId(),
+				teachCourseId));
+		messagePushService.pushMessageToTeacher(teachCourseId, MessagePushEnum.OPEN_VIDEO);
+		int totalMoney = walletService.getStudentMoney(studentId);
+		return totalMoney/teachCourseDO.getMoneyPerMinute();
 	}
 
 	@Override
-	public boolean cancleInvitationByStudent(int studentId) {
+	public TeachOrderDO closeInvitationByStudent(int studentId) {
+		TeachOrderDO teachOrderDO = null;
 		InvitationTeachDO invitationTeachDO = getHandleInvitationByStudent(studentId);
 		if (invitationTeachDO == null) {
-			return false;
+			return teachOrderDO;
 		}
-		invitationTeachDO.setStatus(InviteVideoStatusEnum.CUT.getKey());
-		invitationTeachDao.updateStatus(invitationTeachDO);
-		return true;
-	}
-	
-	@Override
-	public boolean resultInvite(int studentId,int status) {
-		InvitationTeachDO invitationTeachDO = getHandleInvitationByStudent(studentId);
-		if (invitationTeachDO == null) {
-			return false;
-		}
-		//faiu
-		if (status==0){
-			invitationTeachDO.setStatus(InviteVideoStatusEnum.CUT.getKey());
+		if (invitationTeachDO.getStatus()==InviteVideoStatusEnum.WAIT.getKey()){
+			invitationTeachDO.onCut();
+			messagePushService.pushMessageToTeacher(invitationTeachDO.getTeacherId(), MessagePushEnum.STUDENT_CUT);
 		}else{
-			teachOrderService.createInviteOrder(invitationTeachDO);
-			invitationTeachDO.setStatus(InviteVideoStatusEnum.CONN.getKey());
+			invitationTeachDO.onCommit();
+			teachOrderDO = teachOrderService.createTeachOrder(invitationTeachDO);
+			messagePushService.pushMessageToTeacher(invitationTeachDO.getTeacherId(), MessagePushEnum.VIDEO_FINISH);
 		}		
-		invitationTeachDao.updateStatus(invitationTeachDO);
+		invitationTeachDao.update(invitationTeachDO);
+		return teachOrderDO;
+	}
+	
+	@Override
+	public boolean successInvite(int studentId) {
+		InvitationTeachDO invitationTeachDO = getHandleInvitationByStudent(studentId);
+		if (invitationTeachDO == null || invitationTeachDO.getStatus()!=InviteVideoStatusEnum.CONN.getKey()) {
+			return false;
+		}	
+		invitationTeachDao.update(invitationTeachDO.onConnection());
+		messagePushService.pushMessageToTeacher(invitationTeachDO.getTeacherId(), MessagePushEnum.VIDEO_CONN);
 		return true;
 	}
 	
 
 	@Override
-	public boolean cancleInvitationByTeacher(int teacherId) {
+	public TeachOrderDO closeInvitationByTeacher(int teacherId) {
+		TeachOrderDO teachOrderDO = null;
 		InvitationTeachDO invitationTeachDO = getHandleInvitationByTeacher(teacherId);
 		if (invitationTeachDO == null) {
-			return false;
+			return teachOrderDO;
 		}
-		invitationTeachDO.setStatus(InviteVideoStatusEnum.CUT.getKey());
-		teachCourseService.updateTCStatus(invitationTeachDO.getTeachCourseId(), teacherId, TeachCourseStatusEnum.NORMAL);
-		invitationTeachDao.updateStatus(invitationTeachDO);
-		return true;
+		if (invitationTeachDO.getStatus()==InviteVideoStatusEnum.WAIT.getKey()){
+			invitationTeachDao.update(invitationTeachDO.onCut());
+			messagePushService.pushMessageToStudent(invitationTeachDO.getStudentId(),MessagePushEnum.TEACHER_CUT);
+		}else{
+			messagePushService.pushMessageToStudent(invitationTeachDO.getStudentId(),MessagePushEnum.VIDEO_FINISH);
+		}		
+		teacherTCService.updateStatus(teacherId, invitationTeachDO.getTeachCourseId(), TeachCourseStatusEnum.NORMAL);		
+		videoSecureConfig.returnFree(invitationTeachDO.getId());
+		return teachOrderDO;
 	}
 
 
@@ -109,8 +122,8 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 		if (invitationTeachDO == null) {
 			return null;
 		}
-		teachCourseService.updateTCStatus(invitationTeachDO.getTeachCourseId(),teacherId, TeachCourseStatusEnum.BUSY);
-		return videoSecureConfig.getFreeOne();
+		teacherTCService.updateStatus(teacherId, invitationTeachDO.getTeachCourseId(), TeachCourseStatusEnum.BUSY);
+		return videoSecureConfig.getFreeOne(invitationTeachDO.getId());
 	}
 
 	@Override
@@ -119,8 +132,7 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 		if (invitationTeachDO == null) {
 			return false;
 		}
-		String channelId = userOnlineInfoService.getChannelByTCID(invitationTeachDO.getTeachCourseId());
-		messagePushService.pushMessage(channelId, key);
+		messagePushService.pushMessageToStudent(invitationTeachDO.getStudentId(), key);
 		return true;
 	}
 	
@@ -130,14 +142,21 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 	}
 
 	private InvitationTeachDO getHandleInvitationByTeacher(int teacherId) {
-		Integer teachCourseId = teachCourseService
-				.getTCIdByTeacherId(teacherId);
-		if (teachCourseId == null) {
-			return null;
-		}
 		return invitationTeachDao
-				.getHandleInvitationByTeachCourse(teachCourseId);
+				.getHandleInvitationByTeacher(teacherId);
 	}
+
+	@Override
+	public boolean checkVideoConn(int teacherId) {
+		InvitationTeachDO invitationTeachDO = getHandleInvitationByTeacher(teacherId);
+		if (invitationTeachDO != null && invitationTeachDO.getStatus()==InviteVideoStatusEnum.CONN.getKey()) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
 
 	
 

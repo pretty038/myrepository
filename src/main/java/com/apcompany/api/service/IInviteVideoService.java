@@ -1,19 +1,22 @@
 package com.apcompany.api.service;
 
+import com.apcompany.api.model.pojo.TeachOrderDO;
 import com.apcompany.api.pojo.VideoAccount;
 
 public interface IInviteVideoService {
 	
-	boolean inviteVideo(int studentId,int tcId);
+	int inviteVideo(int studentId,int tcId);
 
-	boolean cancleInvitationByStudent(int studentId);
+	TeachOrderDO closeInvitationByStudent(int studentId);
 	
-	boolean resultInvite(int studentId,int status);
+	boolean successInvite(int studentId);
 	
-	boolean cancleInvitationByTeacher(int studentId);
+	TeachOrderDO closeInvitationByTeacher(int studentId);
 	
 	VideoAccount getVideoAccount(int teacherId);
 	
 	boolean pushVideoKey(int teacherId,String key);
+	
+	boolean checkVideoConn(int teacherId);
 	
 }

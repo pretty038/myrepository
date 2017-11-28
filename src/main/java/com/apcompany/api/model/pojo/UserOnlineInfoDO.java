@@ -1,7 +1,7 @@
 package com.apcompany.api.model.pojo;
 
 import com.apcompany.api.constrant.UserStatusEnum;
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 
 public class UserOnlineInfoDO {
 
@@ -26,7 +26,7 @@ public class UserOnlineInfoDO {
 
 	}
 
-	public UserOnlineInfoDO(int userId, UserType type,UserStatusEnum status, String token, double lat,
+	public UserOnlineInfoDO(int userId, UserTypeEnum type,UserStatusEnum status, String token, double lat,
 			double lng) {
 		this.userId = userId;
 		this.type = type.getKey();

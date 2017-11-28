@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.apcompany.api.constrant.UserStatusEnum;
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.pojo.Teacher;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.service.TeacherService;
@@ -134,7 +134,7 @@ public class TeacherLoginController {
 	}
 	
 	private String createToken(int teacherId,double lat,double lng){
-		return infoService.addWithLogin(teacherId, UserType.Teacher,UserStatusEnum.ONLINE, lat, lng);
+		return infoService.addWithLogin(teacherId, UserTypeEnum.Teacher,UserStatusEnum.ONLINE, lat, lng);
 	}	
 	
 }

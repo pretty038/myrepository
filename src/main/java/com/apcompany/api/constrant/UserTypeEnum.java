@@ -4,21 +4,21 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public enum UserType {
+public enum UserTypeEnum {
 	
 	Student(0,"studentId"),Teacher(1,"teacherId");
 	
 	public final int key;
 	public final String value;
 	
-	private static Map<Integer, UserType> allUserTypes = Maps.newHashMap();
+	private static Map<Integer, UserTypeEnum> allUserTypes = Maps.newHashMap();
 	
 	static{
 		allUserTypes.put(0, Student);
 		allUserTypes.put(1, Teacher);
 	}
 	
-	UserType(int key,String value){
+	UserTypeEnum(int key,String value){
 		this.key=key;
 		this.value=value;
 	}
@@ -31,7 +31,7 @@ public enum UserType {
 		return value;
 	}
 	
-	public static UserType valueOf(Integer key) {
+	public static UserTypeEnum valueOf(Integer key) {
 		if(key==null){
 			return null;
 		}

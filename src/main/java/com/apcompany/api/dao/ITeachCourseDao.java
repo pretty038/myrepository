@@ -66,12 +66,12 @@ public interface ITeachCourseDao {
 	@Select("select * from teach_course where id=#{id}")
 	TeachCourseDO getTCById(@Param("id") int id);
 	
-	@Select("select teacher.id from teach_course inner join teacher on teach_course.teacher_id=teacher.id where teach_course.id=#{teachCourseId} ")
-	Integer getTeacherByTeachCourseId(
-			@Param("teachCourseId") int teachCourseId);
+	@Select("select teacher_id from teach_course  where id=#{id} ")
+	Integer getTeacherIdById(
+			@Param("id") int id);
 
-	@Select("select teach_course.id as id from teach_course inner join teacher on teach_course.teacher_id=teacher.id where teacher.id=#{teacherId}")
-	Integer getTCIdByTeacherId(
+	@Select("select id from teach_course where teacher_id=#{teacherId}")
+	List<Integer> getTCIdByTeacherId(
 			@Param("teacherId")int teacherId);
 	
 }

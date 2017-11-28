@@ -2,26 +2,27 @@ package com.apcompany.api.constrant;
 
 public enum TeachOrderStatusEnum {
 	
-	RUNNING(0,"教学中"),
-	FINISHED(1,"教学结束"),
-	PAYED(2,"已支付"),
-	MARKED(3,"已评价");
 	
-	private final int value;
-    private final String desc;
+	PAY_FINISH(1,"已支付"),
+	COMMENT_FINISH(0,"未支付");
+	
+	private final int key;
+    private final String value;
 
-    TeachOrderStatusEnum(int value, String desc) {
+    TeachOrderStatusEnum(int key, String value) {
+        this.key = key;
         this.value = value;
-        this.desc = desc;
     }
 
-	public int getValue() {
+	public int getKey() {
+		return key;
+	}
+
+	public String getValue() {
 		return value;
 	}
 
-	public String getDesc() {
-		return desc;
-	}
+	
 	
     
 

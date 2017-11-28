@@ -37,11 +37,12 @@ public interface UserOnlineInfoDao {
 	@Update("update user_online_info set status=0 where access_time<#{lastAccessTime}")
 	public void offlineAuto(String lastAccessTime);
 	
-	@Update("update user_online_info set channel=#{channel} where userId=#{userId} and type=#{type}")
+	@Update("update user_online_info set channel=#{channel} where user_id=#{userId} and type=#{type}")
 	void addChannel(@Param("userId")int userId, @Param("type")int type,@Param("channel")String channel);
 	
-	@Select("select user_online_info.channel  from teach_course where teach_course.id=#{tcId} "
-			+ " inner join user_online_info on user_online_info.user_id=teach_course.teacher_id where user_online_info.type=1 ")
-	String getChannelByTCId(int tcId);
-
+	@Select("select channel from user_online_info where user_id=#{userId} and type=#{type}")
+	String getChannelByUser(
+			@Param("userId") int userId,
+			@Param("type")int type);
+	
 }

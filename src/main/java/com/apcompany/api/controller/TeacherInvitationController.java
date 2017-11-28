@@ -39,7 +39,15 @@ public class TeacherInvitationController {
 	public Object cancleVideo(
 			@RequestAttribute(value = "teacherId", required = true) Integer teacherId
 			) {
-		return TipUtil.success(invitationService.cancleInvitationByTeacher(teacherId));
+		return TipUtil.success(invitationService.closeInvitationByTeacher(teacherId));
+	}
+	
+	@RequestMapping(value = "/checkSuccess", method = RequestMethod.GET)
+	@ResponseBody
+	public Object checkVideoSuccess(
+			@RequestAttribute(value = "teacherId", required = true) Integer teacherId
+			) {
+		return TipUtil.success(invitationService.checkVideoConn(teacherId));
 	}
 	
 	

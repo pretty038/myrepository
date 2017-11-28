@@ -5,25 +5,38 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 public enum MessagePushEnum {
-    OPEN_VIDEO("open video");
+    OPEN_VIDEO(1,"open video"),
+    STUDENT_CUT(2,"STUDENT CLOSE"),
+    TEACHER_CUT(3,"TEACHER CLOSE"),
+    VIDEO_CONN(4,"TEACHER CLOSE"),
+    VIDEO_FINISH(5,"tonghuajieshu");
 	
-	
-	public final String value;
+    private final int key;
+    private final String value;
 	
 	private static Map<Integer, MessagePushEnum> allUserTypes = Maps.newHashMap();
 	
 	static{
 		allUserTypes.put(1, OPEN_VIDEO);
-		
+		allUserTypes.put(2, STUDENT_CUT);
+		allUserTypes.put(3, TEACHER_CUT);
+		allUserTypes.put(4, VIDEO_CONN);
+		allUserTypes.put(5, VIDEO_FINISH);
 	}
 	
-	MessagePushEnum(String value){
-		
+	MessagePushEnum(int key,String value){
+		this.key=key;
 		this.value=value;
 	}
 
 	
 	
+	public int getKey() {
+		return key;
+	}
+
+
+
 	public String getValue() {
 		return value;
 	}

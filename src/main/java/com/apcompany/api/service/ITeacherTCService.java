@@ -2,6 +2,7 @@ package com.apcompany.api.service;
 
 import java.util.List;
 
+import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 
 public interface ITeacherTCService {
@@ -13,6 +14,8 @@ public interface ITeacherTCService {
 	boolean preparedToTeach(int teacherId, int teachCourseId);
 
 	boolean closeToTeach(int teacherId, int teachCourseId);
+	
+	boolean updateStatus(int teacherId,int teachCourseId,TeachCourseStatusEnum status);
 	
 	// **********************TEACHER INTERFACE end************************
 

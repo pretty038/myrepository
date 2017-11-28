@@ -1,8 +1,6 @@
 package com.apcompany.api.service;
 
 import java.util.List;
-
-import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.model.pojo.CourseDO;
 import com.apcompany.api.model.pojo.TeachCourseDO;
 
@@ -19,10 +17,10 @@ public interface ITCService {
 	List<CourseDO> getAllCourseList();
 	CourseDO getCourseById(Integer id);
 	TeachCourseDO getTCById(Integer id);
-	Integer getTCIdByTeacherId(Integer teacherId);
+	List<Integer> getTCIdByTeacherId(Integer teacherId);
 	void updateScoreOfTeachCourse(int teachCourseID, float teachScore);
-	Integer getTIdByTeachCourseId(int teachCourseId);
-	void updateTCStatus(int id,int teacherId,TeachCourseStatusEnum e);
+	Integer getTeacherIdById(int teachCourseId);
+	
 	//******************common end****************   
 
 	

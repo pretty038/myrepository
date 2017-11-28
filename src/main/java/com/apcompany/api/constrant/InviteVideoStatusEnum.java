@@ -7,7 +7,8 @@ import com.google.common.collect.Maps;
 public enum InviteVideoStatusEnum {
     WAIT(1,"wait"),
     CUT(2,"挂断"),
-    CONN(3,"连接成功");
+    CONN(3,"连接中"),
+    COMMIT(4,"通话技术");
 	
 	public final int key;
 	public final String value;
@@ -18,6 +19,7 @@ public enum InviteVideoStatusEnum {
 		allUserTypes.put(1, WAIT);
 		allUserTypes.put(2, CUT);
 		allUserTypes.put(3, CONN);
+		allUserTypes.put(3, COMMIT);
 	}
 	
 	InviteVideoStatusEnum(int key,String value){

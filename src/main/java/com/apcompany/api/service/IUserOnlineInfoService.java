@@ -1,13 +1,13 @@
 package com.apcompany.api.service;
 
 import com.apcompany.api.constrant.UserStatusEnum;
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 
 
 public interface IUserOnlineInfoService {
 	
 	//after login success,proccessed 
-	String addWithLogin(int userId,UserType type,UserStatusEnum status,double lat,double lng);
+	String addWithLogin(int userId,UserTypeEnum type,UserStatusEnum status,double lat,double lng);
 	
 	//拦截器中调用此方法check 
 	boolean checkAccessToken(String token);
@@ -25,4 +25,6 @@ public interface IUserOnlineInfoService {
 	boolean addChannelInfo(int studentId,int teacherId,String channel);
 
 	String getChannelByTCID(int tcid);
+	
+	String getChannel(int userId, UserTypeEnum userTypeEnum);
 }

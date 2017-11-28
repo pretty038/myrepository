@@ -11,20 +11,20 @@ import com.apcompany.api.model.pojo.TeachOrderDO;
 public interface ITeachOrderDao {
 	
 	@Select("select * from teach_order where id=#{id}")
-	public TeachOrderDO getOrderById(@Param("id") int id);
+	TeachOrderDO getOrderById(@Param("id") int id);
 	
 	@Update("update teach_order set teacher_customer_score =#{teacherCustomerScore}, "
 			+ "teacher_manner_score=#{teacherMannerScore},"
 			+ "teacher_skill_score=#{teacherSkillScore},modified= now() where id=#{id} ")
-	public void markOrder(TeachOrderDO order);
+	void markOrder(TeachOrderDO order);
 	
-	@Insert("insert into teach_order(type,src_id,student_id,teach_course_id,begin_time,"
+	@Insert("insert into teach_order(student_id,teacher_id,teach_course_id,begin_time,"
 			+ "end_time,use_minute,money,status,teacher_customer_score,"
 			+ "teacher_manner_score,teacher_skill_score,created,modified) "
-			+ "values(#{type},#{srcId},#{studentId},#{teachCourseId},#{beginTime},#{endTime},"
+			+ "values(#{studentId},#{teacherId},#{teachCourseId},#{beginTime},#{endTime},"
 			+ "#{useMinute},#{money},#{status},#{teacherCustomerScore},"
 			+ "#{teacherMannerScore},#{teacherSkillScore},now(),now() )")
-	public void addTeachOrder(TeachOrderDO teachOrderDO);
+	void add(TeachOrderDO teachOrderDO);
 	
 	@Update("update teach_order set end_time=now(),use_minute=#{useMinute},"
 			+ "money=#{money},status=#{status},modifed=now() where id=#{id}")
@@ -39,7 +39,7 @@ public interface ITeachOrderDao {
 	@Select("select * from teach_order where teach_course_id=#{teachCourseId} and type=0 and status=0  limit 1")
 	public TeachOrderDO getHandleInviteOrderByTeachCourse(int teachCourseId);
 	
-	@Select("select * from teach_order where student_id=#{studentId} and type=0 and status=0  limit 1")
+	@Select("select * from teach_order where student_id=#{studentId} and status=0  limit 1")
 	public TeachOrderDO getHandleInviteOrderByStudent(int studentId);
 	
 	@Select("select * from teach_order where type=1 and src_id=#{bookId}")

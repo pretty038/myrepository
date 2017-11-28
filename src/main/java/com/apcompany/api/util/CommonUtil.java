@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.pojo.TokenModel;
 import com.apcompany.user.utils.TipUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +25,7 @@ public class CommonUtil {
 		}
 	}
 	
-	public static String createToken(int userId,UserType userType){
+	public static String createToken(int userId,UserTypeEnum userType){
 		StringBuffer buff =new StringBuffer();
 		buff.append(UUID.randomUUID().toString().replaceAll("-", ""));
 		buff.append("_u");
@@ -60,7 +60,7 @@ public class CommonUtil {
 		String userType = token.substring(idEnd+2);
 		try {
 			int id = Integer.valueOf(userIds);
-			UserType type= UserType.valueOf(Integer.valueOf(userType));
+			UserTypeEnum type= UserTypeEnum.valueOf(Integer.valueOf(userType));
 			return new TokenModel(token,id, type);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class CommonUtil {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(getTokenModelFromToken(createToken(311, UserType.Teacher)));
+		System.out.println(getTokenModelFromToken(createToken(311, UserTypeEnum.Teacher)));
 	}
 	
 	public static String toJson(Object obj){

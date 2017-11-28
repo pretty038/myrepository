@@ -7,17 +7,9 @@ import com.apcompany.api.model.pojo.TeachOrderDO;
 
 public interface ITeachOrderService {
 	
-	TeachOrderDO getHandleInviteOrderByTeacher(int teacherId);
-	
-	TeachOrderDO getHandleInviteOrderByStudent(int studentId);
-	
-	boolean createInviteOrder(InvitationTeachDO invitationTeachDO);
-	
-	TeachOrderDO commitInviteOrderByStudent(int studentId,int orderId);
+	TeachOrderDO createTeachOrder(InvitationTeachDO invitationTeachDO);
 	
 	boolean markScoreForOrder(int studentId,OrderTeacherScoreForm form);
-	
-	TeachOrderDO commitInviteOrderByTeacher(int teacherId,int orderId);
 	
 	TeachOrderDO getById(int id);
 	

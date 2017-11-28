@@ -1,8 +1,9 @@
 package com.apcompany.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.apcompany.api.constrant.UserStatusEnum;
-import com.apcompany.api.constrant.UserType;
+import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.dao.UserOnlineInfoDao;
 import com.apcompany.api.model.pojo.UserOnlineInfoDO;
 import com.apcompany.api.service.ITCService;
@@ -42,7 +43,7 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	}
 
 	@Override
-	public String addWithLogin(int userId, UserType type,UserStatusEnum status,double lat, double lng) {
+	public String addWithLogin(int userId, UserTypeEnum type,UserStatusEnum status,double lat, double lng) {
 		try {
 			String token= CommonUtil.createToken(userId, type);
 			UserOnlineInfoDO userOnlineInfoDO = new UserOnlineInfoDO(userId, type,status, token, lat, lng);
@@ -72,9 +73,9 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 			return false;
 		}
 		int userId= studentId;
-		int type=UserType.Student.getKey();
+		int type=UserTypeEnum.Student.getKey();
 		if(studentId==0){
-			type=UserType.Teacher.getKey();
+			type=UserTypeEnum.Teacher.getKey();
 			userId= teacherId;
 		}
 		onlineInfoDao.addChannel(userId, type, channel);
@@ -83,7 +84,13 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	
 	@Override
 	public String getChannelByTCID(int tcid){
-		return onlineInfoDao.getChannelByTCId(tcid);
+		int tid= teachCourseService.getTeacherIdById(tcid);
+		return getChannel(tid, UserTypeEnum.Teacher);
+	}
+
+	@Override
+	public String getChannel(int userId, UserTypeEnum userTypeEnum) {
+		return onlineInfoDao.getChannelByUser(userId, userTypeEnum.getKey());
 	}
 
 }
