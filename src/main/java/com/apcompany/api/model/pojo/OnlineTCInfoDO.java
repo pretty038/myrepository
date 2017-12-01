@@ -13,6 +13,9 @@ public class OnlineTCInfoDO implements Serializable{
 	private String teacherName;
 	private String photo;
 	
+	private String college_name;
+	private String profession;
+	private int grade;
 	
 	private float teachScore;
 	private int moneyPerMinute;
@@ -89,6 +92,24 @@ public class OnlineTCInfoDO implements Serializable{
 	}
 	public void setTeacherStatus(int teacherStatus) {
 		this.teacherStatus = teacherStatus;
+	}
+	public String getCollege_name() {
+		return college_name;
+	}
+	public void setCollege_name(String college_name) {
+		this.college_name = college_name;
+	}
+	public String getProfession() {
+		return profession;
+	}
+	public void setProfession(String profession) {
+		this.profession = profession;
+	}
+	public int getGrade() {
+		return grade;
+	}
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 	
 	

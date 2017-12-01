@@ -27,12 +27,14 @@ public interface ITeachCourseDao {
 	
 	@Select("select t_c.id as teach_course_id ,t_c.teach_score  teach_score,t_c.money_per_minute  money_per_minute,t_c.status as teach_course_status,"
 			+ "t.name as teacher_name,t.id as teacher_id, "
-			+ "t.imageurl as photo, "
+			+ "t.imageurl as photo,t_info.college_name as college_name,t_info.grade as grade ,"
+			+ " t_info.profession as profession, "
 			+ " online.status as teacher_status, x(online.address) as lat,y(online.address) as lng "
 			+ "from teach_course as t_c "
 			+ "inner join teacher as t  on t.id=t_c.teacher_id "
 			+"inner join user_online_info as online "
 			+ "on online.type=1 and  t_c.teacher_id=online.user_id "
+			+ " inner join teacher_base_info t_info on t_info.teacher_id=t.id "
 			+ " where t_c.course_id=#{courseId} and online.status=1 and t_c.status=1 order by #{orderType} "
 			+ " limit #{index},#{limit}")
 	List<OnlineTCInfoDO> getOnlineListBySubject(OnlineTCForm form);
