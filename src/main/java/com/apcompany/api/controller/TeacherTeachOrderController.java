@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.apcompany.api.model.form.OnlineTCForm;
-import com.apcompany.api.model.pojo.OnlineTCInfoDO;
+import com.apcompany.api.model.schema.OnlineTCInfoDO;
 import com.apcompany.api.service.ITeachOrderService;
 import com.apcompany.user.utils.TipUtil;
 

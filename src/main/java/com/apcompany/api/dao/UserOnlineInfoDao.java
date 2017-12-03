@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.apcompany.api.model.pojo.UserOnlineInfoDO;
+import com.apcompany.api.model.schema.UserOnlineInfoDO;
 
 public interface UserOnlineInfoDao {
 	

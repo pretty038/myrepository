@@ -1,5 +1,6 @@
 package com.apcompany.api.service.impl;
 
+import com.apcompany.api.service.teachcourse.ITeachCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.apcompany.api.constrant.TeachCourseStatusEnum;
@@ -7,14 +8,13 @@ import com.apcompany.api.constrant.TeachOrderStatusEnum;
 import com.apcompany.api.dao.ITeachOrderDao;
 import com.apcompany.api.dao.TeacherDao;
 import com.apcompany.api.model.form.OrderTeacherScoreForm;
-import com.apcompany.api.model.pojo.BookDayTeachDO;
-import com.apcompany.api.model.pojo.BookTimeTeachDO;
-import com.apcompany.api.model.pojo.InvitationTeachDO;
-import com.apcompany.api.model.pojo.TeachCourseDO;
-import com.apcompany.api.model.pojo.TeachOrderDO;
+import com.apcompany.api.model.schema.BookDayTeachDO;
+import com.apcompany.api.model.schema.BookTimeTeachDO;
+import com.apcompany.api.model.schema.InvitationTeachDO;
+import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
+import com.apcompany.api.model.schema.TeachOrderDO;
 import com.apcompany.api.service.IBookTeachService;
 import com.apcompany.api.service.ITeachOrderService;
-import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.IWalletService;
 
 @Service
@@ -22,7 +22,7 @@ public class TeachOrderServiceImp implements ITeachOrderService{
 	
 	@Autowired private ITeachOrderDao teachOrderDao;
 	@Autowired private TeacherDao teacherDao;	
-	@Autowired private ITCService tcService;	
+	@Autowired private ITeachCourseService tcService;
 	@Autowired private IBookTeachService bookService;
     @Autowired private IWalletService walletService;
 	

@@ -1,6 +1,6 @@
 package com.apcompany.api.service;
 
-import com.apcompany.api.model.pojo.TeachOrderDO;
+import com.apcompany.api.model.schema.TeachOrderDO;
 import com.apcompany.api.pojo.VideoAccount;
 
 public interface IInviteVideoService {

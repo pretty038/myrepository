@@ -1,12 +1,12 @@
 package com.apcompany.api.service.impl;
+import com.apcompany.api.service.teachcourse.ITeachCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apcompany.api.constrant.UserStatusEnum;
 import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.dao.UserOnlineInfoDao;
-import com.apcompany.api.model.pojo.UserOnlineInfoDO;
-import com.apcompany.api.service.ITCService;
+import com.apcompany.api.model.schema.UserOnlineInfoDO;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.util.CommonUtil;
 
@@ -15,7 +15,7 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 	
 	@Autowired private UserOnlineInfoDao onlineInfoDao;
 
-	@Autowired private ITCService teachCourseService;
+	@Autowired private ITeachCourseService teachCourseService;
 
 	@Override
 	public boolean checkAccessToken(String token) {

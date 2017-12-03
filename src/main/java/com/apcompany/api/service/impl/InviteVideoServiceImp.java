@@ -1,5 +1,7 @@
 package com.apcompany.api.service.impl;
 
+import com.apcompany.api.service.teachcourse.ITeachCourseService;
+import com.apcompany.api.service.teachcourse.ITeacherTeachCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.apcompany.api.config.VideoSecureConfig;
@@ -7,17 +9,15 @@ import com.apcompany.api.constrant.InviteVideoStatusEnum;
 import com.apcompany.api.constrant.MessagePushEnum;
 import com.apcompany.api.constrant.TeachCourseStatusEnum;
 import com.apcompany.api.dao.IInvitationTeachDao;
-import com.apcompany.api.model.pojo.InvitationTeachDO;
-import com.apcompany.api.model.pojo.TeachCourseDO;
-import com.apcompany.api.model.pojo.TeachOrderDO;
+import com.apcompany.api.model.schema.InvitationTeachDO;
+import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
+import com.apcompany.api.model.schema.TeachOrderDO;
 import com.apcompany.api.pojo.VideoAccount;
 import com.apcompany.api.service.IBookTeachService;
 import com.apcompany.api.service.IInviteVideoService;
 import com.apcompany.api.service.IMessagePushService;
 import com.apcompany.api.service.IWalletService;
-import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.ITeachOrderService;
-import com.apcompany.api.service.ITeacherTCService;
 import com.apcompany.api.service.IUserOnlineInfoService;
 
 @Service
@@ -31,9 +31,9 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 	@Autowired
 	private ITeachOrderService teachOrderService;
 	@Autowired
-	private ITCService tcService;
+	private ITeachCourseService tcService;
 	@Autowired
-	private ITeacherTCService teacherTCService;
+	private ITeacherTeachCourseService teacherTCService;
 	@Autowired
 	private IBookTeachService bookService;
 	@Autowired

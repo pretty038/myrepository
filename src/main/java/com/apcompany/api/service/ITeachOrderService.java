@@ -1,9 +1,9 @@
 package com.apcompany.api.service;
 
 import com.apcompany.api.model.form.OrderTeacherScoreForm;
-import com.apcompany.api.model.pojo.BookTimeTeachDO;
-import com.apcompany.api.model.pojo.InvitationTeachDO;
-import com.apcompany.api.model.pojo.TeachOrderDO;
+import com.apcompany.api.model.schema.BookTimeTeachDO;
+import com.apcompany.api.model.schema.InvitationTeachDO;
+import com.apcompany.api.model.schema.TeachOrderDO;
 
 public interface ITeachOrderService {
 	

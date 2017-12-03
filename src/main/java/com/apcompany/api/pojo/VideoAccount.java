@@ -1,6 +1,8 @@
 package com.apcompany.api.pojo;
 
 import com.apcompany.api.constrant.VideoAccountStatusEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class VideoAccount {
 
@@ -35,6 +37,11 @@ public class VideoAccount {
 	public void setStatus(VideoAccountStatusEnum status) {
 		this.status = status;
 	}
-	
+
+
+	public static void main(String []args) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		System.out.println(mapper.writeValueAsString(new VideoAccount()));
+	}
 	
 }

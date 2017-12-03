@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import com.apcompany.api.model.pojo.BookDayTeachDO;
-import com.apcompany.api.model.pojo.BookTimeTeachDO;
+import com.apcompany.api.model.schema.BookDayTeachDO;
+import com.apcompany.api.model.schema.BookTimeTeachDO;
 
 public interface IBookTeachDao {
 	

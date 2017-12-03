@@ -7,9 +7,9 @@ import com.google.common.collect.Maps;
 public enum MessagePushEnum {
     OPEN_VIDEO(1,"open video"),
     STUDENT_CUT(2,"STUDENT CLOSE"),
-    TEACHER_CUT(3,"TEACHER CLOSE"),
-    VIDEO_CONN(4,"TEACHER CLOSE"),
-    VIDEO_FINISH(5,"tonghuajieshu");
+    TEACHER_CUT(3,"TEACHER CUT"),
+    VIDEO_CONN(4,"TEACHER CONN"),
+    VIDEO_FINISH(5,"VIDEO FINISH");
 	
     private final int key;
     private final String value;

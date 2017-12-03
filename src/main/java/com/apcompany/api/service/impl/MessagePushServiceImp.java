@@ -2,12 +2,12 @@ package com.apcompany.api.service.impl;
 
 import javax.annotation.Resource;
 
+import com.apcompany.api.service.teachcourse.ITeachCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apcompany.api.constrant.UserTypeEnum;
 import com.apcompany.api.service.IMessagePushService;
-import com.apcompany.api.service.ITCService;
 import com.apcompany.api.service.IUserOnlineInfoService;
 import com.apcompany.api.util.CommonUtil;
 import com.baidu.yun.push.client.BaiduPushClient;
@@ -19,7 +19,7 @@ public class MessagePushServiceImp implements IMessagePushService {
 	@Autowired private BaiduPushClient baiduPushClient;
 	
 	@Resource private IUserOnlineInfoService userOnlineInfoService;
-	@Resource private ITCService tcService;
+	@Resource private ITeachCourseService tcService;
 	 
 
 	@Override

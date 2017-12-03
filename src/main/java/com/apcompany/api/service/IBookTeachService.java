@@ -2,9 +2,9 @@ package com.apcompany.api.service;
 
 import java.util.List;
 
-import com.apcompany.api.model.pojo.BookDayTeachDO;
-import com.apcompany.api.model.pojo.BookTimeTeachDO;
-import com.apcompany.api.model.pojo.TeachOrderDO;
+import com.apcompany.api.model.schema.BookDayTeachDO;
+import com.apcompany.api.model.schema.BookTimeTeachDO;
+import com.apcompany.api.model.schema.TeachOrderDO;
 
 public interface IBookTeachService {
 	
