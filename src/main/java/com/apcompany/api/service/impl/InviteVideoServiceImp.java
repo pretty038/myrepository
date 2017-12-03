@@ -53,7 +53,7 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 			return 0;
 		}
 		TeachCourseDO teachCourseDO = tcService.getTCById(teachCourseId);
-        if(teachCourseDO==null){
+        if( teachCourseDO == null ){
         	return 0;
         }
 		if (getHandleInvitationByTeacher(teachCourseDO.getTeacherId()) != null) {

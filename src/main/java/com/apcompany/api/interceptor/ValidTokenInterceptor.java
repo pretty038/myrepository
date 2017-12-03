@@ -22,24 +22,29 @@ public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		try {			
-//			TokenModel tokenModel = CommonUtil.validToken(request.getParameter("token"));
-//		    if(tokenModel==null){
-//		    	logger.info("token is not valid");
-//		    	CommonUtil.setResponseData(response, "token is null or  invalid");
-//		    	return false;
-//		    }
-//			if(! userinfoInfoService.checkAccessToken(tokenModel.getToken())){
-//		    	logger.info("user is offline,pleace login or pust the right token");
-//		    	CommonUtil.setResponseData(response, "user token is not exits");
-//		    	return false;
-//		    }
-//			logger.info("check ok and refresh success");
-			TokenModel tokenModel =new TokenModel("", 1, UserTypeEnum.Student);
+			TokenModel tokenModel = CommonUtil.validToken(request.getParameter("token"));
+		    if(tokenModel==null){
+		    	logger.info("token is not valid");
+		    	//CommonUtil.setResponseData(response, "token is null or  invalid");
+				TokenModel tokenModel2 =new TokenModel("", 1, UserTypeEnum.Student);
+				TokenModel tokenModel3 =new TokenModel("", 1, UserTypeEnum.Teacher);
+				setDataToRequest(request, tokenModel2);
+				setDataToRequest(request, tokenModel3);
+		    	return true;
+		    }
+			if(! userinfoInfoService.checkAccessToken(tokenModel.getToken())){
+		    	logger.info("user is offline,pleace login or pust the right token");
+		    	//CommonUtil.setResponseData(response, "user token is not exits");
+				TokenModel tokenModel2 =new TokenModel("", 1, UserTypeEnum.Student);
+				TokenModel tokenModel3 =new TokenModel("", 1, UserTypeEnum.Teacher);
+				setDataToRequest(request, tokenModel2);
+				setDataToRequest(request, tokenModel3);
+				return true;
+		    }
+			logger.info("check ok and refresh success");
 			setDataToRequest(request, tokenModel);
-			TokenModel tokenModel1 =new TokenModel("", 1, UserTypeEnum.Teacher);
-			setDataToRequest(request, tokenModel1);
-			logger.info("set data ok");			
-		    return true;
+			logger.info("set data ok");
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

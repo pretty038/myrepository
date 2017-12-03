@@ -24,7 +24,7 @@ public interface ITeachCourseDao {
 			+ " limit #{index},#{limit}")
 	List<OnlineTCInfoDO> getOnlineListBySubject(OnlineTCForm form);
 	
-	@Select("select * from teach_course as t_c where t_c.teacher_id=#{teacherId} ")
+	@Select("select * from teach_course where teacher_id=#{teacherId} ")
 	List<TeachCourseDO> getTCListByTId(int teacherId);
 
 	@Delete("delete from teach_course where id=#{id} and teacher_id=#{teacherId}")
@@ -34,9 +34,9 @@ public interface ITeachCourseDao {
 	);
 
 	@Select("select count(1) from teach_course where id=#{id} and teacher_id=#{teacherId} and status>0")
-	int chekcTCIsValid(
+	int checkTCIsValid(
 			@Param("id") int id,
-			@Param("teacher_id") int teacherId);
+			@Param("teacherId") int teacherId);
 	
 	@Update("update teach_course set status=#{status} where id=#{id} and teacher_id=#{teacherId}")
 	boolean updateTCStatus(

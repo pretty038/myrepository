@@ -41,7 +41,7 @@ public class TeacherTeachCourseServiceImp implements ITeacherTeachCourseService 
 
 	@Override
 	public boolean updateStatus(int teacherId, int teachCourseId,TeachCourseStatusEnum status) {
-		int id = teachCourseDao.chekcTCIsValid(teachCourseId,teacherId);
+		int id = teachCourseDao.checkTCIsValid(teachCourseId,teacherId);
 		if (id == 0 ) return false;
 		teachCourseDao.updateTCStatus(teachCourseId, teacherId, status.getKey());
 		return true;
