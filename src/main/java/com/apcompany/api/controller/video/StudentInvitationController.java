@@ -16,7 +16,7 @@ public class StudentInvitationController {
 	@RequestMapping(value = "/invite", method = RequestMethod.GET)
 	@ResponseBody
 	public Object invite(
-			@SessionAttribute(value = "studentId", required = true) Integer studentId,
+			@RequestAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "teachCourseId", required = true) int teachCourseId) {
 		return TipUtil.success(invitationService.inviteVideo(studentId, teachCourseId));
 	}
@@ -24,14 +24,14 @@ public class StudentInvitationController {
 	@RequestMapping(value = "/cancle", method = RequestMethod.GET)
 	@ResponseBody
 	public Object cancleInvitation(
-			@SessionAttribute(value = "studentId", required = true) Integer studentId) {
+			@RequestAttribute(value = "studentId", required = true) Integer studentId) {
 		return invitationService.closeInvitationByStudent(studentId);
 	}
 	
 	@RequestMapping(value = "/success", method = RequestMethod.GET)
 	@ResponseBody
 	public Object successVideo(
-			@SessionAttribute(value = "studentId", required = true) Integer studentId,
+			@RequestAttribute(value = "studentId", required = true) Integer studentId,
 			@RequestParam(value = "status", required = true) int status) {
 		invitationService.successInvite(studentId);
 		return "success";

@@ -19,7 +19,7 @@ public interface ITeachCourseDao {
 			+ "inner join teacher as t  on t.id=t_c.teacher_id "
 			+"inner join user_online_info as online "
 			+ "on online.type=1 and  t_c.teacher_id=online.user_id "
-			+ " inner join teacher_base_info t_info on t_info.teacher_id=t.id "
+			+ " left join teacher_base_info t_info on t_info.teacher_id=t.id "
 			+ " where t_c.course_id=#{courseId} and online.status=1 and t_c.status=2 order by #{orderType} "
 			+ " limit #{index},#{limit}")
 	List<OnlineTCInfoDO> getOnlineListBySubject(OnlineTCForm form);
