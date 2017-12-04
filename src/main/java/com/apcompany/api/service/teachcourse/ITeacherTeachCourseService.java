@@ -1,18 +1,20 @@
 package com.apcompany.api.service.teachcourse;
 
 import com.apcompany.api.constrant.TeachCourseStatusEnum;
+import com.apcompany.api.model.vo.ApiResponse;
 import com.apcompany.api.model.vo.teachcourse.TeachCourseVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ITeacherTeachCourseService {
 
-	boolean applyTeachCourse(int teacherId,int courseId,int moneyPerMinute);
+	ApiResponse applyTeachCourse(int teacherId,int courseId,int moneyPerMinute);
 
-	List<TeachCourseVO> getMyTeachCourseList(int teacherId);
+	ApiResponse getMyTeachCourseList(int teacherId);
 
-	boolean updateStatus(int teacherId, int teachCourseId, TeachCourseStatusEnum status);
+	ApiResponse updateStatus(int teacherId, int teachCourseId, TeachCourseStatusEnum status);
 
-	boolean deleteTeachCourse(int id,int teacherId);
+	ApiResponse deleteTeachCourse(int id,int teacherId);
 
 }

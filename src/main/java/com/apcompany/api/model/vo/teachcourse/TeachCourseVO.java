@@ -1,7 +1,7 @@
 package com.apcompany.api.model.vo.teachcourse;
 
-import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
 import com.apcompany.api.model.schema.teachcourse.CourseDO;
+import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
 
 public class TeachCourseVO {
 	

@@ -21,7 +21,7 @@ public class MessageController {
 	
 	@Autowired private IMessagePushService messagePushService;
 	
-	@RequestMapping(value="/push/channel",method = RequestMethod.GET)
+	@RequestMapping(value="/push/channel",method = RequestMethod.POST)
 	@ResponseBody
 	public Object pushChannel(
 			@RequestAttribute(value="studentId",required=false) int studentId,

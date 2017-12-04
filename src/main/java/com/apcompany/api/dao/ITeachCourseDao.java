@@ -20,7 +20,7 @@ public interface ITeachCourseDao {
 			+"inner join user_online_info as online "
 			+ "on online.type=1 and  t_c.teacher_id=online.user_id "
 			+ " inner join teacher_base_info t_info on t_info.teacher_id=t.id "
-			+ " where t_c.course_id=#{courseId} and online.status=1 and t_c.status=1 order by #{orderType} "
+			+ " where t_c.course_id=#{courseId} and online.status=1 and t_c.status=2 order by #{orderType} "
 			+ " limit #{index},#{limit}")
 	List<OnlineTCInfoDO> getOnlineListBySubject(OnlineTCForm form);
 	
@@ -38,7 +38,7 @@ public interface ITeachCourseDao {
 			@Param("id") int id,
 			@Param("teacherId") int teacherId);
 	
-	@Update("update teach_course set status=#{status} where id=#{id} and teacher_id=#{teacherId}")
+	@Update("update teach_course set status=#{status} ,modified=now()  where id=#{id} and teacher_id=#{teacherId}")
 	boolean updateTCStatus(
 			@Param("id") int id,
 			@Param("teacherId") int teacherId,

@@ -3,7 +3,8 @@ package com.apcompany.api.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,7 +15,7 @@ import com.apcompany.api.util.CommonUtil;
 
 public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 	
-	private Logger logger= Logger.getLogger(ValidTokenInterceptor.class);
+	private Logger logger= LoggerFactory.getLogger(ValidTokenInterceptor.class);
 	
 	@Autowired private IUserOnlineInfoService userinfoInfoService;
 
@@ -26,8 +27,8 @@ public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 		    if(tokenModel==null){
 		    	logger.info("token is not valid");
 		    	//CommonUtil.setResponseData(response, "token is null or  invalid");
-				TokenModel tokenModel2 =new TokenModel("", 1, UserTypeEnum.Student);
-				TokenModel tokenModel3 =new TokenModel("", 1, UserTypeEnum.Teacher);
+				TokenModel tokenModel2 =new TokenModel("", 8, UserTypeEnum.Student);
+				TokenModel tokenModel3 =new TokenModel("", 3, UserTypeEnum.Teacher);
 				setDataToRequest(request, tokenModel2);
 				setDataToRequest(request, tokenModel3);
 		    	return true;
@@ -35,8 +36,8 @@ public class ValidTokenInterceptor extends HandlerInterceptorAdapter {
 			if(! userinfoInfoService.checkAccessToken(tokenModel.getToken())){
 		    	logger.info("user is offline,pleace login or pust the right token");
 		    	//CommonUtil.setResponseData(response, "user token is not exits");
-				TokenModel tokenModel2 =new TokenModel("", 1, UserTypeEnum.Student);
-				TokenModel tokenModel3 =new TokenModel("", 1, UserTypeEnum.Teacher);
+				TokenModel tokenModel2 =new TokenModel("", 8, UserTypeEnum.Student);
+				TokenModel tokenModel3 =new TokenModel("", 3, UserTypeEnum.Teacher);
 				setDataToRequest(request, tokenModel2);
 				setDataToRequest(request, tokenModel3);
 				return true;

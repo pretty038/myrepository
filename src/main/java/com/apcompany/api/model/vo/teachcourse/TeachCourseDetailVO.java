@@ -2,6 +2,7 @@ package com.apcompany.api.model.vo.teachcourse;
 
 
 import com.apcompany.api.model.schema.teacher.TeacherInfoDO;
+import com.apcompany.api.model.vo.teachcourse.TeachCourseVO;
 
 public class TeachCourseDetailVO extends TeachCourseVO {
 

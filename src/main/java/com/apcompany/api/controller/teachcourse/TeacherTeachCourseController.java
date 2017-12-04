@@ -21,14 +21,14 @@ public class TeacherTeachCourseController {
 			@RequestAttribute("teacherId") int teacherId,
 			@RequestParam("courseId") int teachCourseId,
 			@RequestParam("moneyPerMinute") int moneyPerMinute){
-		return TipUtil.success(teacherTeachCourseService.applyTeachCourse(teacherId, teachCourseId,moneyPerMinute));
+		return teacherTeachCourseService.applyTeachCourse(teacherId, teachCourseId,moneyPerMinute);
 	}
 	
 	@RequestMapping(value="/all.json",method = RequestMethod.GET)
 	@ResponseBody
 	public Object getTCListByTeacher(
 			@RequestAttribute("teacherId") int teacherId){
-	    return TipUtil.success(teacherTeachCourseService.getMyTeachCourseList(teacherId));
+	    return teacherTeachCourseService.getMyTeachCourseList(teacherId);
 	}
 
 
@@ -38,8 +38,7 @@ public class TeacherTeachCourseController {
 	public Object preparedToTeach(
 			@RequestAttribute("teacherId") int teacherId,
 			@RequestParam("teachCourseId") int teachCourseId){
-		boolean result=  teacherTeachCourseService.updateStatus(teacherId, teachCourseId, TeachCourseStatusEnum.NORMAL);
-	    return TipUtil.success(result);
+		return teacherTeachCourseService.updateStatus(teacherId, teachCourseId, TeachCourseStatusEnum.NORMAL);
 	}
 	
 	@RequestMapping(value="/close.do",method = RequestMethod.GET)
@@ -47,8 +46,7 @@ public class TeacherTeachCourseController {
 	public Object closeToTeach(
 			@RequestAttribute("teacherId") int teacherId,
 			@RequestParam("teachCourseId") int teachCourseId){
-		boolean result=  teacherTeachCourseService.updateStatus(teacherId, teachCourseId,TeachCourseStatusEnum.CLOSE);
-	    return TipUtil.success(result);
+		return  teacherTeachCourseService.updateStatus(teacherId, teachCourseId,TeachCourseStatusEnum.CLOSE);
 	}
 
 	@RequestMapping(value="/delete/{id}",method = RequestMethod.GET)
@@ -56,8 +54,7 @@ public class TeacherTeachCourseController {
 	public Object deleteTeachCourse(
 			@RequestAttribute("teacherId") int teacherId,
 			@PathVariable("id") int id){
-		boolean result=  teacherTeachCourseService.deleteTeachCourse(id, teacherId);
-		return TipUtil.success(result);
+		return  teacherTeachCourseService.deleteTeachCourse(id, teacherId);
 	}
 
 }

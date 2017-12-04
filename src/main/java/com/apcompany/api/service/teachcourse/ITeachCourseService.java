@@ -1,7 +1,6 @@
 package com.apcompany.api.service.teachcourse;
 
 import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
-import com.apcompany.api.model.schema.teacher.TeacherInfoDO;
 import com.apcompany.api.model.vo.teachcourse.TeachCourseVO;
 import java.util.List;
 
