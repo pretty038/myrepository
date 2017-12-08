@@ -14,10 +14,11 @@ public interface UserOnlineInfoDao {
 			+ "now(),now()) ")
 	public void addwithLogin(UserOnlineInfoDO userOnlineInfoDO);
 		
-	@Select("select user_online_info.id as id from user_online_info where type=1 and "
-			+ " status=1 inner join teach_course on user_online_info.user_id=teach_course.teacher_id "
-			+ " and teach_course.status=1 and teach_course.id=#{id}")
-	public Integer checkTCNormal(@Param("id")int Id);
+	@Select("select *  from user_online_info where type=#{userType} and "
+			+ " user_id=#{userId} ")
+	public UserOnlineInfoDO getUserInfoByUserId(
+			@Param("userId")int userId,
+			@Param("userType")int userType);
 	
 	@Update("update user_online_info set status=#{status} where id=#{id}")
 	public void updateStatusByID(int id, int status);

@@ -37,7 +37,7 @@ public class TeachCourseVO {
 			return this;
 		}
 		this.setCourseId(courseDO.getId());
-		this.setCourseName(courseDO.getName()+"f");
+		this.setCourseName(courseDO.getName());
 		return this;
 	}
 

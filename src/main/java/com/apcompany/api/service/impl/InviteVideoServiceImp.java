@@ -19,6 +19,7 @@ import com.apcompany.api.service.IMessagePushService;
 import com.apcompany.api.service.IWalletService;
 import com.apcompany.api.service.ITeachOrderService;
 import com.apcompany.api.service.IUserOnlineInfoService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class InviteVideoServiceImp implements IInviteVideoService {
@@ -41,6 +42,7 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 	
 	@Autowired private IWalletService walletService;
 
+	@Transactional
 	@Override
 	public int inviteVideo(int studentId, int teachCourseId) {
 		// check 当前是否已经有在进行中的邀请。
@@ -63,9 +65,11 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 				teachCourseId));
 		messagePushService.pushMessageToTeacher(teachCourseId, MessagePushEnum.OPEN_VIDEO);
 		int totalMoney = walletService.getStudentMoney(studentId);
-		return totalMoney/teachCourseDO.getMoneyPerMinute();
+		int moneyPerMinute = teachCourseDO.getMoneyPerMinute();
+		return moneyPerMinute==0?1000:totalMoney/moneyPerMinute;
 	}
 
+	@Transactional
 	@Override
 	public TeachOrderDO closeInvitationByStudent(int studentId) {
 		TeachOrderDO teachOrderDO = null;
@@ -95,8 +99,8 @@ public class InviteVideoServiceImp implements IInviteVideoService {
 		messagePushService.pushMessageToTeacher(invitationTeachDO.getTeacherId(), MessagePushEnum.VIDEO_CONN);
 		return true;
 	}
-	
 
+	@Transactional
 	@Override
 	public TeachOrderDO closeInvitationByTeacher(int teacherId) {
 		TeachOrderDO teachOrderDO = null;

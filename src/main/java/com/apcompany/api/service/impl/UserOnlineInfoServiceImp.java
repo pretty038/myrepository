@@ -1,4 +1,6 @@
 package com.apcompany.api.service.impl;
+import com.apcompany.api.constrant.TeachCourseStatusEnum;
+import com.apcompany.api.model.schema.teachcourse.TeachCourseDO;
 import com.apcompany.api.service.teachcourse.ITeachCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,13 @@ public class UserOnlineInfoServiceImp implements IUserOnlineInfoService {
 
 	@Override
 	public boolean checkTCNormal(int tcId) {
-		Integer id = onlineInfoDao.checkTCNormal(tcId);
-		return id==null?false:true;
+		TeachCourseDO teachCourseDO = teachCourseService.getTCById(tcId);
+		if (teachCourseDO == null || teachCourseDO.getStatus()!= TeachCourseStatusEnum.NORMAL.getKey()) return false;
+        UserOnlineInfoDO userOnlineInfoDO = onlineInfoDao.getUserInfoByUserId(teachCourseDO.getTeacherId(),UserTypeEnum.Teacher.getKey());
+        if ( userOnlineInfoDO == null || userOnlineInfoDO.getStatus()== UserStatusEnum.OFFLINE.getKey()){
+        	return false;
+		}
+		return true;
 	}
 
 	@Override
